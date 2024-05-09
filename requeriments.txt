@@ -1,2 +1,5 @@
+wheel
 Django
-pyrebase
+firebase-admin
+pyrebase4
+setuptools
