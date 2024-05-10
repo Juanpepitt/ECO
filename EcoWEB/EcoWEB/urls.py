@@ -24,8 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', ecoweb_views.home, name='home'),
-    path('usuarios/login/', usuarios_views.login, name='login'),
+    path('usuarios/login/', usuarios_views.log_in, name='login'),
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
+    path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
 ]

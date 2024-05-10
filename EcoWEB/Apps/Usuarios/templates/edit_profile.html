@@ -1,18 +1,17 @@
-<!-- login.html -->
+<!-- usuarios/templates/edit_profile.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Editar Perfil</title>
 </head>
 <body>
-    <h2>Iniciar sesión</h2>
+    <h1>Editar Perfil</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Iniciar sesión</button>
+        <button type="submit">Guardar Cambios</button>
     </form>
 </body>
 </html>
