@@ -3,5 +3,3 @@ Django
 firebase-admin
 pyrebase4
 setuptools
-node
-npx
