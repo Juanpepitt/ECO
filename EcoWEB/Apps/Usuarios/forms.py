@@ -4,19 +4,23 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 
 class ConsumidorSignUpForm(UserCreationForm):
-    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+    email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+    username = forms.CharField(max_length=254, help_text='Por favor introduce un username.')
 
     class Meta:
         model = User
         fields = ('email', 'username', 'password1', 'password2')
 
 class ProductorSignUpForm(UserCreationForm):
-    empresa = forms.CharField(max_length=100, help_text='Required. Inform the company name.')
-    telefono = forms.CharField(max_length=15, help_text='Required. Inform the phone number.')
+
+    email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+    username = forms.CharField(max_length=254, help_text='Por favor introduce un username.')
+    cif = forms.CharField(max_length=100, help_text='Campo requerido. Introduzca el CIF de la empresa.')
+    telefono = forms.CharField(max_length=15, help_text='Campo requerido. Introduzca un número de teléfono.')
 
     class Meta:
         model = User
-        fields = ('username', 'empresa', 'telefono', 'password1', 'password2')
+        fields = ('email', 'username', 'cif', 'telefono', 'password1', 'password2')
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:

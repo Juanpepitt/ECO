@@ -23,7 +23,7 @@ from Apps.Usuarios import views as usuarios_views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', ecoweb_views.home, name='home'),
+    path('', ecoweb_views.home, name='index'),
     path('usuarios/login/', usuarios_views.log_in, name='login'),
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),

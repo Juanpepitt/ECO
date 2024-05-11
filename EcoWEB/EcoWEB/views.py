@@ -17,4 +17,4 @@ database = firebase.database()
 
 def home(request):
     ejemplo = database.child("Data").child("ejemplo1").get().val()
-    return render(request, 'home.html', {"ejemplo":ejemplo})
+    return render(request, 'index.html', {"ejemplo":ejemplo})

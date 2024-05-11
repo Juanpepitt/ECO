@@ -32,15 +32,21 @@ def signup_consumidor(request):
         form = ConsumidorSignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Crear el usuario en Firebase Authentication
             try:
-                auth.create_user_with_email_and_password(user.email, user.password)
-                return redirect('home')  # Redirigir a la página principal después del registro
+                # Crear el usuario en Firebase Authentication
+                user_firebase_info = auth.create_user_with_email_and_password(user.email, user.password)
+                # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
+                uid = user_firebase_info['localId']
+                guardar_consumidor_en_firebase(uid, user.email, user.username, user.password)
+                return redirect('home')
             except Exception as e:
-                # Manejar errores al crear el usuario en Firebase
+                error_code = e.args[0]['error']['message']
+                if error_code == 'EMAIL_EXISTS':
+                    messages.error(request, 'El usuario ya existe. Por favor, inicia sesión.')
+                else:
+                    messages.error(request, 'Error al crear el usuario en Firebase.')
+                user.delete() #revertir usuario de django
                 print("Error al crear el usuario en Firebase:", e)
-                # También puedes revertir el registro del usuario en Django si falla en Firebase
-                user.delete()
     else:
         form = ConsumidorSignUpForm()
     return render(request, 'signup_consumidor.html', {'form': form})
@@ -50,39 +56,49 @@ def signup_productor(request):
         form = ProductorSignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Guardar datos del productor en Firebase
-            guardar_productor_en_firebase(user)
-            return redirect('home')  # Redirigir a la página principal después del registro
+            try:
+                # Crear el usuario en Firebase Authentication
+                user_firebase_info = auth.create_user_with_email_and_password(user.email, user.password)
+                # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
+                uid = user_firebase_info['localId']
+                guardar_productor_en_firebase(uid, user.email, user.username, user.password)
+                return redirect('home')
+            except Exception as e:
+                error_code = e.args[0]['error']['message']
+                if error_code == 'EMAIL_EXISTS':
+                    messages.error(request, 'El usuario ya existe. Por favor, inicia sesión.')
+                else:
+                    messages.error(request, 'Error al crear el usuario en Firebase.')
+                user.delete() #revertir usuario de django
+                print("Error al crear el usuario en Firebase:", e)
     else:
         form = ProductorSignUpForm()
     return render(request, 'signup_productor.html', {'form': form})
 
-
-def guardar_consumidor_en_firebase(user):
-    database = firebase.database()
+def guardar_consumidor_en_firebase(uid, email, nombre, password):
 
     # Datos del consumidor a guardar
     consumidor_data = {
-        "nombre": user.username,
-        "email": user.email,
-        # Otros datos del consumidor
+        "nombre": nombre,
+        "email": email,
+        "pass": password
     }
 
     # Guardar el consumidor en la base de datos
-    database.child("Consumidores").push(consumidor_data)
+    database.child("Consumidores").child(uid).set(consumidor_data)
 
-def guardar_productor_en_firebase(user):
-    database = firebase.database()
+def guardar_productor_en_firebase(uid, email, nombre, password):
 
-    # Datos del productor a guardar
+    # Datos del consumidor a guardar
     productor_data = {
-        "nombre": user.username,
-        "email": user.email,
-        # Otros datos del productor
+        "nombre": nombre,
+        "email": email,
+        "pass": password
     }
 
-    # Guardar el productor en la base de datos
-    database.child("Productores").push(productor_data)
+    # Guardar el consumidor en la base de datos
+    database.child("Productores").child(uid).set(productor_data)
+
 
 def log_in(request):
     if request.method == 'POST':
@@ -117,7 +133,6 @@ def verificar_credenciales_firebase(email, password):
     return True  # Devuelve True si las credenciales son válidas en Firebase
 
 
-
 def perfil(request):
     return render(request, 'perfil.html')
 
@@ -139,8 +154,3 @@ def edit_profile(request):
     else:
         form = ProfileEditForm(instance=user)
     return render(request, 'edit_profile.html', {'form': form})
-
-def guardar_usuario_en_firebase(uid, user_data):
-    database = firebase.database()
-    database.child('Consumidores').child(uid).update(user_data)
-
