@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 
 class ConsumidorSignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
-    username = forms.CharField(max_length=254, help_text='Por favor introduce un username.')
+    username = forms.CharField(max_length=254, help_text='Por favor introduce un nombre de Usuario.')
 
     class Meta:
         model = User
@@ -14,7 +14,7 @@ class ConsumidorSignUpForm(UserCreationForm):
 class ProductorSignUpForm(UserCreationForm):
 
     email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
-    username = forms.CharField(max_length=254, help_text='Por favor introduce un username.')
+    username = forms.CharField(max_length=254, help_text='Por favor introduce un nombre de Usuario.')
     cif = forms.CharField(max_length=100, help_text='Campo requerido. Introduzca el CIF de la empresa.')
     telefono = forms.CharField(max_length=15, help_text='Campo requerido. Introduzca un número de teléfono.')
 
