@@ -5,11 +5,18 @@ from django.contrib.auth.forms import AuthenticationForm
 
 class ConsumidorSignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
-    username = forms.CharField(max_length=254, help_text='Por favor introduce un nombre de Usuario.')
 
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('email', 'username', 'password1', 'password2')
+        fields = ('email', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.username = self.cleaned_data["email"]  # Utiliza el correo electrónico como nombre de usuario
+        user.email = self.cleaned_data["email"]  # Establece el correo electrónico
+        if commit:
+            user.save()
+        return user
 
 class ProductorSignUpForm(UserCreationForm):
 
@@ -33,4 +40,7 @@ class ProfileEditForm(forms.ModelForm):
         }
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(widget=forms.EmailInput(attrs={'autofocus': True}))
+    email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+
+
+   

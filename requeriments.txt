@@ -4,3 +4,4 @@ firebase-admin
 pyrebase4
 setuptools
 social-auth-app-django
+django-allauth

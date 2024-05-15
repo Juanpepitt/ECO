@@ -34,11 +34,12 @@ def signup_consumidor(request):
             user = form.save()
             try:
                 # Crear el usuario en Firebase Authentication
-                user_firebase_info = auth.create_user_with_email_and_password(user.email, user.password)
+                user_firebase_info = auth.create_user_with_email_and_password(user.username, user.password)
                 # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
                 uid = user_firebase_info['localId']
                 guardar_consumidor_en_firebase(uid, user.email, user.username, user.password)
-                return redirect('home')
+                print("Consumidor registrado con éxito en Django y Firebase")
+                return redirect('login')
             except Exception as e:
                 error_code = e.args[0]['error']['message']
                 if error_code == 'EMAIL_EXISTS':
@@ -102,6 +103,7 @@ def guardar_productor_en_firebase(uid, email, nombre, password):
 
 def log_in(request):
     if request.method == 'POST':
+        print(request.POST)
         form = EmailAuthenticationForm(request, request.POST)
         if form.is_valid():
             email = form.cleaned_data['username']
@@ -123,14 +125,19 @@ def log_in(request):
                 # Manejar el caso en que las credenciales no sean válidas en Firebase
                 print ("no es válido en Firebase")
         else:
-            print("no es válido el formulario")
+            print("no es válido el formulario: ")
     else:
         form = EmailAuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+
 def verificar_credenciales_firebase(email, password):
-    # Lógica para verificar las credenciales en Firebase
-    return True  # Devuelve True si las credenciales son válidas en Firebase
+
+    try:
+        auth.sign_in_with_email_and_password(email, password)
+        return True
+    except:
+        return False
 
 
 def perfil(request):
@@ -154,3 +161,11 @@ def edit_profile(request):
     else:
         form = ProfileEditForm(instance=user)
     return render(request, 'edit_profile.html', {'form': form})
+
+
+def home(request):
+    return render(request, "index")
+
+def log_out(request):
+    logout(request)
+    return redirect("signup_consumidor")

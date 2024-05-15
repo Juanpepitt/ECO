@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from EcoWEB import views as ecoweb_views
 
 from Apps.Usuarios import views as usuarios_views
@@ -25,7 +25,10 @@ urlpatterns = [
 
     path('', ecoweb_views.home, name='index'),
     path('usuarios/login/', usuarios_views.log_in, name='login'),
+    path("accounts/", include("allauth.urls")),
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
+    path('usuarios/signup/logout/', usuarios_views.log_out),
+    
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
