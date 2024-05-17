@@ -21,6 +21,7 @@
     <link href="/../static/css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="/../static/css/responsive.css" rel="stylesheet" />
+
     <style>
         /* Estilos para el formulario de inicio de sesión */
         body, html {
@@ -121,6 +122,7 @@
         {% if user.is_authenticated %}
         <h2>Estás registrado como {{user.username}}</h2>
         <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{user.username}}</a>
+        <a href="/" class="btn">Ir a Inicio</a>
         {% else %}
             <h2>Iniciar sesión</h2>
             <form method="post">
@@ -142,6 +144,8 @@
         </p>
     </section>
     <!-- footer section -->
+    
 </body>
 
 </html>
+

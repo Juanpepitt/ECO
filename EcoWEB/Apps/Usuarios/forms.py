@@ -39,8 +39,24 @@ class ProfileEditForm(forms.ModelForm):
             'email': 'Correo electrónico'
         }
 
-class EmailAuthenticationForm(AuthenticationForm):
-    email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+class LoginForm(AuthenticationForm):
+    username = forms.EmailField(
+        label='Email',
+        max_length=254,
+        help_text='Campo requerido. Por favor, introduce una dirección mail válida.',
+        widget=forms.EmailInput(attrs={'autofocus': True, 'style': 'width: 100%;'})
+    )
+    password = forms.CharField(
+        label='Contraseña',
+        max_length=254,
+        help_text='Campo requerido. Por favor, introduce una contraseña válida.',
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autofocus': True, 'style': 'width: 100%;'})
+    )
+    
+    class Meta:
+        fields = ['username', 'password']
+    
 
 
    
