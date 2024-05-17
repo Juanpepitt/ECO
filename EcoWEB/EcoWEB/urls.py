@@ -16,6 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 from EcoWEB import views as ecoweb_views
 
 from Apps.Usuarios import views as usuarios_views
@@ -32,4 +36,4 @@ urlpatterns = [
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

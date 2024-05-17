@@ -30,14 +30,21 @@ class ProductorSignUpForm(UserCreationForm):
         fields = ('email', 'username', 'cif', 'telefono', 'password1', 'password2')
 
 class ProfileEditForm(forms.ModelForm):
-    class Meta:
+    email = forms.EmailField(required=True)
+    direccion = forms.CharField(required=False, max_length=255)
+    photo = forms.ImageField(required=False)
+
+    class Meta (UserCreationForm.Meta):
         model = User
-        fields = ['first_name', 'last_name', 'email']
-        labels = {
-            'first_name': 'Nombre',
-            'last_name': 'Apellido',
-            'email': 'Correo electrónico'
-        }
+        fields = ('email', 'direccion', 'photo')
+
+        def save(self, commit=True):
+            user = super().save(commit=False)
+            user.username = self.cleaned_data["email"]  # Utiliza el correo electrónico como nombre de usuario
+            user.email = self.cleaned_data["email"]  # Establece el correo electrónico
+            if commit:
+                user.save()
+            return user
 
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(
@@ -56,6 +63,8 @@ class LoginForm(AuthenticationForm):
     
     class Meta:
         fields = ['username', 'password']
+
+
     
 
 

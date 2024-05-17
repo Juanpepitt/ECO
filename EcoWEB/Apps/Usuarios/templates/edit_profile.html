@@ -1,6 +1,7 @@
-<!-- usuarios/templates/edit_profile.html -->
+<!-- templates/edit_profile.html -->
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,19 @@
 </head>
 <body>
     <h1>Editar Perfil</h1>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Guardar Cambios</button>
     </form>
+    <a href="{% url 'perfil' %}">Cancelar</a>
+
+      <!-- footer section -->
+    <section class="container-fluid footer_section_edit">
+        <p>
+        &copy; 2024 MARKETECO - Universidad de Sevilla </a>
+        </p>
+    </section>
+    <!-- footer section -->
 </body>
 </html>

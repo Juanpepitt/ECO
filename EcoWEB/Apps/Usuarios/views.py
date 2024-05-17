@@ -34,15 +34,6 @@ database = firebase.database()
 auth = firebase.auth()
 
 
-# usu = auth.create_user_with_email_and_password("test@test.test", "Testpassword1!")
-# if usu is not None:
-#     print("Bien")
-
-# awa = auth.sign_in_with_email_and_password("test@test.test", "Testpassword1!")
-# if awa is not None:
-#     print("Bienx2")
-
-
 def signup_consumidor(request):
     clear_messages(request)
     if request.method == 'POST':
@@ -175,6 +166,7 @@ def verificar_credenciales_firebase(email, password):
     user_firebase_info = auth.sign_in_with_email_and_password(email, password)
     return user_firebase_info is not None
 
+@login_required
 def perfil(request):
     return render(request, 'perfil.html')
 
@@ -182,16 +174,17 @@ def perfil(request):
 def edit_profile(request):
     user = request.user
     if request.method == 'POST':
-        form = ProfileEditForm(request.POST, instance=user)
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
             # Actualizar los datos en Firebase
             user_data = {
                 'email': user.email,
                 'nombre': user.username,
                 # Agrega otros campos según sea necesario
             }
-            guardar_usuario_en_firebase(user.uid, user_data)
+            # guardar_consumidor_en_firebase(user.uid, user_data)
             return redirect('perfil')  # Redirige al perfil después de la edición
     else:
         form = ProfileEditForm(instance=user)

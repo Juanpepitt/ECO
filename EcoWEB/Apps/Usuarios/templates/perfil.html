@@ -1,4 +1,4 @@
-<!-- perfil.html -->
+<!-- templates/perfil.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,9 +22,157 @@
     <link href="/../static/css/style.css" rel="stylesheet" />
     <!-- responsive style -->
     <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <style>
+    /* Estilos para el formulario de inicio de sesión */
+    body, html {
+        height: 100%; 
+        margin: 0; /* Elimina los márgenes predeterminados */
+        font-family: Arial, sans-serif; /* Usa una fuente genérica */
+    }
+
+    .container_perfil {
+        background-color: #f6f8f7;
+        height: 100vh; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+     .perfil_form {
+        width: 100%;
+        padding: 20px;
+        margin: 300px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f6f8f7;
+    }
+
+    .perfil_form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #023b48;
+    }
+    
+    .campo {
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f6f8f7;
+    }
+/* 
+    .login_form input[type="text"],
+    .login_form input[type="password"],
+    .login_form button[type="submit"] {
+        width: calc(100% - 22px); 
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box; 
+    }
+
+    .login_form button[type="submit"] {
+        background-color: #3d8a4f;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .login_form button[type="submit"]:hover {
+        background-color: #2c6b3a; 
+    } */
+
+    .btn {
+        width: calc(100% - 22px); 
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box; 
+        background-color: #3d8a4f;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #2c6b3a; 
+    }
+
+
+    /* footer section*/
+
+    .footer_section_perfil {
+    background-color: #fbfdfd;
+    padding: 20px;
+    font-weight: 500;
+    }
+
+    .footer_section_perfil p {
+    color: #292929;
+    margin: 0;
+    text-align: center;
+    }
+
+    .footer_section_perfil a {
+    color: #292929;
+    }
+
+    /* end footer section*/
+
+</style>
 </head>
 <body>
-    <h1>Página de perfil</h1>
-    <!-- Contenido de la página de perfil -->
+    <!-- Mostrar mensajes de Django -->
+    {% if messages %}
+    <div id="popup-messages" style="display: none;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Mostrar mensajes de Django -->
+    <div class="container_perfil">
+        <div class="perfil_form">
+            <h1>Perfil de Usuario</h1>
+            <p class="campo"><strong>Nombre:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Dirección:</strong> {{ user.direccion }}</p>
+            <p>
+                <strong>Foto de Perfil:</strong>
+                {% if user.photo %}
+                    <img src="{{ user.photo.url }}" alt="Foto de Perfil" width="150">
+                {% else %}
+                    No has subido una foto de perfil.
+                {% endif %}
+            </p>
+            <a href="{% url 'edit_profile' %}">Editar Perfil</a>
+        </div>
+    </div>
+
+    <!-- footer section -->
+    <section class="container-fluid footer_section_perfil">
+        <p>
+        &copy;  2024 MARKETECO - Universidad de Sevilla </a>
+        </p>
+    </section>
+    <!-- footer section -->
+
+    <script>
+        // Mostrar el popup con SweetAlert
+        window.onload = function() {
+            var popupMessages = document.getElementById('popup-messages');
+            if (popupMessages && popupMessages.children.length > 0) {
+                Swal.fire({
+                    icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
+                    title: '¡ÉXITO!',
+                    html: popupMessages.innerHTML,
+                });
+            }
+        }
+      </script>
+
 </body>
 </html>
