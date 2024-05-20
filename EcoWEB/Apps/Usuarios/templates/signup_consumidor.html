@@ -125,7 +125,7 @@
                 {% if user.is_authenticated %}
                 <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{user.username}}</a>
                 {% else %}
-                <a href="{% provider_login_url 'google' %}?next=/" class="btn">Registrar con Google</a>
+                <a href="{% provider_login_url 'google' %}?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a>
                 {% endif %}
             </form>
         </div>

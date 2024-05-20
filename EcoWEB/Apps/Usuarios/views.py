@@ -9,10 +9,14 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import ConsumidorSignUpForm, ProductorSignUpForm, ProfileEditForm, LoginForm
 from django.contrib.auth.decorators import login_required
 
+from allauth.socialaccount.models import SocialAccount
+from allauth.socialaccount.models import SocialToken
 
 import hashlib
 import binascii
 import base64
+import random
+import string
 
 import pyrebase
 
@@ -166,6 +170,45 @@ def verificar_credenciales_firebase(email, password):
     user_firebase_info = auth.sign_in_with_email_and_password(email, password)
     return user_firebase_info is not None
 
+
+def generate_random_password(length=12):
+    # Generar una contraseña aleatoria
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(characters) for i in range(length))
+    return password
+
+@login_required
+def firebase_register(request):
+
+    try:
+        social_account_user = SocialAccount.objects.get(user=request.user, provider='google')
+
+        if social_account_user:
+            email = social_account_user.extra_data.get('email')
+            if email:
+                password = generate_random_password()
+                try:
+                    user_firebase_info = auth.create_user_with_email_and_password(email, password)
+                    # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
+                    uid = user_firebase_info['localId']
+                    guardar_consumidor_en_firebase(uid, email, password)
+                    messages.success(request, 'Registro exitoso.')
+                    print("Consumidor registrado con éxito en Django y Firebase")
+                except Exception as e:
+                    print('Error al registrar el usuario en Firebase.')
+                    print(e)
+            else:
+                print('No se pudo obtener el correo electrónico del usuario.')
+
+        else:
+            print('No se pudo obtener la cuenta de Google.')
+
+    except Exception as e:
+        messages.error(request, 'Error al registrar.')
+        print(e)
+    
+    return redirect('index')
+
 @login_required
 def perfil(request):
     return render(request, 'perfil.html')
@@ -180,10 +223,10 @@ def edit_profile(request):
             messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
             # Actualizar los datos en Firebase
             user_data = {
-                'email': user.email,
-                'nombre': user.username,
-                # Agrega otros campos según sea necesario
+                'email': request.POST['email'],
+                'password': request.POST['password'],
             }
+            #actualizar los datos en firebase authentication y bbdd
             # guardar_consumidor_en_firebase(user.uid, user_data)
             return redirect('perfil')  # Redirige al perfil después de la edición
     else:

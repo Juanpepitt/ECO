@@ -32,7 +32,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
     path('usuarios/signup/logout/', usuarios_views.log_out),
-    
+    path('usuarios/firebase_register/', usuarios_views.firebase_register),
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
