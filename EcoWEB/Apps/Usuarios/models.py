@@ -27,20 +27,24 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     groups = models.ManyToManyField('auth.Group', related_name='users', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='users', blank=True)
+    direccion = models.CharField(max_length=255, blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    fecha_alta = models.DateTimeField(auto_now_add=True)
+    photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
-class Consumidor(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='consumidor')
+# class Consumidor(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='consumidor')
 
-    def __str__(self):
-        return self.user.email
+#     def __str__(self):
+#         return self.user.email
 
-class Productor(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='productor')
+# class Productor(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='productor')
 
-    def __str__(self):
-        return self.user.email
+#     def __str__(self):
+#         return self.user.email

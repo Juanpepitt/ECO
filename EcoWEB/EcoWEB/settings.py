@@ -169,3 +169,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Configura el almacenamiento de fotos de perfil
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+
+# Configuración de EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+EMAIL_HOST = 'smtp.hostinger.com'
+EMAIL_HOST_USER = 'info@marketeco.shop'
+EMAIL_HOST_PASSWORD = 'Hollowpitt6.'

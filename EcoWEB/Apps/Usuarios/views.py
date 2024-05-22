@@ -8,9 +8,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from .forms import ConsumidorSignUpForm, ProductorSignUpForm, ProfileEditForm, LoginForm
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from google.oauth2 import service_account
+
+from django.conf import settings
 
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.models import SocialToken
+
+import threading
 
 import hashlib
 import binascii
@@ -177,6 +183,16 @@ def generate_random_password(length=12):
     password = ''.join(random.choice(characters) for i in range(length))
     return password
 
+
+def enviar_mail(request, email, password):
+    send_mail(
+        'Registro Exitoso en MARKETECO',
+        f'Hola, {request.user.username}!\n\nTu registro ha sido exitoso. Aquí están tus credenciales:\n\nEmail: {email}\nContraseña: {password}\n\nPor favor, guarda esta información en un lugar seguro.',
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+    )
+
 @login_required
 def firebase_register(request):
 
@@ -192,11 +208,21 @@ def firebase_register(request):
                     # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
                     uid = user_firebase_info['localId']
                     guardar_consumidor_en_firebase(uid, email, password)
-                    messages.success(request, 'Registro exitoso.')
+                    messages.success(request, 'Registro con éxito, se ha enviado su contraseña a su dirección email.')
                     print("Consumidor registrado con éxito en Django y Firebase")
+                    # Enviar correo electrónico con la contraseña
+                    
+                    thread = threading.Thread(target=enviar_mail, 
+                        args=(request, email, password, ))
+                    thread.start()
+
                 except Exception as e:
                     print('Error al registrar el usuario en Firebase.')
                     print(e)
+
+                    
+
+                
             else:
                 print('No se pudo obtener el correo electrónico del usuario.')
 
@@ -219,13 +245,14 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
+            print(f"Datos del formulario: {form.cleaned_data}")  # Depuración
             form.save()
             messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
             # Actualizar los datos en Firebase
-            user_data = {
-                'email': request.POST['email'],
-                'password': request.POST['password'],
-            }
+            # user_data = {
+            #     'email': request.POST['email'],
+            #     'password': request.POST['password'],
+            # }
             #actualizar los datos en firebase authentication y bbdd
             # guardar_consumidor_en_firebase(user.uid, user_data)
             return redirect('perfil')  # Redirige al perfil después de la edición
