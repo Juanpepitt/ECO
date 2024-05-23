@@ -146,6 +146,7 @@
                 {% endif %}
             </p>
             <a href="{% url 'edit_profile' %}" class="btn">Editar Perfil</a>
+            <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{user.username}}</a>
         </div>
     </div>
 
@@ -158,18 +159,17 @@
     <!-- footer section -->
 
     <script>
-        // Mostrar el popup con SweetAlert
         window.onload = function() {
             var popupMessages = document.getElementById('popup-messages');
             if (popupMessages && popupMessages.children.length > 0) {
                 Swal.fire({
-                    icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
+                    icon: 'success',
                     title: '¡ÉXITO!',
                     html: popupMessages.innerHTML,
                 });
             }
         }
-      </script>
+    </script>
 
 </body>
 </html>

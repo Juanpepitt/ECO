@@ -165,8 +165,6 @@ def log_in(request):
             login(request, user)
             # messages.success(request, 'Inicio de sesión automático exitoso.')
             return redirect('index')
-        else:
-            messages.error(request, 'Error en el inicio de sesión automático.')
 
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
@@ -247,7 +245,7 @@ def edit_profile(request):
         if form.is_valid():
             print(f"Datos del formulario: {form.cleaned_data}")  # Depuración
             form.save()
-            messages.success(request, 'Tu perfil ha sido actualizado exitosamente.')
+            messages.success(request, 'Tu perfil ha sido actualizado.')
             # Actualizar los datos en Firebase
             # user_data = {
             #     'email': request.POST['email'],

@@ -36,15 +36,3 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
-
-# class Consumidor(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='consumidor')
-
-#     def __str__(self):
-#         return self.user.email
-
-# class Productor(models.Model):
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='productor')
-
-#     def __str__(self):
-#         return self.user.email

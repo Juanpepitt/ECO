@@ -133,6 +133,8 @@
             <div>
                 <h2>¿No estás registrado?</h2>
                 <a href="/usuarios/signup" class="btn">Registrar</a>
+                {% load socialaccount %}
+                <a href="/accounts/google/login/" class="btn">Iniciar sesión con Google</a>
             </div>
         {% endif %} 
         </div>

@@ -121,19 +121,21 @@
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Registrar</button> 
-                {% load socialaccount %}
                 {% if user.is_authenticated %}
                 <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{user.username}}</a>
                 {% else %}
-                <a href="{% provider_login_url 'google' %}?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a>
+                {% load socialaccount %}
+                <a href="/accounts/google/login/?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a>
+
+                <!-- <a href="{% provider_login_url 'google' %}?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a> -->
                 {% endif %}
             </form>
         </div>
     </div>
-      <!-- footer section -->
-      <section class="container-fluid footer_section_signup">
+    <!-- footer section -->
+    <section class="container-fluid footer_section_signup">
         <p>
-        &copy; 2024 All Rights Reserved </a>
+        &copy;  2024 MARKETECO - Universidad de Sevilla </a>
         </p>
     </section>
     <!-- footer section -->
