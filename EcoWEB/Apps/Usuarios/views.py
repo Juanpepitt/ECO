@@ -46,7 +46,7 @@ config={
 }
 
 #Firebase ADMIN
-cred = credentials.Certificate("EcoWeb/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
+cred = credentials.Certificate("EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
 firebase_admin.initialize_app(cred)
 
 
@@ -325,7 +325,7 @@ def edit_profile(request):
             #     'password': request.POST['password'],
             # }
             #actualizar los datos en firebase authentication y bbdd
-            # guardar_consumidor_en_firebase(user.uid, user_data)
+            guardar_consumidor_en_firebase(user.uid, user_data)
             return redirect('perfil')  # Redirige al perfil después de la edición
     else:
         form = ProfileEditForm(instance=user)
