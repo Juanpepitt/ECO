@@ -29,8 +29,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requeriments.txt
 
-    - name: Create secret file
-      run: echo "${{ secrets.ADMIN_FIREBASE }}"
+    - name: Generate Firebase Admin SDK JSON file
+      env:
+        ADMIN_FIREBASE: ${{ secrets.ADMIN_FIREBASE }}
+      run: | 
+        echo "$ADMIN_FIREBASE" > EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
+  
         
     - name: Run Tests
       run: |
