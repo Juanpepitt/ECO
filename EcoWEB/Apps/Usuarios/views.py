@@ -49,6 +49,8 @@ config={
 cred = credentials.Certificate("Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
 firebase_admin.initialize_app(cred)
 
+print(firebase_admin)
+
 # Inicialización de la aplicación de Firebase
 firebase = pyrebase.initialize_app(config)
 database = firebase.database()
