@@ -33,12 +33,7 @@ jobs:
       env:
         ADMIN_FIREBASE: ${{ secrets.ADMIN_FIREBASE }}
       run: | 
-        echo "$ADMIN_FIREBASE" > EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
-    
-    - name: Print directory contents
-      run: ls -R EcoWEB
-      
-  
+        echo "$ADMIN_FIREBASE" > Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
         
     - name: Run Tests
       run: |
