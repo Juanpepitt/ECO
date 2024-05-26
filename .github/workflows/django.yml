@@ -28,6 +28,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requeriments.txt
+
+    - name: Create secret file
+      run: echo "${{ secrets.ADMIN_FIREBASE }}" > EcoWeb/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
         
     - name: Run Tests
       run: |
