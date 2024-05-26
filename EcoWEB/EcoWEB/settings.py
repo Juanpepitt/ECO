@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID=4
+SITE_ID=6
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,6 +57,10 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"access_type": "online"}
     }
 }
+# ACCOUNT_ADAPTER = 'Apps.Usuarios.adapters.CustomAccountAdapter'
+# SOCIALACCOUNT_ADAPTER = 'Apps.Usuarios.adapters.CustomSocialAccountAdapter'
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -167,8 +171,8 @@ MESSAGE_TAGS = {
 }
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = 'Usuarios/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Apps')
 # Configura el almacenamiento de fotos de perfil
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 

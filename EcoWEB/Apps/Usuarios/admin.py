@@ -2,22 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Consumidor
 
-# class CustomUserAdmin(UserAdmin):
-#     model = CustomUser
-#     list_display = ('email', 'first_name', 'last_name', 'is_staff', 'fecha_alta')
-#     fieldsets = (
-#         (None, {'fields': ('email', 'password')}),
-#         ('Personal info', {'fields': ('first_name', 'last_name', 'direccion', 'telefono', 'photo')}),
-#         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-#         ('Important dates', {'fields': ('last_login', 'date_joined', 'fecha_alta')}),
-#     )
-#     add_fieldsets = (
-#         (None, {
-#             'classes': ('wide',),
-#             'fields': ('email', 'password1', 'password2'),
-#         }),
-#     )
-#     search_fields = ('email', 'first_name', 'last_name')
-#     ordering = ('email',)
+class ConsumidorAdmin(UserAdmin):
+    list_display = ('email', 'nombre', 'apellidos', 'is_staff', 'is_active')
+    search_fields = ('email', 'nombre', 'apellidos')
+    readonly_fields = ('fecha_alta',)
+
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
 
 admin.site.register(Consumidor)

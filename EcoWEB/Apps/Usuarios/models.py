@@ -27,7 +27,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class Consumidor(AbstractUser):
-    username = None
+    username = models.CharField('Username', blank=True, max_length=50)
     email = models.EmailField('Correo electrónico', unique=True, max_length=100)
     nombre = models.CharField('Nombre', max_length=254, blank=True, null=True)
     apellidos = models.CharField('Apellidos', max_length=254, blank=True, null=True)
@@ -35,8 +35,9 @@ class Consumidor(AbstractUser):
     telefono = models.CharField('Teléfono', max_length=20, blank=True, null=True)
     fecha_alta = models.DateTimeField('Fecha de Alta', auto_now_add=True)
     photo = models.ImageField('Imagen de Perfil', upload_to='Usuarios/perfiles/', blank=True, null=True)
-    # usuario_activo = models.BooleanField(default=True)
-    # usuario_administrador = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -44,17 +45,13 @@ class Consumidor(AbstractUser):
     objects = CustomUserManager()
 
     # def __str__(self):
-    #     return f'{self.email}'
+    #     return self.email
 
-    # def has_perm(self, perm, obj = None):
-    #     return True
+    # def has_perm(self, perm, obj=None):
+    #     return self.is_superuser
 
     # def has_module_perms(self, app_label):
-    #     return True
-
-    # @property
-    # def is_staff(self):
-    #     return self.usuario_administrador
+    #     return self.is_superuser
 
 
         
