@@ -17,7 +17,6 @@ from django.contrib.messages import constants as messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -32,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID=3
+SITE_ID=4
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -120,6 +119,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Modelo
+AUTH_USER_MODEL = 'Usuarios.Consumidor'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -177,4 +179,6 @@ EMAIL_USE_SSL = True
 EMAIL_PORT = 465
 EMAIL_HOST = 'smtp.hostinger.com'
 EMAIL_HOST_USER = 'info@marketeco.shop'
+DEFAULT_FROM_EMAIL = 'info@marketeco.shop' 
 EMAIL_HOST_PASSWORD = 'Hollowpitt6.'
+

@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate
 
+from django.contrib.auth import views as auth_views
+
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -12,6 +14,8 @@ from django.core.mail import send_mail
 from google.oauth2 import service_account
 
 from django.conf import settings
+
+from django.urls import reverse_lazy
 
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.models import SocialToken
@@ -23,6 +27,9 @@ import binascii
 import base64
 import random
 import string
+
+import firebase_admin
+from firebase_admin import credentials, auth
 
 import pyrebase
 
@@ -38,23 +45,26 @@ config={
     "measurementId": "G-YXW94VQWHH"
 }
 
+#Firebase ADMIN
+cred = credentials.Certificate("Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
+firebase_admin.initialize_app(cred)
+
+
 # Inicialización de la aplicación de Firebase
 firebase = pyrebase.initialize_app(config)
 database = firebase.database()
-auth = firebase.auth()
+auth_firebase = firebase.auth()
 
 
 def signup_consumidor(request):
     clear_messages(request)
-    if request.method == 'POST':
-        form = ConsumidorSignUpForm(request.POST)
-
+    if request.method == 'POST' and request.POST['password1'] == request.POST['password2']:
         try:
-            user_firebase_info = auth.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
+            form = ConsumidorSignUpForm(request.POST)
+            user_firebase_info = auth_firebase.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
             # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
             uid = user_firebase_info['localId']
-            guardar_consumidor_en_firebase(uid, request.POST['email'], request.POST['password1'])
-            messages.success(request, 'Registro exitoso.')
+            guardar_consumidor_en_firebase(uid, request.POST['email'])
             print("Consumidor registrado con éxito en Django y Firebase")
             # Guardar las credenciales en la sesión
             request.session['username'] = request.POST['email']
@@ -72,10 +82,13 @@ def signup_consumidor(request):
         #creación en Django
         if form.is_valid():
             user = form.save()
+            messages.success(request, '¡¡Registro con éxito!!')
+            messages.success(request, 'Se ha iniciado sesión.')
             return redirect('login')    
     else:
         form = ConsumidorSignUpForm()
     return render(request, 'signup_consumidor.html', {'form': form})
+
 
 def signup_productor(request):
     if request.method == 'POST':
@@ -84,7 +97,7 @@ def signup_productor(request):
             user = form.save()
             try:
                 # Crear el usuario en Firebase Authentication
-                user_firebase_info = auth.create_user_with_email_and_password(user.email, user.password)
+                user_firebase_info = auth_firebase.create_user_with_email_and_password(user.email, user.password)
                 # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
                 uid = user_firebase_info['localId']
                 guardar_productor_en_firebase(uid, user.email, user.username, user.password)
@@ -101,12 +114,11 @@ def signup_productor(request):
         form = ProductorSignUpForm()
     return render(request, 'signup_productor.html', {'form': form})
 
-def guardar_consumidor_en_firebase(uid, email, password):
+def guardar_consumidor_en_firebase(uid, email):
 
     # Datos del consumidor a guardar
     consumidor_data = {
-        "user": email,
-        "pass": password
+        "user": email
     }
 
     # Guardar el consumidor en la base de datos
@@ -125,9 +137,9 @@ def guardar_productor_en_firebase(uid, email, nombre, password):
     database.child("Productores").child(uid).set(productor_data)
 
 
-def log_in(request):
-    clear_messages(request)
+def log_in_2(request):
     if request.method == 'POST':
+        clear_messages(request)
         form = LoginForm(request, request.POST)
         email_firebase = request.POST['username']
         pass_firebase = request.POST['password']
@@ -145,7 +157,7 @@ def log_in(request):
                     login(request, user)
                     
                     # Redirigir a la página de perfil después del inicio de sesión exitoso
-                    messages.success(request, 'Login exitoso. Bienvenido a MARKETECO.')
+                    messages.success(request, '¡¡Bienvenido a MARKETECO de nuevo!!')
                     return redirect('index')
                 else:
                     messages.error(request, 'Nombre de usuario o contraseña incorrectos.')   
@@ -163,15 +175,44 @@ def log_in(request):
         if user is not None:
             verificar_credenciales_firebase(username, password)
             login(request, user)
-            # messages.success(request, 'Inicio de sesión automático exitoso.')
             return redirect('index')
 
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+def log_in(request):
+    if request.method == 'POST':
+        clear_messages(request)
+        form = LoginForm(data=request.POST) 
+        if form.is_valid():            
+            email = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, '¡Bienvenido a MARKETECO de nuevo!')
+                return redirect('index')
+            else:
+                messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
+        else:
+            messages.error(request, '¡Algo salió mal! Por favor, verifica tus datos.')  # Agregar un mensaje de error general si el formulario no es válido
+    else:
+        # Intentar el login automático primero en Firebase y luego en Django
+        username = request.session.pop('username', None)
+        password = request.session.pop('password', None)
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+
+        form = LoginForm()  # Crear una instancia de LoginForm sin pasar datos adicionales
+
+    return render(request, 'login.html', {'form': form})
+
 
 def verificar_credenciales_firebase(email, password):
-    user_firebase_info = auth.sign_in_with_email_and_password(email, password)
+    user_firebase_info = auth_firebase.sign_in_with_email_and_password(email, password)
     return user_firebase_info is not None
 
 
@@ -182,7 +223,7 @@ def generate_random_password(length=12):
     return password
 
 
-def enviar_mail(request, email, password):
+def enviar_mail_2(request, email, password):
     send_mail(
         'Registro Exitoso en MARKETECO',
         f'Hola, {request.user.username}!\n\nTu registro ha sido exitoso. Aquí están tus credenciales:\n\nEmail: {email}\nContraseña: {password}\n\nPor favor, guarda esta información en un lugar seguro.',
@@ -190,6 +231,18 @@ def enviar_mail(request, email, password):
         [email],
         fail_silently=False,
     )
+
+def enviar_mail(request):
+    print(request)
+    send_mail(
+        'Registro Exitoso en MARKETECO',
+        f'Hola, {request.user.username}!\n\nTu registro ha sido exitoso.',
+        settings.EMAIL_HOST_USER,
+        [request.user.username],
+        fail_silently=False,
+    )
+    print(f'email enviado a {request.user.username}')
+    return redirect('password_reset_done')
 
 @login_required
 def firebase_register(request):
@@ -202,17 +255,17 @@ def firebase_register(request):
             if email:
                 password = generate_random_password()
                 try:
-                    user_firebase_info = auth.create_user_with_email_and_password(email, password)
+                    user_firebase_info = auth_firebase.create_user_with_email_and_password(email, password)
                     # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
                     uid = user_firebase_info['localId']
-                    guardar_consumidor_en_firebase(uid, email, password)
-                    messages.success(request, 'Registro con éxito, se ha enviado su contraseña a su dirección email.')
+                    guardar_consumidor_en_firebase(uid, email)
+                    messages.success(request, 'Registrado con éxito en Marketeco')
                     print("Consumidor registrado con éxito en Django y Firebase")
-                    # Enviar correo electrónico con la contraseña
                     
-                    thread = threading.Thread(target=enviar_mail, 
-                        args=(request, email, password, ))
-                    thread.start()
+                    # Enviar correo electrónico con la contraseña
+                    # thread = threading.Thread(target=enviar_mail, 
+                    #     args=(request, email, password, ))
+                    # thread.start()
 
                 except Exception as e:
                     print('Error al registrar el usuario en Firebase.')
@@ -233,9 +286,29 @@ def firebase_register(request):
     
     return redirect('index')
 
+def obtener_uid(request):
+    try:
+        user = auth.get_user_by_email(str(request.user))
+        uid = user.uid
+        print(f'UID del usuario: {uid}')
+    except firebase_admin.auth.UserNotFoundError:
+        print(f'No se encontró un usuario con el correo electrónico {email}')
+    except Exception as e:
+        print(f'Error al obtener el usuario: {str(e)}')
+    return uid
+
+
 @login_required
 def perfil(request):
-    return render(request, 'perfil.html')
+    user = request.user
+    
+    # Pasar los datos del usuario al contexto de la plantilla
+    context = {
+        'user': user,
+    }
+
+    # Renderizar la plantilla y pasar el contexto
+    return render(request, 'perfil.html', context)
 
 @login_required
 def edit_profile(request):
@@ -270,3 +343,13 @@ def clear_messages(request):
     storage = messages.get_messages(request)
     for _ in storage:
         pass
+
+
+class CustomPasswordResetView(auth_views.PasswordResetView):
+    email_template_name = 'password_reset_email.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['domain'] = 'localhost:8000'
+        context['protocol'] = 'http'
+        return context

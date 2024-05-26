@@ -19,6 +19,7 @@ from django.urls import path, include
 
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 from EcoWEB import views as ecoweb_views
 
@@ -35,7 +36,16 @@ urlpatterns = [
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
     path('usuarios/signup/logout/', usuarios_views.log_out),
     path('usuarios/firebase_register/', usuarios_views.firebase_register),
+
+    path('usuarios/password_reset/', usuarios_views.CustomPasswordResetView.as_view(template_name='password_reset_form.html', email_template_name='password_reset_email.html'), name='password_reset'),
+    path('usuarios/password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='password_reset_done.html'), name='password_reset_done'),
+    path('usuarios/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'), name='password_reset_confirm'),
+    path('usuarios/reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
+    
+    path('usuarios/send_mail/', usuarios_views.enviar_mail),
     path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
+
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

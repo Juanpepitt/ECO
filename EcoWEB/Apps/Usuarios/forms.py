@@ -1,13 +1,30 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import CustomUser
+from .models import Consumidor
+# from .models import CustomUser
+
+# class ConsumidorSignUpForm2(UserCreationForm):
+#     email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+
+#     class Meta(UserCreationForm.Meta):
+#         model = Consumidor
+#         fields = ('email', 'password1', 'password2')
+
+#     def save(self, commit=True):
+#         user = super().save(commit=False)
+#         user.username = self.cleaned_data["email"]  # Utiliza el correo electrónico como nombre de usuario
+#         user.email = self.cleaned_data["email"]  # Establece el correo electrónico
+#         if commit:
+#             user.save()
+#         return user
 
 class ConsumidorSignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Campo requerido. Por favor introduce una dirección mail válida.')
+    # nombre = forms.CharField(max_length=254, help_text='Campo requerido. Por favor introduce tu nombre.')
 
     class Meta(UserCreationForm.Meta):
-        model = User
+        model = Consumidor
         fields = ('email', 'password1', 'password2')
 
     def save(self, commit=True):
@@ -17,6 +34,8 @@ class ConsumidorSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
 
 class ProductorSignUpForm(UserCreationForm):
 
@@ -48,8 +67,8 @@ class ProductorSignUpForm(UserCreationForm):
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
-        model = CustomUser
-        fields = ['first_name', 'last_name', 'email', 'direccion', 'telefono', 'photo']
+        model = Consumidor
+        fields = ['nombre', 'apellidos', 'email', 'direccion', 'telefono', 'photo']
 
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(

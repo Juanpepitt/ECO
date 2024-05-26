@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -22,17 +24,37 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-class CustomUser(AbstractUser):
+
+
+class Consumidor(AbstractUser):
     username = None
-    email = models.EmailField(unique=True)
-    groups = models.ManyToManyField('auth.Group', related_name='users', blank=True)
-    user_permissions = models.ManyToManyField('auth.Permission', related_name='users', blank=True)
-    direccion = models.CharField(max_length=255, blank=True, null=True)
-    telefono = models.CharField(max_length=20, blank=True, null=True)
-    fecha_alta = models.DateTimeField(auto_now_add=True)
-    photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
+    email = models.EmailField('Correo electrónico', unique=True, max_length=100)
+    nombre = models.CharField('Nombre', max_length=254, blank=True, null=True)
+    apellidos = models.CharField('Apellidos', max_length=254, blank=True, null=True)
+    direccion = models.CharField('Direccion', max_length=255, blank=True, null=True)
+    telefono = models.CharField('Teléfono', max_length=20, blank=True, null=True)
+    fecha_alta = models.DateTimeField('Fecha de Alta', auto_now_add=True)
+    photo = models.ImageField('Imagen de Perfil', upload_to='Usuarios/perfiles/', blank=True, null=True)
+    # usuario_activo = models.BooleanField(default=True)
+    # usuario_administrador = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+    # def __str__(self):
+    #     return f'{self.email}'
+
+    # def has_perm(self, perm, obj = None):
+    #     return True
+
+    # def has_module_perms(self, app_label):
+    #     return True
+
+    # @property
+    # def is_staff(self):
+    #     return self.usuario_administrador
+
+
+        
