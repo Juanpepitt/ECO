@@ -1,3 +1,4 @@
 venv/*
-EcoWeb/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
-migrations/*
+EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
+EcoWEB/Apps/Usuarios/migrations/*
+EcoWEB/Apps/Usuarios/__pycache__/*
