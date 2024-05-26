@@ -29,14 +29,17 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requeriments.txt
 
+    - name: Create directory if not exists
+      run: mkdir -p Claves
+
     - name: Generate Firebase Admin SDK JSON file
       env:
           ADMIN_FIREBASE: ${{ secrets.ADMIN_FIREBASE }}
       run: |
-        echo "$ADMIN_FIREBASE" > Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
+        echo "$ADMIN_FIREBASE" > Claves/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
 
     - name: Copy Firebase Admin SDK JSON file to actual location
-      run: cp Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
+      run: cp Claves/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
 
     - name: Run Tests
       run: |
