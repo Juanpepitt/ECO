@@ -30,7 +30,7 @@ jobs:
         pip install -r requeriments.txt
 
     - name: Create directory if not exists
-      run: mkdir -p Claves
+      run: mkdir -p Apps/Usuarios
 
     - name: Generate Firebase Admin SDK JSON file
       env:
