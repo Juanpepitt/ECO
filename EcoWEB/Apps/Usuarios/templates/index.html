@@ -24,6 +24,60 @@
   <link href="static/css/responsive.css" rel="stylesheet" />
   <!-- SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+    .header_section {
+      background-color: #f8f9fa; /* Fondo claro para contraste */
+      padding: 10px 0;
+    }
+  
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+  
+    .navbar-brand img {
+      margin-right: 10px;
+    }
+  
+    .navbar-brand span {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .form-inline {
+      display: flex;
+      align-items: center;
+      flex-grow: 1; /* Para que ocupe todo el espacio disponible */
+    }
+  
+    .form-control {
+      margin-left: 70px;
+      flex-grow: 1; /* Para que la barra de búsqueda ocupe todo el espacio disponible */
+      margin-right: 20px;
+      max-width: 800px;
+    }
+  
+    .btn-outline-success {
+      width: auto; /* Ajusta el ancho automáticamente */
+    }
+  
+    @media (max-width: 768px) {
+      .navbar-brand span {
+        display: none;
+      }
+  
+      .nav-link span {
+        display: none;
+      }
+  
+      .form-inline {
+        max-width: 100%;
+      }
+    }
+  </style>
+
 </head>
 
 
@@ -38,45 +92,68 @@
   {% endif %}
   <!-- Mostrar mensajes de Django -->
 
-  <div class="hero_area">
-    <!-- header section strats -->
-    <header class="header_section">
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="">
-            <img src="static/images/logo.png" alt="">
-            <span>MARKETECO</span>
-          </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-    
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-              <form class="form-inline my-2 my-lg-0 mx-auto">
-                <input class="form-control mr-sm-2" type="search" placeholder="Buscar producto" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">BUSCAR</button>
-              </form>
-            </div>
-          </div>
+    <!-- header section starts -->
+<header class="header_section">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg custom_nav-container">
+      <a class="navbar-brand" href="/">
+        <img src="static/images/MARKETECO_logo.png" alt="MARKETECO_logo" style="width: 120px; height: 120px; border-radius: 80%;">
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0 flex-grow-1">
+          <input class="form-control mr-sm-2 flex-grow-1" type="search" placeholder="Buscar producto" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">BUSCAR</button>
+        </form>
+        <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
-          <a class="navbar-brand" href="usuarios/perfil">
-            <!-- <img src="static/images/logo.png" alt=""> -->            
-            <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 80px; height: 80px; border-radius: 50%;">            
-            <span>{{ user.email }}</span>
-          </a>
+          <li class="nav-item">
+            <a class="nav-link" href="usuarios/perfil">
+              <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 70px; height: 70px; border-radius: 50%;">
+              <span>{{ user.email }}</span>
+            </a>
+          </li>
           {% else %}
-          <a class="navbar-brand" href="usuarios/login">
-            <img src="static/images/logo.png" alt="">
-            <span>LOGIN</span>
-          </a>
+          <li class="nav-item">
+            <a class="nav-link" href="usuarios/login">
+              <img src="static/images/logo.png" alt="" style="width: 50px; height: 50px;">
+              <span>LOGIN</span>
+            </a>
+          </li>
           {% endif %}
-        </nav>
+        </ul>
       </div>
-    </header>
-    
-    <!-- end header section -->
+    </nav>
+  </div>
+</header>
+<!-- header section ends -->
+
+<!-- Menú horizontal -->
+<nav class="navbar navbar-expand-lg custom_nav-container">
+  <div class="container-fluid">
+    <ul class="navbar-nav mx-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Inicio</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Categorías</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Ofertas</a>
+      </li>
+      <!-- Añade más elementos según sea necesario -->
+    </ul>
+  </div>
+</nav>
+<!-- end Menú horizontal -->
+
     <!-- slider section -->
     <section class=" slider_section position-relative">
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

@@ -20,8 +20,11 @@ from django.urls import reverse_lazy
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.models import SocialToken
 
-import threading
+import requests
+from requests.exceptions import HTTPError
+import json
 
+import threading
 import hashlib
 import binascii
 import base64
@@ -48,8 +51,6 @@ config={
 #Firebase ADMIN
 cred = credentials.Certificate("Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
 firebase_admin.initialize_app(cred)
-
-print(firebase_admin)
 
 # Inicialización de la aplicación de Firebase
 firebase = pyrebase.initialize_app(config)
@@ -92,25 +93,34 @@ def signup_consumidor(request):
 
 
 def signup_productor(request):
-    if request.method == 'POST':
-        form = ProductorSignUpForm(request.POST)
+    clear_messages(request)
+    if request.method == 'POST' and request.POST['password1'] == request.POST['password2']:
+        try:
+            form = ProductorSignUpForm(request.POST)
+            user_firebase_info = auth_firebase.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
+            # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
+            uid = user_firebase_info['localId']
+            guardar_productor_en_firebase(uid, request.POST['email'])
+            print("Productor registrado con éxito en Django y Firebase")
+            # Guardar las credenciales en la sesión
+            request.session['username'] = request.POST['email']
+            request.session['password'] = request.POST['password1']
+
+        except Exception as e:
+            error_code = e.args[0]['error']['message']
+            if error_code == 'EMAIL_EXISTS':
+                messages.error(request, 'El usuario ya existe. Por favor, inicia sesión.')
+            else:
+                messages.error(request, 'Error al crear el usuario en Firebase.')
+            user.delete() #revertir usuario de django
+            print("Error al crear el usuario en Firebase:", e)
+
+        #creación en Django
         if form.is_valid():
             user = form.save()
-            try:
-                # Crear el usuario en Firebase Authentication
-                user_firebase_info = auth_firebase.create_user_with_email_and_password(user.email, user.password)
-                # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
-                uid = user_firebase_info['localId']
-                guardar_productor_en_firebase(uid, user.email, user.username, user.password)
-                return redirect('home')
-            except Exception as e:
-                error_code = e.args[0]['error']['message']
-                if error_code == 'EMAIL_EXISTS':
-                    messages.error(request, 'El usuario ya existe. Por favor, inicia sesión.')
-                else:
-                    messages.error(request, 'Error al crear el usuario en Firebase.')
-                user.delete() #revertir usuario de django
-                print("Error al crear el usuario en Firebase:", e)
+            messages.success(request, '¡¡Registro con éxito!!')
+            messages.success(request, 'Se ha iniciado sesión.')
+            return redirect('login')    
     else:
         form = ProductorSignUpForm()
     return render(request, 'signup_productor.html', {'form': form})
@@ -125,61 +135,26 @@ def guardar_consumidor_en_firebase(uid, email):
     # Guardar el consumidor en la base de datos
     database.child("Consumidores").child(uid).set(consumidor_data)
 
+def actualizar_consumidor_en_firebase(request, user_data):
+    #Obtener el uid del usuario actual
+    uid = obtener_uid(request=request)
+    database.child("Consumidores").child(uid).set(user_data)
+
+
 def guardar_productor_en_firebase(uid, email, nombre, password):
 
     # Datos del consumidor a guardar
     productor_data = {
-        "nombre": nombre,
-        "email": email,
-        "pass": password
+        "user": email
     }
 
     # Guardar el consumidor en la base de datos
     database.child("Productores").child(uid).set(productor_data)
 
-
-def log_in_2(request):
-    if request.method == 'POST':
-        clear_messages(request)
-        form = LoginForm(request, request.POST)
-        email_firebase = request.POST['username']
-        pass_firebase = request.POST['password']
-
-        if form.is_valid():            
-            # Verificar credenciales en Firebase
-            if verificar_credenciales_firebase(email_firebase, pass_firebase):
-                # Si las credenciales son válidas, iniciar sesión en Django
-                
-                email = form.cleaned_data['username']
-                password = form.cleaned_data['password']
-                
-                user = authenticate(request, username=email, password=password)
-                if user is not None:
-                    login(request, user)
-                    
-                    # Redirigir a la página de perfil después del inicio de sesión exitoso
-                    messages.success(request, '¡¡Bienvenido a MARKETECO de nuevo!!')
-                    return redirect('index')
-                else:
-                    messages.error(request, 'Nombre de usuario o contraseña incorrectos.')   
-                    print("no existe en Django")
-            else:
-                messages.error(request, 'No se ha registrado bien')
-                print ("no es válido en Firebase")
-        else:
-            print("no es válido el formulario: ")
-    else:
-        # Intentar el login automático primero en Firebase y luego en Django
-        username = request.session.pop('username', None)
-        password = request.session.pop('password', None)
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            verificar_credenciales_firebase(username, password)
-            login(request, user)
-            return redirect('index')
-
-        form = LoginForm()
-    return render(request, 'login.html', {'form': form})
+def actualizar_productor_en_firebase(request, user_data):
+    #Obtener el uid del usuario actual
+    uid = obtener_uid(request=request)
+    database.child("Productores").child(uid).set(user_data)
 
 def log_in(request):
     if request.method == 'POST':
@@ -224,15 +199,6 @@ def generate_random_password(length=12):
     return password
 
 
-def enviar_mail_2(request, email, password):
-    send_mail(
-        'Registro Exitoso en MARKETECO',
-        f'Hola, {request.user.username}!\n\nTu registro ha sido exitoso. Aquí están tus credenciales:\n\nEmail: {email}\nContraseña: {password}\n\nPor favor, guarda esta información en un lugar seguro.',
-        settings.EMAIL_HOST_USER,
-        [email],
-        fail_silently=False,
-    )
-
 def enviar_mail(request):
     print(request)
     send_mail(
@@ -259,22 +225,20 @@ def firebase_register(request):
                     user_firebase_info = auth_firebase.create_user_with_email_and_password(email, password)
                     # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
                     uid = user_firebase_info['localId']
-                    guardar_consumidor_en_firebase(uid, email)
+                    if(request.POST['CIF'] is not None):
+                        guardar_productor_en_firebase(uid, email)
+                    else:
+                        guardar_consumidor_en_firebase(uid, email)
                     messages.success(request, 'Registrado con éxito en Marketeco')
                     print("Consumidor registrado con éxito en Django y Firebase")
-                    
-                    # Enviar correo electrónico con la contraseña
-                    # thread = threading.Thread(target=enviar_mail, 
-                    #     args=(request, email, password, ))
-                    # thread.start()
-
+                except requests.HTTPError as e:
+                    error_json = e.args[1]
+                    error = json.loads(error_json)['error']['message']
+                    if error == "EMAIL_EXISTS":
+                        print('El usuario ya se encuentra en Firebase. Por favor, revisar Firebase.')
                 except Exception as e:
-                    print('Error al registrar el usuario en Firebase.')
                     print(e)
 
-                    
-
-                
             else:
                 print('No se pudo obtener el correo electrónico del usuario.')
 
@@ -303,7 +267,6 @@ def obtener_uid(request):
 def perfil(request):
     user = request.user
     
-    # Pasar los datos del usuario al contexto de la plantilla
     context = {
         'user': user,
     }
@@ -321,12 +284,15 @@ def edit_profile(request):
             form.save()
             messages.success(request, 'Tu perfil ha sido actualizado.')
             # Actualizar los datos en Firebase
-            # user_data = {
-            #     'email': request.POST['email'],
-            #     'password': request.POST['password'],
-            # }
-            #actualizar los datos en firebase authentication y bbdd
-            guardar_consumidor_en_firebase(user.uid, user_data)
+            user_data = {
+                'user': request.POST['email'],
+                'nombre': request.POST['nombre'],
+                'apellidos': request.POST['apellidos'],
+                'direccion': request.POST['direccion'],
+                'telefono': request.POST['telefono']
+            }
+            actualizar_consumidor_en_firebase(request, user_data)
+            
             return redirect('perfil')  # Redirige al perfil después de la edición
     else:
         form = ProfileEditForm(instance=user)

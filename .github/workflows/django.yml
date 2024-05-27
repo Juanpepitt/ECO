@@ -29,7 +29,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requeriments.txt
 
-    - name: Create directory if not exists
+    - name: Crear la carpeta para sortear incongruencias
       run: mkdir -p Apps/Usuarios
 
     - name: Generate Firebase Admin SDK JSON file
@@ -38,7 +38,7 @@ jobs:
       run: |
         echo "$ADMIN_FIREBASE" > Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
 
-    - name: Copy Firebase Admin SDK JSON file to actual location
+    - name: Copiar Firebase Admin SDK JSON file
       run: cp Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
 
     - name: Run Tests

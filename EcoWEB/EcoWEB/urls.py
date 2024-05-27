@@ -34,6 +34,7 @@ urlpatterns = [
     path('accounts/login/', usuarios_views.log_in),
     path("accounts/", include("allauth.urls")),
     path('usuarios/signup/', usuarios_views.signup_consumidor, name='signup_consumidor'),
+    path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
     path('usuarios/signup/logout/', usuarios_views.log_out),
     path('usuarios/firebase_register/', usuarios_views.firebase_register),
 
@@ -43,7 +44,7 @@ urlpatterns = [
     path('usuarios/reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='password_reset_complete.html'), name='password_reset_complete'),
     
     path('usuarios/send_mail/', usuarios_views.enviar_mail),
-    path('usuarios/signup_prod/', usuarios_views.signup_productor, name='signup_productor'),
+    
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
 
