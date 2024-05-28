@@ -22,12 +22,12 @@ class ConsumidorSignUpForm(UserCreationForm):
 
 class ProductorSignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, label='Correo electrónico', help_text='Campo requerido. Por favor introduce una dirección mail válida.')
-    cif = forms.CharField(max_length=100, label= 'CIF/NIF', help_text='Campo requerido. Introduzca el CIF de la empresa.')
+    cif = forms.CharField(max_length=100, label= 'CIF/NIF', help_text='Campo requerido. Introduzca el CIF o NIF de la empresa.')
 
     class Meta:
         model = Productor
         fields = ('email', 'cif', 'password1', 'password2')
-    
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.username = self.cleaned_data["email"]  # Utiliza el correo electrónico como nombre de usuario
@@ -41,6 +41,11 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Consumidor
         fields = ['nombre', 'apellidos', 'email', 'direccion', 'telefono', 'photo']
+
+class ProfileEditFormProd(forms.ModelForm):
+    class Meta:
+        model = Productor
+        fields = ['nombre', 'apellidos', 'email', 'cif', 'direccion', 'telefono', 'photo']
 
 class LoginForm(AuthenticationForm):
     username = forms.EmailField(

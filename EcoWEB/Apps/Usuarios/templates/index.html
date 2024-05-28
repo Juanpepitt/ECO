@@ -113,7 +113,9 @@
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="usuarios/perfil">
+              {% if user.photo %}
               <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 70px; height: 70px; border-radius: 50%;">
+              {% endif %}
               <span>{{ user.email }}</span>
             </a>
           </li>

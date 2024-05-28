@@ -123,9 +123,6 @@
                 <button type="submit">Registrar</button> 
                 {% if user.is_authenticated %}
                 <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{user.username}}</a>
-                {% else %}
-                {% load socialaccount %}
-                <a href="/accounts/google/login/?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a>
                 {% endif %}
             </form>
         </div>

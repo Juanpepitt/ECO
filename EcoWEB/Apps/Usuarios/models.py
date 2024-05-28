@@ -49,7 +49,7 @@ class Consumidor(AbstractUser):
 
 
 class Productor(Consumidor):
-    CIF = models.CharField('CIF', unique=True, max_length=200)
+    cif = models.CharField('CIF', unique=True, max_length=200)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
