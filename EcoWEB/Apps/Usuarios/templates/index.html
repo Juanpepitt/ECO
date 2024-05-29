@@ -49,12 +49,12 @@
     .form-inline {
       display: flex;
       align-items: center;
-      flex-grow: 1; /* Para que ocupe todo el espacio disponible */
+      flex-grow: 1;
     }
   
     .form-control {
-      margin-left: 70px;
-      flex-grow: 1; /* Para que la barra de búsqueda ocupe todo el espacio disponible */
+      margin-left: 80px;
+      flex-grow: 1; 
       margin-right: 20px;
       max-width: 800px;
     }
@@ -113,8 +113,10 @@
           {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="usuarios/perfil">
-              {% if user.photo %}
-              <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 70px; height: 70px; border-radius: 50%;">
+              {% if user.photo_url %}
+                <img src="{{ user.photo_url }}" alt="Profile Picture" style="width: 70px; height: 70px; border-radius: 50%;">
+              {% elif user.photo %}
+                <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 70px; height: 70px; border-radius: 50%;">
               {% endif %}
               <span>{{ user.email }}</span>
             </a>
@@ -139,16 +141,13 @@
   <div class="container-fluid">
     <ul class="navbar-nav mx-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">Inicio</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="#">Productos</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Categorías</a>
+        <a class="nav-link" href="#">Productores</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Ofertas</a>
+        <a class="nav-link" href="#">Contacto</a>
       </li>
       <!-- Añade más elementos según sea necesario -->
     </ul>

@@ -121,8 +121,10 @@
             <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
             <p><strong>Fecha de Alta:</strong> {{ user.fecha_alta }}</p>
             <p>
-                <strong>Foto de Perfil:</strong>
-                {% if user.photo %}
+                <strong>Foto de Perfil:</strong><br>
+                {% if user.photo_url %}
+                    <img src="{{ user.photo_url }}" alt="Profile Picture" width="200">
+                {% elif user.photo %}
                     <img src="{{ user.photo.url }}" alt="Foto de Perfil" width="200">
                 {% else %}
                     No has subido una foto de perfil.
@@ -132,7 +134,7 @@
             <a href="{% url 'edit_profile' %}" class="btn">Editar Perfil</a>
             
             <div class="button_group">
-                <a href="/" class="btn btn_back">Volver a Inicio</a>
+                <a href="/" class="btn">Volver a Inicio</a>
                 <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{ user.username }}</a>
             </div>
         </div>

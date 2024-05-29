@@ -35,6 +35,7 @@ class Consumidor(AbstractUser):
     telefono = models.CharField('Teléfono', max_length=20, blank=True, null=True)
     fecha_alta = models.DateTimeField('Fecha de Alta', auto_now_add=True)
     photo = models.ImageField('Imagen de Perfil', upload_to='Usuarios/perfiles/', blank=True, null=True)
+    photo_url = models.URLField('URL de Imagen de Perfil', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

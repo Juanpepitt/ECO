@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID=6
+SITE_ID=12
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -54,11 +54,14 @@ SOCIALACCOUNT_PROVIDERS = {
             "profile",
             "email"
         ],
-        "AUTH_PARAMS": {"access_type": "online"}
+        "AUTH_PARAMS": {"access_type": "online"},
+        'OAUTH_PKCE_ENABLED': True,
     }
 }
-# ACCOUNT_ADAPTER = 'Apps.Usuarios.adapters.CustomAccountAdapter'
-# SOCIALACCOUNT_ADAPTER = 'Apps.Usuarios.adapters.CustomSocialAccountAdapter'
+
+
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 
 
@@ -171,7 +174,7 @@ MESSAGE_TAGS = {
 }
 
 
-MEDIA_URL = 'Usuarios/media/'
+MEDIA_URL = 'Usuarios/perfiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Apps')
 # Configura el almacenamiento de fotos de perfil
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'

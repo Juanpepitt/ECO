@@ -61,7 +61,7 @@ auth_firebase = firebase.auth()
 
 def signup_consumidor(request):
     clear_messages(request)
-    if request.method == 'POST' and request.POST['password1'] == request.POST['password2']:
+    if request.method == 'POST' and request.POST['password1'] == request.POST['password2'] and not verificar_usuario_en_firebase_auth(request.POST['email']):
         try:
             form = ConsumidorSignUpForm(request.POST)
             user_firebase_info = auth_firebase.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
@@ -93,7 +93,7 @@ def signup_consumidor(request):
             user = form.save()
             messages.success(request, '¡¡Registro con éxito!!')
             messages.success(request, 'Se ha iniciado sesión.')
-            return redirect('login')    
+            return redirect('login')
     else:
         form = ConsumidorSignUpForm()
     return render(request, 'signup_consumidor.html', {'form': form})
@@ -101,9 +101,10 @@ def signup_consumidor(request):
 
 def signup_productor(request):
     clear_messages(request)
-    if request.method == 'POST' and request.POST['password1'] == request.POST['password2']:
+    if request.method == 'POST' and request.POST['password1'] == request.POST['password2'] and not verificar_usuario_en_firebase_auth(request.POST['email']):
         try:
             form = ProductorSignUpForm(request.POST)
+            print(form.is_valid())
             user_firebase_info = auth_firebase.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
             # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
             uid = user_firebase_info['localId']
@@ -123,8 +124,7 @@ def signup_productor(request):
             error_code = e.args[0]['error']['message']
             if error_code == 'EMAIL_EXISTS':
                 messages.error(request, 'El usuario ya existe. Por favor, inicia sesión.')
-            else:
-                messages.error(request, 'Error al crear el usuario en Firebase.')
+
             user.delete() #revertir usuario de django
             print("Error al crear el usuario en Firebase:", e)
 
@@ -149,6 +149,20 @@ def guardar_consumidor_en_firebase(uid, email):
 
     # Guardar el consumidor en la base de datos
     database.child("Consumidores").child(uid).set(consumidor_data)
+
+def verificar_usuario_en_firebase_auth(email):
+    api_key = config["apiKey"]
+    url = f"https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={api_key}"
+    payload = json.dumps({"email": [email]})
+    headers = {"Content-Type": "application/json"}
+
+    response = requests.post(url, data=payload, headers=headers)
+    if response.status_code == 200:
+        users = response.json().get("users", [])
+        if users:
+            return True
+    return False
+
 
 def actualizar_consumidor_en_firebase(request, user_data):
     #Obtener el uid del usuario actual
@@ -175,12 +189,15 @@ def actualizar_productor_en_firebase(request, user_data):
 def log_in(request):
     if request.method == 'POST':
         clear_messages(request)
-        form = LoginForm(data=request.POST) 
+        form = LoginForm(data=request.POST)
+        print(form.is_valid())
         if form.is_valid():            
             email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            
-            user = authenticate(request, username=email, password=password)
+            print(email)
+            print(password)
+            user = authenticate(request=request, username=email, password=password)
+            print(user)
             if user is not None:
                 login(request, user)
                 messages.success(request, '¡Bienvenido a MARKETECO de nuevo!')

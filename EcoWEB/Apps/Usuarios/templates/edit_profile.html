@@ -55,33 +55,10 @@
         color: #023b48;
     }
 
-/* 
-    .login_form input[type="text"],
-    .login_form input[type="password"],
-    .login_form button[type="submit"] {
-        width: calc(100% - 22px); 
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box; 
-    }
-
-    .login_form button[type="submit"] {
-        background-color: #3d8a4f;
-        color: #ffffff;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .login_form button[type="submit"]:hover {
-        background-color: #2c6b3a; 
-    } */
-
     .btn {
         width: calc(100% - 22px); 
         padding: 10px;
-        margin-bottom: 20px;
+        margin: 20px;
         border: 1px solid #ddd;
         border-radius: 5px;
         box-sizing: border-box; 
@@ -89,11 +66,23 @@
         color: #ffffff;
         cursor: pointer;
         transition: background-color 0.3s ease;
+    }
+    
+    .btn_pass{
+        border: 1px solid #ddd;
+        background-color: #3d6f8a;
+        color: #ffffff;
+
     }
 
     .btn:hover {
         background-color: #2c6b3a; 
     }
+
+    .button_group {
+            display: flex;
+            justify-content: center;
+        }
 
 
     /* footer section*/
@@ -125,7 +114,17 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
+                
+                {% load socialaccount %}
+                {% if not socialaccount%}                    
                 <button type="submit" class="btn">Guardar Cambios</button>
+                {% else %}
+                <div class="button_group">
+                    <a href="/usuarios/password_reset/" class="btn btn_pass">Editar Contraseña</a>
+                    <button type="submit" class="btn">Guardar Cambios</button>
+                </div>
+                {% endif %}
+                
             </form>
             <a href="{% url 'perfil' %}" class="btn">Cancelar</a>
         </div>
