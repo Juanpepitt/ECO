@@ -49,5 +49,11 @@ urlpatterns = [
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
     path('usuarios/editar_perfil_prod/', usuarios_views.edit_profile_prod, name='edit_profile_prod'),
 
+
+    path('usuarios/productos/', usuarios_views.products, name='products'),
+    path('usuarios/productos/add/', usuarios_views.add_product, name='add_product'),
+    path('usuarios/productos/edit/<str:product_id>/', usuarios_views.edit_product, name='edit_product'),
+    path('usuarios/productos/delete/<str:product_id>/', usuarios_views.delete_product, name='delete_product'),
+
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

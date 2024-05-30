@@ -104,7 +104,6 @@ def signup_productor(request):
     if request.method == 'POST' and request.POST['password1'] == request.POST['password2'] and not verificar_usuario_en_firebase_auth(request.POST['email']):
         try:
             form = ProductorSignUpForm(request.POST)
-            print(form.is_valid())
             user_firebase_info = auth_firebase.create_user_with_email_and_password(request.POST['email'], request.POST['password1'])
             # Obtener el UID del usuario desde la respuesta de Firebase Authentication y Guardar el usuario en la base de datos de Firebase
             uid = user_firebase_info['localId']
@@ -175,7 +174,18 @@ def guardar_productor_en_firebase(uid, email, cif):
     # Datos del consumidor a guardar
     productor_data = {
         "user": email,
-        "cif": cif
+        "cif": cif,
+        "productos": {
+            "example_product_id": {
+                "nombre": "",
+                "descripcion": "",
+                "imagenes": [],
+                "precio": 0.0,
+                "categoria": "",
+                "certificaciones_ecologicas": [],
+                "disponibilidad": False
+            }
+        }
     }
 
     # Guardar el consumidor en la base de datos
@@ -190,14 +200,10 @@ def log_in(request):
     if request.method == 'POST':
         clear_messages(request)
         form = LoginForm(data=request.POST)
-        print(form.is_valid())
         if form.is_valid():            
             email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            print(email)
-            print(password)
             user = authenticate(request=request, username=email, password=password)
-            print(user)
             if user is not None:
                 login(request, user)
                 messages.success(request, '¡Bienvenido a MARKETECO de nuevo!')
@@ -291,7 +297,7 @@ def obtener_uid(request):
     try:
         user = auth.get_user_by_email(str(request.user))
         uid = user.uid
-        print(f'UID del usuario: {uid}')
+        # print(f'UID del usuario: {uid}')
     except firebase_admin.auth.UserNotFoundError:
         print(f'No se encontró un usuario con el correo electrónico {email}')
     except Exception as e:
@@ -375,6 +381,105 @@ def clear_messages(request):
     storage = messages.get_messages(request)
     for _ in storage:
         pass
+
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user_email = request.user.email
+
+            # Crea un nuevo producto en Firebase
+            product_data = {
+                'nombre': data['nombre'],
+                'descripcion': data['descripcion'],
+                'precio': str(data['precio']),
+                'stock': data['stock'],
+                'imagen': data['imagen'],
+                'productor': user_email
+            }
+            database.child("productos").push(product_data)
+            messages.success(request, 'Producto añadido con éxito')
+            return redirect('product_list')
+    else:
+        form = ProductForm()
+    return render(request, 'add_product.html', {'form': form})
+
+@login_required
+def edit_product(request, product_id):
+    product = database.child("productos").child(product_id).get().val()
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            # Actualiza el producto en Firebase
+            updated_product_data = {
+                'nombre': data['nombre'],
+                'descripcion': data['descripcion'],
+                'precio': str(data['precio']),
+                'stock': data['stock'],
+                'imagen': data['imagen']
+            }
+            database.child("productos").child(product_id).update(updated_product_data)
+            messages.success(request, 'Producto actualizado con éxito')
+            return redirect('product_list')
+    else:
+        initial_data = {
+            'nombre': product['nombre'],
+            'descripcion': product['descripcion'],
+            'precio': product['precio'],
+            'stock': product['stock'],
+            'imagen': product['imagen']
+        }
+        form = ProductForm(initial=initial_data)
+    return render(request, 'edit_product.html', {'form': form, 'product_id': product_id})
+
+@login_required
+def delete_product(request, product_id):
+    database.child("productos").child(product_id).remove()
+    messages.success(request, 'Producto eliminado con éxito')
+    return redirect('product_list')
+
+@login_required
+def products(request):
+    uid = obtener_uid(request)
+    productos_ref = database.child("Productores").child(uid).child("productos").get()
+
+    productos = [
+    {
+        "id": product_id,
+        "nombre": product_data.get("nombre", ""),
+        "descripcion": product_data.get("descripcion", ""),
+        "imagenes": product_data.get("imagenes", []),
+        "precio": product_data.get("precio", ""),
+        "categoria": product_data.get("categoria", ""),
+        "certificaciones_ecologicas": product_data.get("certificaciones_ecologicas", []),
+        "disponibilidad": product_data.get("disponibilidad", False)
+    } 
+    for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
+
+    # productos = []
+    # if productos_ref and productos_ref.val():
+    #     for product_id, product_data in productos_ref.val().items():
+    #         producto = {
+    #             "id": product_id,
+    #             "nombre": product_data.get("nombre", ""),
+    #             "descripcion": product_data.get("descripcion", ""),
+    #             "imagenes": product_data.get("imagenes", []),
+    #             "precio": product_data.get("precio", ""),
+    #             "categoria": product_data.get("categoria", ""),
+    #             "certificaciones_ecologicas": product_data.get("certificaciones_ecologicas", []),
+    #             "disponibilidad": product_data.get("disponibilidad", False)
+    #         }
+    #         productos.append(producto)
+    # else:
+    #     print("No se encontraron productos para el usuario.")
+
+    return render(request, 'products.html', {'productos': productos})
+
+
 
 
 class CustomPasswordResetView(auth_views.PasswordResetView):

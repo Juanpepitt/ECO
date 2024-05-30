@@ -10,7 +10,7 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>PERFIL</title>
+    <title>PRODUCTOS</title>
     <!-- slider stylesheet -->
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
     <!-- bootstrap core css -->
@@ -100,70 +100,26 @@
     </style>
 </head>
 <body>
-    
-    <!-- Mostrar mensajes de Django -->
-    {% if messages %}
-    <div id="popup-messages" style="display: none;">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <!-- Mostrar mensajes de Django -->
-
     <div class="container_perfil">
+        <h1>Lista de Productos</h1>
         <div class="perfil_form">
-            <h2>Perfil de Usuario</h2>
-            <p><strong>Nombre:</strong> {{ user.nombre }}</p>
-            <p><strong>Apellidos:</strong> {{ user.apellidos }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>CIF/NIF:</strong> {{ user.cif }}</p>
-            <p><strong>Dirección:</strong> {{ user.direccion }}</p>
-            <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
-            <p><strong>Fecha de Alta:</strong> {{ user.fecha_alta }}</p>
-            <p>
-                <strong>Foto de Perfil:</strong>
-                {% if user.photo %}
-                    <img src="{{ user.photo.url }}" alt="Foto de Perfil" width="200">
-                {% else %}
-                    No has subido una foto de perfil.
-                {% endif %}
-            </p>
-            
-
-            {% if user.is_productor %}
-            <div class="button_group">
-                <a href="{% url 'products' %}" class="btn">Productos</a>
-                <a href="{% url 'edit_profile_prod' %}" class="btn">Editar Perfil Prod</a>
+            {% if productos %}
+                <ul>
+                    {% for producto in productos %}
+                        <li>
+                            <h2>{{ producto.id }}</h2>
+                            <h2>{{ producto.nombre }}</h2>
+                            <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+                            <p><strong>Precio:</strong> {{ producto.precio }}</p>
+                            <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                            <p><strong>Disponibilidad:</strong> {% if producto.disponibilidad %} Disponible {% else %} No Disponible {% endif %}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No se encontraron productos para este usuario.</p>
             {% endif %}
-            </div>                
-            <div class="button_group">
-                <a href="/" class="btn btn_back">Volver a Inicio</a>
-                <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{ user.username }}</a>
-            </div>
         </div>
     </div>
-
-    <!-- footer section -->
-    <section class="container-fluid footer_section_perfil">
-        <p>
-        &copy;  2024 MARKETECO - Universidad de Sevilla </a>
-        </p>
-    </section>
-    <!-- footer section -->
-
-    <script>
-        window.onload = function() {
-            var popupMessages = document.getElementById('popup-messages');
-            if (popupMessages && popupMessages.children.length > 0) {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡ÉXITO!',
-                    html: popupMessages.innerHTML,
-                });
-            }
-        }
-    </script>
-
 </body>
 </html>

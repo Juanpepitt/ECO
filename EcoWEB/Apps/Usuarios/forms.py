@@ -40,8 +40,8 @@ class ProductorSignUpForm(UserCreationForm):
         return email
 
     def save(self, commit=True):
-        
         user = super().save(commit=False)
+        user.is_productor = True
         if(isinstance(user, Productor)):
             user.username = self.cleaned_data["email"]  # Utiliza el correo electrónico como nombre de usuario
             user.email = self.cleaned_data["email"]  # Establece el correo electrónico
@@ -83,3 +83,11 @@ class ProfileEditFormProd(forms.ModelForm):
         fields = ['nombre', 'apellidos', 'email', 'cif', 'direccion', 'telefono', 'photo']
 ##########################
 
+##########################
+class ProductForm(forms.Form):
+    nombre = forms.CharField(max_length=255)
+    descripcion = forms.CharField(widget=forms.Textarea)
+    precio = forms.DecimalField(max_digits=10, decimal_places=2)
+    stock = forms.IntegerField()
+    imagen = forms.URLField(required=False)  # Puedes usar ImageField si prefieres subir imágenes a Firebase Storage
+##########################
