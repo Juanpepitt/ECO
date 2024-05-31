@@ -84,10 +84,15 @@ class ProfileEditFormProd(forms.ModelForm):
 ##########################
 
 ##########################
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
 class ProductForm(forms.Form):
-    nombre = forms.CharField(max_length=255)
-    descripcion = forms.CharField(widget=forms.Textarea)
-    precio = forms.DecimalField(max_digits=10, decimal_places=2)
-    stock = forms.IntegerField()
-    imagen = forms.URLField(required=False)  # Puedes usar ImageField si prefieres subir imágenes a Firebase Storage
+    nombre = forms.CharField(label='Nombre de producto', max_length=150, strip=False, widget=forms.TextInput(attrs={'autofocus': True, 'style': 'width: 100%;'}))
+    categoria = forms.CharField(label='Categoría de producto', max_length=100, strip=False, widget=forms.TextInput(attrs={'autofocus': True, 'style': 'width: 100%;'}))
+    descripcion = forms.CharField(label='Descripción', widget=forms.Textarea, strip=True)
+    precio = forms.DecimalField(label='Precio en €', max_digits=10, decimal_places=2)
+    stock = forms.IntegerField(label='Número de unidades disponibles en Stock')
+    imagenes = forms.FileField(label='Imagen o imágenes del producto', widget=MultipleFileInput(attrs={'multiple': True, 'style': 'width: 100%;'}))
+    # imagen_url = forms.URLField(required=False)
 ##########################

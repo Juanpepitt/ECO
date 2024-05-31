@@ -8,7 +8,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from .forms import ConsumidorSignUpForm, ProductorSignUpForm, LoginForm, ProfileEditForm, ProfileEditFormProd
+from .forms import ConsumidorSignUpForm, ProductorSignUpForm, LoginForm, ProfileEditForm, ProfileEditFormProd, ProductForm
 from .models import Consumidor, Productor
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -33,7 +33,7 @@ import random
 import string
 
 import firebase_admin
-from firebase_admin import credentials, auth
+from firebase_admin import credentials, auth, storage, initialize_app
 
 import pyrebase
 
@@ -51,12 +51,14 @@ config={
 
 #Firebase ADMIN
 cred = credentials.Certificate("Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
-firebase_admin.initialize_app(cred)
+firebase_admin.initialize_app(cred, {'storageBucket': config["storageBucket"]})
+bucket = storage.bucket()
 
 # Inicialización de la aplicación de Firebase
 firebase = pyrebase.initialize_app(config)
 database = firebase.database()
 auth_firebase = firebase.auth()
+
 
 
 def signup_consumidor(request):
@@ -382,65 +384,91 @@ def clear_messages(request):
     for _ in storage:
         pass
 
+
+def upload_image_to_firebase(image, filename):
+    blob = bucket.blob(filename)
+    blob.upload_from_file(image)
+    blob.make_public()
+    return blob.public_url
+
+
 @login_required
 def add_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            data = form.cleaned_data
-            user_email = request.user.email
+            nombre = form.cleaned_data['nombre']
+            categoria = form.cleaned_data['categoria']
+            descripcion = form.cleaned_data['descripcion']
+            precio = form.cleaned_data['precio']
+            stock = form.cleaned_data['stock']
+            imagenes = request.FILES.getlist('imagenes')
 
-            # Crea un nuevo producto en Firebase
-            product_data = {
-                'nombre': data['nombre'],
-                'descripcion': data['descripcion'],
-                'precio': str(data['precio']),
-                'stock': data['stock'],
-                'imagen': data['imagen'],
-                'productor': user_email
+            # Subir imágenes a Firebase Storage y obtener las URLs
+            image_urls = []
+            bucket = storage.bucket()
+            for imagen in imagenes:
+                blob = bucket.blob(f'productos/{uuid4()}_{imagen.name}')
+                blob.upload_from_file(imagen, content_type=imagen.content_type)
+                image_urls.append(blob.public_url)
+
+            # Crear el objeto del producto
+            producto = {
+                "nombre": nombre,
+                "categoria": categoria,
+                "descripcion": descripcion,
+                "precio": precio,
+                "stock": stock,
+                "imagenes": image_urls
             }
-            database.child("productos").push(product_data)
-            messages.success(request, 'Producto añadido con éxito')
-            return redirect('product_list')
+
+            # Añadir el producto a la base de datos
+            database.child("Productores").child(obtener_uid(request)).child("productos").push(producto)
+
+            return redirect('success_page')  # Redirige a una página de éxito
     else:
         form = ProductForm()
     return render(request, 'add_product.html', {'form': form})
 
 @login_required
 def edit_product(request, product_id):
-    product = database.child("productos").child(product_id).get().val()
     if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
+        nombre = request.POST.get('nombre')
+        descripcion = request.POST.get('descripcion')
+        precio = request.POST.get('precio')
+        categoria = request.POST.get('categoria')
+        disponibilidad = 'disponibilidad' in request.POST
 
-            # Actualiza el producto en Firebase
-            updated_product_data = {
-                'nombre': data['nombre'],
-                'descripcion': data['descripcion'],
-                'precio': str(data['precio']),
-                'stock': data['stock'],
-                'imagen': data['imagen']
-            }
-            database.child("productos").child(product_id).update(updated_product_data)
-            messages.success(request, 'Producto actualizado con éxito')
-            return redirect('product_list')
+        # Manejar la subida de una nueva imagen si se proporciona
+        if 'imagen' in request.FILES:
+            image = request.FILES['imagen']
+            image_filename = f"products/{request.user.id}/{image.name}"
+            image_url = upload_image_to_firebase(image, image_filename)
+            product_data["imagen"] = image_url
+
+        # Actualizar los datos del producto en Firebase
+        productos_ref = database.child("Productores").child(obtener_uid(request)).child("productos").child(product_id).update({
+            "nombre": nombre,
+            "descripcion": descripcion,
+            "precio": precio,
+            "categoria": categoria,
+            "disponibilidad": disponibilidad
+        })
+
+        return redirect('products')
+
     else:
-        initial_data = {
-            'nombre': product['nombre'],
-            'descripcion': product['descripcion'],
-            'precio': product['precio'],
-            'stock': product['stock'],
-            'imagen': product['imagen']
-        }
-        form = ProductForm(initial=initial_data)
-    return render(request, 'edit_product.html', {'form': form, 'product_id': product_id})
+        # Aquí puedes cargar los datos del producto para mostrarlos en el formulario si es necesario
+        productos_ref = database.child("Productores").child(obtener_uid(request)).child("productos").get()
+        producto = productos_ref.child(product_id)
+        return render(request, 'edit_product.html', {'producto': producto})
+
 
 @login_required
 def delete_product(request, product_id):
     database.child("productos").child(product_id).remove()
     messages.success(request, 'Producto eliminado con éxito')
-    return redirect('product_list')
+    return redirect('products')
 
 @login_required
 def products(request):
@@ -459,23 +487,6 @@ def products(request):
         "disponibilidad": product_data.get("disponibilidad", False)
     } 
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
-
-    # productos = []
-    # if productos_ref and productos_ref.val():
-    #     for product_id, product_data in productos_ref.val().items():
-    #         producto = {
-    #             "id": product_id,
-    #             "nombre": product_data.get("nombre", ""),
-    #             "descripcion": product_data.get("descripcion", ""),
-    #             "imagenes": product_data.get("imagenes", []),
-    #             "precio": product_data.get("precio", ""),
-    #             "categoria": product_data.get("categoria", ""),
-    #             "certificaciones_ecologicas": product_data.get("certificaciones_ecologicas", []),
-    #             "disponibilidad": product_data.get("disponibilidad", False)
-    #         }
-    #         productos.append(producto)
-    # else:
-    #     print("No se encontraron productos para el usuario.")
 
     return render(request, 'products.html', {'productos': productos})
 
