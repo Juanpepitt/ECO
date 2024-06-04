@@ -67,6 +67,20 @@
             margin: 10px;
         }
 
+        .product-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        overflow: hidden; 
+        }
+
+        .product-image img {
+            width: 100%; 
+            height: auto;
+            border-radius: 50%;
+        }
+
+
         .btn {
         width: calc(100% - 22px); 
         padding: 10px;
@@ -80,11 +94,29 @@
         transition: background-color 0.3s ease;
         }
 
+        .btn-cancel {
+        width: calc(100% - 22px); 
+        padding: 10px;
+        margin: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box; 
+        background-color: #8a3d3d;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        }
+
         .btn_pass{
         border: 1px solid #ddd;
         background-color: #3d6f8a;
         color: #ffffff;
 
+        }
+
+        .button_group {
+            display: flex;
+            justify-content: center;
         }
 
         .hidden {
@@ -139,41 +171,55 @@
             {% for producto in productos %}
                 <div class="product-item">
                     <div id="img-{{ producto.id }}">
-                        <img src="{% if producto.imagenes %}{{ producto.imagenes.0 }}{% else %}https://dummyimage.com/420x260{% endif %}" alt="{{ producto.nombre }}">
+                        <!-- <img src="{% if producto.imagen %}{% else %}https://dummyimage.com/420x260{% endif %}" alt="{{ producto.nombre }}"> -->
+                        {% if producto.imagen %}
+                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
+                        {% else %}
+                            <img src="https://dummyimage.com/420x260" width="200" alt="{{ producto.nombre }}">
+                        {% endif %}
+
                         <h3>{{ producto.nombre }}</h3>
                         <p>{{ producto.descripcion }}</p>
                         <p>{{ producto.precio }}€</p>
-                        <button onclick="toggleEdit('{{ producto.id }}')">Editar</button>
+                        <p>Unidades: {{ producto.stock }}</p>
+                        
+                        <a onclick="toggleEdit('{{ producto.id }}')" class="btn btn_pass">Editar</a>
                     </div>
                     <div id="form-{{ producto.id }}" class="hidden">
-                        <form method="post" action="{% url 'edit_product' producto.id %}" class="edit-form bg-white p-4 rounded">
+                        <form method="post" action="{% url 'edit_product' producto.id %}" class="edit-form bg-white p-4 rounded" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <div class="mb-2">
-                                <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                                <input type="text" name="nombre" value="{{ producto.nombre }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <div>
+                                <label for="nombre">Nombre</label>
+                                <input type="text" name="nombre" value="{{ producto.nombre }}">
                             </div>
-                            <div class="mb-2">
-                                <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                                <textarea name="descripcion" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">{{ producto.descripcion }}</textarea>
+                            <div>
+                                <label for="descripcion">Descripción</label>
+                                <textarea name="descripcion">{{ producto.descripcion }}</textarea>
                             </div>
-                            <div class="mb-2">
-                                <label for="precio" class="block text-sm font-medium text-gray-700">Precio (€)</label>
-                                <input type="number"  step="0.01" name="precio" value="{{ producto.precio }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <div>
+                                <label for="precio">Precio (€)</label>
+                                <input type="number"  step="0.01" name="precio" value="{{ producto.precio }}">
                             </div>
-                            <div class="mb-2">
-                                <label for="stock" class="block text-sm font-medium text-gray-700">Unidades</label>
-                                <input type="number" name="stock" value="{{ producto.stock }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <div>
+                                <label for="stock">Unidades</label>
+                                <input type="number" name="stock" value="{{ producto.stock }}">
                             </div>
-                            <div class="mb-2">
-                                <label for="categoria" class="block text-sm font-medium text-gray-700">Categoría</label>
-                                <input type="text" name="categoria" value="{{ producto.categoria }}" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <div>
+                                <label for="categoria">Categoría</label>
+                                <input type="text" name="categoria" value="{{ producto.categoria }}">
                             </div>
-                            <div class="mb-2">
-                                <label for="disponibilidad" class="block text-sm font-medium text-gray-700">Disponible</label>
-                                <input type="checkbox" name="disponibilidad" {% if producto.disponibilidad %}checked{% endif %} class="mt-1 block shadow-sm sm:text-sm border-gray-300 rounded-md">
+                            <div>
+                                <label for="disponibilidad">Disponible</label>
+                                <input type="checkbox" name="disponibilidad" {% if producto.disponibilidad %}checked{% endif %}>
                             </div>
-                            <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Guardar</button>
-                            <button type="button" onclick="toggleEdit('{{ producto.id }}')" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded">Cancelar</button>
+                            <div>
+                                <label for="imagen">Imagen</label>
+                                <input type="file" name="imagen" value="{{ producto.imagen }}">
+                            </div>
+                            <div class="button_group">
+                                <button type="submit" class="btn">Guardar</button>
+                                <button type="submit" onclick="toggleEdit('{{ producto.id }}')" class="btn btn-cancel">Cancelar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
