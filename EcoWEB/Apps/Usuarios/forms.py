@@ -87,14 +87,22 @@ class ProfileEditFormProd(forms.ModelForm):
 class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
+CATEGORIAS_PRODUCTO = [
+    ('alimentacion', 'Alimentación'),
+    ('tecnologia', 'Tecnología'),
+    ('ropa', 'Ropa'),
+    ('hogar', 'Hogar'),
+    ('otros', 'Otros'),
+]
+
 class ProductForm(forms.Form):
     nombre = forms.CharField(label='Nombre de producto', max_length=150, strip=False, widget=forms.TextInput(attrs={'autofocus': True, 'style': 'width: 100%;'}), required=True)
-    categoria = forms.CharField(label='Categoría de producto', max_length=100, strip=False, widget=forms.TextInput(attrs={'autofocus': True, 'style': 'width: 100%;'}))
+    categoria = forms.ChoiceField(label='Categoría de producto', choices=CATEGORIAS_PRODUCTO, required=True, widget=forms.Select(attrs={'style': 'width: 100%;'}))
     descripcion = forms.CharField(label='Descripción del producto', widget=forms.Textarea(attrs={'autofocus': True, 'style': 'width: 100%;'}), strip=True)
-    disponibilidad = forms.BooleanField(label='Disponible')
+    disponibilidad = forms.BooleanField(label='Disponible', required=False)
     precio = forms.DecimalField(label='Precio en €', max_digits=10, decimal_places=2, required=True)
-    stock = forms.IntegerField(label='Número de unidades disponibles en Stock', required=True)
-    imagen = forms.ImageField(label='Imagen del producto', required=True)
+    stock = forms.IntegerField(label='Número de unidades disponibles en Stock', required=False)
+    imagen = forms.ImageField(label='Imagen del producto', required=False)
     # imagenes = forms.FileField(label='Imagen o imágenes del producto', widget=MultipleFileInput(attrs={'multiple': True, 'style': 'width: 100%;'}))
     # imagen_url = forms.URLField(required=False)
 ##########################

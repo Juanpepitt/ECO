@@ -95,7 +95,7 @@
   <div class="container_product">
     <div class="product_form">
       <h2>Editar Producto</h2>
-      <form method="post">
+      <form method="post" action="{% url 'edit_product' producto_id %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Actualizar</button>

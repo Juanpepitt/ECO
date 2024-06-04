@@ -387,17 +387,21 @@ def add_product(request):
             disponibilidad = form.cleaned_data['disponibilidad']
             precio = form.cleaned_data['precio']
             stock = form.cleaned_data['stock']
-            imagen = request.FILES['imagen']
+            imagen = request.FILES.get('imagen')
 
             # Generar un UUID para el producto
             producto_id = str(uuid.uuid4())
 
-            # Subir imagen a Firebase Storage y obtener la URL
-            bucket = storage.bucket()
-            blob = bucket.blob(f'productos/{uuid.uuid4()}_{imagen.name}')
-            blob.upload_from_file(imagen, content_type=imagen.content_type)
-            blob.make_public()
-            image_url = blob.public_url
+            image_url = None
+            if imagen:
+                # Subir imagen a Firebase Storage y obtener la URL
+                bucket = storage.bucket()
+                blob = bucket.blob(f'productos/{uuid.uuid4()}_{imagen.name}')
+                blob.upload_from_file(imagen, content_type=imagen.content_type)
+                blob.make_public()
+                image_url = blob.public_url
+            else:
+                image_url = "https://dummyimage.com/420x260"
 
             # Crear el objeto del producto
             producto = {
@@ -406,7 +410,7 @@ def add_product(request):
                 "descripcion": descripcion,
                 "disponibilidad": disponibilidad,
                 "precio": float(precio),
-                "stock": int(stock),
+                "stock": int(stock) if stock else None,
                 "imagen": image_url
             }
 
@@ -469,6 +473,7 @@ def edit_product(request, product_id):
     else:
         producto = database.child("Productores").child(obtener_uid(request)).child("productos").child(product_id)
         return render(request, 'edit_product.html', {'producto': producto})
+        
 
 
 
@@ -497,7 +502,9 @@ def products(request):
     } 
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
 
-    return render(request, 'products.html', {'productos': productos})
+    opciones_categoria = ['Alimentación', 'Tecnología', 'Ropa', 'Hogar', 'Otros']
+
+    return render(request, 'products.html', {'productos': productos, 'opciones_categoria': opciones_categoria})
 
 
 

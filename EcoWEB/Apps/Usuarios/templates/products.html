@@ -175,13 +175,15 @@
                         {% if producto.imagen %}
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
                         {% else %}
-                            <img src="https://dummyimage.com/420x260" width="200" alt="{{ producto.nombre }}">
+                            <img src="https://dummyimage.com/420x260" width="100" alt="{{ producto.nombre }}">
                         {% endif %}
 
                         <h3>{{ producto.nombre }}</h3>
                         <p>{{ producto.descripcion }}</p>
                         <p>{{ producto.precio }}€</p>
-                        <p>Unidades: {{ producto.stock }}</p>
+                        {% if producto.stock %}
+                            <p>Unidades: {{ producto.stock }}</p>
+                        {% endif %}
                         
                         <a onclick="toggleEdit('{{ producto.id }}')" class="btn btn_pass">Editar</a>
                     </div>
@@ -206,7 +208,12 @@
                             </div>
                             <div>
                                 <label for="categoria">Categoría</label>
-                                <input type="text" name="categoria" value="{{ producto.categoria }}">
+                                <select name="categoria">
+                                    <option value="" disabled selected>Selecciona una categoría</option>
+                                    {% for opcion in opciones_categoria %}
+                                        <option value="{{ opcion }}" {% if opcion == producto.categoria %} selected {% endif %}>{{ opcion }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div>
                                 <label for="disponibilidad">Disponible</label>
