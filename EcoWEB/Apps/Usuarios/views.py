@@ -409,15 +409,17 @@ def add_product(request):
                 "categoria": categoria,
                 "descripcion": descripcion,
                 "disponibilidad": disponibilidad,
-                "precio": float(precio),
+                "precio": float(precio) if stock else float(0.0),
                 "stock": int(stock) if stock else None,
-                "imagen": image_url
+                "imagen": image_url,
+                "valoracion": int(0)
+                
             }
 
             # Añadir el producto a la base de datos
             user_uid = obtener_uid(request)
             database.child("Productores").child(user_uid).child("productos").child(producto_id).set(producto)
-
+            messages.success(request, 'Producto añadido con éxito')
             return redirect('products')
         else:
             print(form.errors)
@@ -475,11 +477,10 @@ def edit_product(request, product_id):
         return render(request, 'edit_product.html', {'producto': producto})
         
 
-
-
 @login_required
 def delete_product(request, product_id):
-    database.child("productos").child(product_id).remove()
+    uid = obtener_uid(request)
+    productos_ref = database.child("Productores").child(uid).child("productos").child(product_id).remove()
     messages.success(request, 'Producto eliminado con éxito')
     return redirect('products')
 
@@ -497,14 +498,80 @@ def products(request):
         "precio": product_data.get("precio", ""),
         "categoria": product_data.get("categoria", ""),
         "stock": product_data.get("stock", ""),
-        "certificaciones_ecologicas": product_data.get("certificaciones_ecologicas", []),
         "disponibilidad": product_data.get("disponibilidad", False)
     } 
+
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
 
     opciones_categoria = ['Alimentación', 'Tecnología', 'Ropa', 'Hogar', 'Otros']
 
     return render(request, 'products.html', {'productos': productos, 'opciones_categoria': opciones_categoria})
+
+
+def lista_productos(request):
+    productos_ref = database.child("Productores").get()
+    productos = []
+    categorias = set()
+
+    # Recorrer cada productor y obtener sus productos
+    for productor in productos_ref.each():
+        productos_productor = productor.val().get('productos', {})
+        for product_id, producto_data in productos_productor.items():
+            producto_data['id'] = product_id
+            if 'precio' in producto_data:
+                try:
+                    producto_data['precio'] = float(producto_data['precio'])
+                except (ValueError, TypeError):
+                    producto_data['precio'] = 0
+            
+            if 'valoracion' in producto_data:
+                try:
+                    producto_data['valoracion'] = float(producto_data['valoracion'])
+                except (ValueError, TypeError):
+                    producto_data['valoracion'] = 0
+
+            productos.append(producto_data)
+            categorias.add(producto_data.get('categoria', 'Otros'))
+
+    # Filtrar por categoría si se especifica
+    filtro_categoria = request.GET.get('categoria')
+    if filtro_categoria:
+        productos = [producto for producto in productos if producto.get('categoria') == filtro_categoria]
+
+    #dejar categoría seleccionada al usar desplegable
+    filtro_categoria = request.GET.get('categoria')
+    selected_categoria = filtro_categoria if filtro_categoria in categorias else None
+    
+
+    # Ordenar productos
+    ordenar_por = request.GET.get('ordenar_por')
+    if ordenar_por == 'precio':
+        productos = sorted(productos, key=lambda x: x.get('precio', 0))
+    elif ordenar_por == 'valoracion':
+        productos = sorted(productos, key=lambda x: x.get('valoracion', 0), reverse=True)
+
+    #dejar ordenar seleccionado al usar desplegable
+    ordenar_por = request.GET.get('ordenar_por')
+    selected_ordenar_por = ordenar_por if ordenar_por in ['precio', 'valoracion'] else None
+
+    return render(request, 'list_products.html', {'list_products': productos, 'categorias': categorias, 'selected_categoria': selected_categoria, 'selected_ordenar_por': selected_ordenar_por})
+
+
+def detalle_producto(request, producto_id):
+    productos_ref = database.child("Productores").get()
+    producto = None
+
+    for productor in productos_ref.each():
+        productos_productor = productor.val().get('productos', {})
+        if producto_id in productos_productor:
+            producto = productos_productor[producto_id]
+            producto['id'] = producto_id
+            break
+
+    if producto is None:
+        return render(request, '404.html')  # Muestra una página de error si el producto no se encuentra
+
+    return render(request, 'detalle_producto.html', {'producto': producto})
 
 
 

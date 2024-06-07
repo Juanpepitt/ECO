@@ -51,6 +51,8 @@ urlpatterns = [
 
 
     path('usuarios/productos/', usuarios_views.products, name='products'),
+    path('usuarios/lista_productos/', usuarios_views.lista_productos, name='list_products'),
+    path('detalle_producto/<str:producto_id>/', usuarios_views.detalle_producto, name='detalle_producto'),
     path('usuarios/productos/add/', usuarios_views.add_product, name='add_product'),
     path('usuarios/productos/edit/<str:product_id>/', usuarios_views.edit_product, name='edit_product'),
     path('usuarios/productos/delete/<str:product_id>/', usuarios_views.delete_product, name='delete_product'),

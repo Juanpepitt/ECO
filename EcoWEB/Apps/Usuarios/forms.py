@@ -88,11 +88,11 @@ class MultipleFileInput(forms.ClearableFileInput):
     allow_multiple_selected = True
 
 CATEGORIAS_PRODUCTO = [
-    ('alimentacion', 'Alimentación'),
-    ('tecnologia', 'Tecnología'),
-    ('ropa', 'Ropa'),
-    ('hogar', 'Hogar'),
-    ('otros', 'Otros'),
+    ('Alimentación', 'Alimentación'),
+    ('Tecnología', 'Tecnología'),
+    ('Ropa', 'Ropa'),
+    ('Hogar', 'Hogar'),
+    ('Otros', 'Otros'),
 ]
 
 class ProductForm(forms.Form):

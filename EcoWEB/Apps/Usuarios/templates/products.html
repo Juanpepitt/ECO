@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
     <link href="/../static/css/style.css" rel="stylesheet" />
     <link href="/../static/css/responsive.css" rel="stylesheet" />
+      <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <style>
         body, html {
             height: 100%; 
@@ -109,8 +112,11 @@
 
         .btn_pass{
         border: 1px solid #ddd;
+        border-radius: 5px;
         background-color: #3d6f8a;
         color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
 
         }
 
@@ -162,8 +168,32 @@
         }
     </script>
 
+    <script>
+        // Mostrar el popup con SweetAlert
+        window.onload = function() {
+            var popupMessages = document.getElementById('popup-messages');
+            if (popupMessages && popupMessages.children.length > 0) {
+                Swal.fire({
+                    icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
+                    title: '¡ÉXITO!',
+                    html: popupMessages.innerHTML,
+                });
+            }
+        }
+    </script>
+
 </head>
 <body>
+      <!-- Mostrar mensajes de Django -->
+  {% if messages %}
+  <div id="popup-messages" style="display: none;">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+  </div>
+  {% endif %}
+  <!-- Mostrar mensajes de Django -->
+
     <div class="container_productos">
         <h2>Mis Productos</h2>
         <div class="products-grid">
@@ -186,6 +216,7 @@
                         {% endif %}
                         
                         <a onclick="toggleEdit('{{ producto.id }}')" class="btn btn_pass">Editar</a>
+                        <a href="{% url 'delete_product' producto.id %}" class="btn btn-cancel">Eliminar</a>
                     </div>
                     <div id="form-{{ producto.id }}" class="hidden">
                         <form method="post" action="{% url 'edit_product' producto.id %}" class="edit-form bg-white p-4 rounded" enctype="multipart/form-data">
