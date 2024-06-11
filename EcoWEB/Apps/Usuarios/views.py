@@ -13,6 +13,7 @@ from .models import Consumidor, Productor
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from google.oauth2 import service_account
+from django.core.exceptions import ValidationError
 
 from django.conf import settings
 
@@ -401,7 +402,7 @@ def add_product(request):
                 blob.make_public()
                 image_url = blob.public_url
             else:
-                image_url = "https://dummyimage.com/420x260"
+                image_url = "https://dummyimage.com/600x400/3d003d/ffffff.png&text=Imagen+de+producto"
 
             # Crear el objeto del producto
             producto = {
@@ -409,7 +410,7 @@ def add_product(request):
                 "categoria": categoria,
                 "descripcion": descripcion,
                 "disponibilidad": disponibilidad,
-                "precio": float(precio) if stock else float(0.0),
+                "precio": float(precio),
                 "stock": int(stock) if stock else None,
                 "imagen": image_url,
                 "valoracion": int(0)
@@ -439,6 +440,25 @@ def edit_product(request, product_id):
         categoria = request.POST.get('categoria')
         stock = request.POST.get('stock')
         disponibilidad = 'disponibilidad' in request.POST
+
+        # Convertir precio de coma a punto
+        try:
+            precio = precio.replace(',', '.')
+            precio = float(precio)
+            if precio <= 0:
+                raise ValidationError('El precio debe ser mayor que 0.')
+        except (ValueError, ValidationError) as e:
+            messages.error(request, str(e))
+            return render(request, 'edit_product.html', {
+                'producto': {
+                    'nombre': nombre,
+                    'descripcion': descripcion,
+                    'precio': precio,
+                    'categoria': categoria,
+                    'stock': stock,
+                    'disponibilidad': disponibilidad,
+                }
+            })
 
         # Subir imagen a Firebase Storage y obtener la URL
         if 'imagen' in request.FILES:
@@ -572,8 +592,6 @@ def detalle_producto(request, producto_id):
         return render(request, '404.html')  # Muestra una página de error si el producto no se encuentra
 
     return render(request, 'detalle_producto.html', {'producto': producto})
-
-
 
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
