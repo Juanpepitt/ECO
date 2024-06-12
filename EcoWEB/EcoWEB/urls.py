@@ -24,6 +24,7 @@ from django.contrib.auth import views as auth_views
 from EcoWEB import views as ecoweb_views
 
 from Apps.Usuarios import views as usuarios_views
+from Apps.Productos import views as productos_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -49,15 +50,21 @@ urlpatterns = [
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
     path('usuarios/editar_perfil_prod/', usuarios_views.edit_profile_prod, name='edit_profile_prod'),
 
+    ################################################################################################# 
 
-    path('usuarios/productos/', usuarios_views.products, name='products'),
-    path('detalle_producto/<str:producto_id>/', usuarios_views.detalle_producto, name='detalle_producto'),
-    path('usuarios/productos/add/', usuarios_views.add_product, name='add_product'),
-    path('usuarios/productos/edit/<str:product_id>/', usuarios_views.edit_product, name='edit_product'),
-    path('usuarios/productos/delete/<str:product_id>/', usuarios_views.delete_product, name='delete_product'),
+    ########################################### PRODUCTOS ###########################################
 
+    path('productos/', productos_views.products, name='products'),
+    path('detalle_producto/<str:producto_id>/', productos_views.detalle_producto, name='detalle_producto'),
+    path('usuarios/productos/add/', productos_views.add_product, name='add_product'),
+    path('usuarios/productos/edit/<str:product_id>/', productos_views.edit_product, name='edit_product'),
+    path('usuarios/productos/delete/<str:product_id>/', productos_views.delete_product, name='delete_product'),
+    path('productos/lista_productos/', productos_views.lista_productos, name='list_products'),
 
-    path('usuarios/lista_productos/', usuarios_views.lista_productos, name='list_products'),
+    ################################################################################################# 
 
+    ############################################ COMPRAS ############################################
+
+    
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

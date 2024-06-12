@@ -128,6 +128,7 @@
         .button_group {
             display: flex;
             justify-content: center;
+            margin-top: 20px;
         }
 
         .hidden {
@@ -217,15 +218,17 @@
     <div class="container_productos">
         <h2>Mis Productos</h2>
         {% load custom_filters %}
-        <div class="products-grid">
+        <div>
             <a href="{% url 'add_product' %}" class="btn btn_pass">Añadir producto</a>
+        </div>
+        <div class="products-grid">
             {% for producto in productos %}
                 <div class="product-item">
                     <div id="img-{{ producto.id }}">
                         {% if producto.imagen %}
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
                         {% else %}
-                            <img src="https://dummyimage.com/600x400/3d003d/ffffff.png&text=Imagen+de+producto" width="100" alt="{{ producto.nombre }}">
+                            <img src="https://dummyimage.com/600x400/3d003d/ffffff.png&text=Sin+imagen+de+producto" width="100" alt="{{ producto.nombre }}">
                         {% endif %}
 
                         <h3 class="h3">{{ producto.nombre }}</h3>

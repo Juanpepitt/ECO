@@ -28,6 +28,7 @@
         .product-item {
             background-color: #ffffff;
             border: 1px solid #ddd;
+            min-width: min-content;
             border-radius: 5px;
             overflow: hidden;
             text-align: center;
@@ -63,7 +64,7 @@
         }
 
         .products-grid .product-item {
-            flex: 0 0 calc(33.333% - 20px);
+            flex: 0 0 calc(20% - 20px);
             margin: 10px;
         }
 
@@ -79,6 +80,11 @@
             height: auto;
             border-radius: 50%;
         }
+
+        .h3 {
+            margin-top: 12px;
+        }
+
 
         .btn {
             width: calc(100% - 22px); 
@@ -121,24 +127,87 @@
             display: none;
         }
 
+        .rate {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .rate input {
+            display: none;
+        }
+        .rate label {
+            float: right;
+            color: #ccc;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .rate input:checked ~ label {
+            color: #ffc700;
+        }
+        .rate label:hover,
+        .rate label:hover ~ label {
+            color: #deb217;
+        }
+
+        @media (max-width: 1024px) {
+            .products-grid .product-item {
+                flex: 0 0 calc(25% - 20px); /* 4 en fila para pantallas medianas */
+            }
+        }
+
         @media (max-width: 768px) {
             .products-grid .product-item {
-                flex: 0 0 calc(50% - 20px);
+                flex: 0 0 calc(33.333% - 20px); /* 3 en fila para pantallas pequeñas */
             }
         }
 
         @media (max-width: 480px) {
             .products-grid .product-item {
-                flex: 0 0 calc(100% - 20px);
+                flex: 0 0 calc(50% - 20px); /* 2 en fila para pantallas muy pequeñas */
             }
         }
-    </style>
 
+        @media (max-width: 320px) {
+            .products-grid .product-item {
+                flex: 0 0 calc(100% - 20px); /* 1 en fila para pantallas extra pequeñas */
+            }
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .filter-container div {
+            margin: 10px;
+        }
+
+        .filter-container select, .filter-container button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            background-color: #f8f8f8;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .filter-container button {
+            background-color: #3d8a4f;
+            color: #ffffff;
+        }
+
+        .filter-container button:hover {
+            background-color: #2c6b3a;
+        }
+    </style>
 </head>
 <body>
     <div class="container_productos">
         <h2>Productos</h2>
-        <form method="get">
+        <form method="get" class="filter-container">
             <div>
                 <label for="categoria">Categoría:</label>
                 <select name="categoria" id="categoria">
@@ -146,17 +215,30 @@
                     {% for categoria in categorias %}
                         <option value="{{ categoria }}" {% if categoria == selected_categoria %} selected {% endif %}>{{ categoria }}</option>
                     {% endfor %}
-                </select>                
+                </select>
+            </div>
+            <div>
+                <label for="productor">Productor:</label>
+                <select name="productor" id="productor">
+                    <option value="">Todos</option>
+                    {% for productor in productores %}
+                        <option value="{{ productor }}" {% if productor == selected_productor %} selected {% endif %}>{{ productor }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="ordenar_por">Ordenar por:</label>
                 <select name="ordenar_por" id="ordenar_por">
                     <option value="">Ninguno</option>
-                    <option value="precio" {% if selected_ordenar_por == 'precio' %} selected {% endif %}>Precio</option>
+                    <option value="precio_ascendente" {% if selected_ordenar_por == 'precio_ascendente' %} selected {% endif %}>Precio (más baratos primero)</option>
+                    <option value="precio_descendente" {% if selected_ordenar_por == 'precio_descendente' %} selected {% endif %}>Precio (más caros primero)</option>
                     <option value="valoracion" {% if selected_ordenar_por == 'valoracion' %} selected {% endif %}>Valoración</option>
                 </select>
             </div>
-            <button type="submit" class="btn">Aplicar</button>
+            <div>
+                <button type="submit">Aplicar</button>
+            </div>
+            
         </form>
         <div class="products-grid">
             {% for producto in list_products %}
@@ -166,19 +248,30 @@
                         {% if producto.imagen %}
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
                         {% else %}
-                            <img src="https://dummyimage.com/420x260"  alt="{{ producto.nombre }}">
+                            <img src="https://dummyimage.com/2040x1080/3d003d/ffffff.png&text=Sin+imagen+de+producto"  alt="{{ producto.nombre }}"  class="product-image">
                         {% endif %}
 
-                        <h3><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h3>
-                        <p>{{ producto.descripcion }}</p>
+                        <h3 class="h3"><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h3>
+
+                        <div class="rate">
+                            {% for i in range %}
+                                <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if i <= producto.valoracion %}checked{% endif %} disabled />
+                                <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
+                            {% endfor %}
+                        </div>
+
                         <p>{{ producto.precio }}€</p>
                         {% if producto.stock %}
                             <p>Unidades: {{ producto.stock }}</p>
+                        {% else %}
+                            <p>Sin stock</p>
                         {% endif %}
-                        <p>Valoración: {{ producto.valoracion }}</p>
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div>
+            <a href="/" class="btn">Volver a Inicio</a>
         </div>
     </div>
 
