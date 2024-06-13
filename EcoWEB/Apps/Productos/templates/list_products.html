@@ -9,7 +9,8 @@
     <link rel="stylesheet" type="text/css" href="/../static/css/bootstrap.css"/>
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
     <link href="/../static/css/style.css" rel="stylesheet" />
-    <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <link href="/../static/css/responsive.css" rel="stylesheet" /> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         body, html {
             height: 100%; 
@@ -118,9 +119,25 @@
             color: #ffffff;
         }
 
-        .button_group {
-            display: flex;
-            justify-content: center;
+        .btn-carrito {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-carrito img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .btn-carrito img:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
         }
 
         .hidden {
@@ -205,6 +222,15 @@
     </style>
 </head>
 <body>
+      <!-- Mostrar mensajes de Django -->
+    {% if messages %}
+    <div id="popup-messages" style="display: none;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+  <!-- Mostrar mensajes de Django -->
     <div class="container_productos">
         <h2>Productos</h2>
         {% load custom_filters %}
@@ -241,7 +267,12 @@
             </div>
             
         </form>
-        <div class="products-grid">
+        <div>
+            {% if list_products|length < 1 %}
+                <p>No hay productos que mostrar</p>
+            {% endif %}
+        </div>
+        <div class="products-grid">            
             {% for producto in list_products %}
                 <div class="product-item">
                     <div id="img-{{ producto.id }}">
@@ -269,6 +300,12 @@
                         {% else %}
                             <p>Sin stock</p>
                         {% endif %}
+                        
+                        <a href="{% url 'add_carrito' producto.id %}" class="btn-carrito" alt="Añadir al carrito">
+                            <img src="/static/icons/full-cart.png" alt="Añadir al carrito">
+                        </a>
+                        
+
                     </div>
                 </div>
             {% endfor %}
@@ -283,5 +320,20 @@
         <p>&copy; 2024 MARKETECO - Universidad de Sevilla</p>
     </section>
     <!-- footer section -->
+
+    <script>
+        // Mostrar el popup con SweetAlert
+        window.onload = function() {
+            var popupMessages = document.getElementById('popup-messages');
+            if (popupMessages && popupMessages.children.length > 0) {
+                Swal.fire({
+                    icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
+                    title: '¡ÉXITO!',
+                    html: popupMessages.innerHTML,
+                });
+            }
+        }
+      </script>
+
 </body>
 </html>

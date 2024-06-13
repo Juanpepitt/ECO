@@ -121,22 +121,22 @@
                 {% csrf_token %}
 
                 <label for="id_nombre">Nombre:</label>
-                <input type="text" name="nombre" id="id_nombre" value="{{ productor_data.nombre }}" required>
+                <input type="text" name="nombre" id="id_nombre" value="{{ productor_data.nombre }}">
 
                 <label for="id_apellidos">Apellidos:</label>
-                <input type="text" name="apellidos" id="id_apellidos" value="{{ productor_data.apellidos }}" required>
+                <input type="text" name="apellidos" id="id_apellidos" value="{{ productor_data.apellidos }}">
 
                 <label for="id_email">Email:</label>
-                <input type="email" name="email" id="id_email" value="{{ productor_data.user }}" required>
+                <input type="email" name="email" id="id_email" value="{{ productor_data.user }}">
 
                 <label for="id_cif">CIF/NIF:</label>
                 <input type="text" name="cif" id="id_cif" value="{{ productor_data.cif }}" required>
 
                 <label for="id_direccion">Dirección:</label>
-                <input type="text" name="direccion" id="id_direccion" value="{{ productor_data.direccion }}" required>
+                <input type="text" name="direccion" id="id_direccion" value="{{ productor_data.direccion }}">
 
                 <label for="id_telefono">Teléfono:</label>
-                <input type="text" name="telefono" id="id_telefono" value="{{ productor_data.telefono }}" required>
+                <input type="text" name="telefono" id="id_telefono" value="{{ productor_data.telefono }}">
 
                 <label for="id_photo">Foto:</label>
                 <input type="file" name="photo" id="id_photo">

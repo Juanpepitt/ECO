@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -66,6 +66,9 @@ urlpatterns = [
 
     ############################################ COMPRAS ############################################
 
-    path('carrito/', carrito_views.carrito, name='carrito'),
+    path('carrito/', carrito_views.ver_carrito, name='ver_carrito'),
+    path('carrito/add_carrito/<str:producto_id>/', carrito_views.add_carrito, name='add_carrito'),
+    path('carrito/eliminar/<str:producto_id>/', carrito_views.eliminar_producto_carrito, name='eliminar_producto_carrito'),
+    path('carrito/actualizar/<str:producto_id>/<str:cambio>/', carrito_views.actualizar_cantidad, name='actualizar_cantidad'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

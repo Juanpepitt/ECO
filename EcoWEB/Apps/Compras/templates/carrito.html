@@ -4,21 +4,66 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrito de Compras</title>
+    <title>CESTA DE LA COMPRA</title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
     <link rel="stylesheet" type="text/css" href="/../static/css/bootstrap.css"/>
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
     <link href="/../static/css/style.css" rel="stylesheet" />
     <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
-        /* Agrega aquí cualquier estilo adicional que necesites para el carrito */
-        /* Asegúrate de incluir estilos para el carrito específicamente */
+        .btn {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            background-color: #3d8a4f;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cancel {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            background-color: #8a3d3d;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn_pass{
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #3d6f8a;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button_group {
+            display: flex;
+            justify-content: center;
+        }
+
         .carrito-container {
             background-color: #f6f8f7;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        .products-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .carrito-item {
@@ -36,7 +81,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            overflow: hidden; 
+            overflow: hidden;
         }
 
         .carrito-item h3 {
@@ -45,20 +90,6 @@
 
         .carrito-item p {
             margin: 10px 0;
-        }
-
-        .carrito-item button {
-            padding: 10px 20px;
-            background-color: #3d8a4f;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .carrito-item button:hover {
-            background-color: #2c6b3a; 
         }
 
         .carrito-total {
@@ -70,56 +101,52 @@
             font-weight: bold;
             font-size: 18px;
         }
-
-        .carrito-buttons {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .carrito-buttons a {
-            margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #3d8a4f;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .carrito-buttons a:hover {
-            background-color: #2c6b3a; 
-        }
     </style>
 </head>
 <body>
+      <!-- Mostrar mensajes de Django -->
+      {% if messages %}
+      <div id="popup-messages" style="display: none;">
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+      </div>
+      {% endif %}
+      <!-- Mostrar mensajes de Django -->
+
     <div class="carrito-container">
-        <h2>Carrito de Compras</h2>
+        <h2>Cesta de la Compra</h2>
+        {% load custom_filters %}
         <div class="products-grid">
-            {% for item in carrito.all %}
-                <div class="carrito-item">
-                    <div id="img-{{ item.id }}">
-                        <img src="{{ item.producto.imagen }}" alt="{{ item.nombre }}" class="product-image">
-                        <h3>{{ item.nombre }}</h3>
-                        <div class="rate">
-                            <!-- Puedes incluir aquí el sistema de valoración si es necesario -->
+            {% if carrito %}
+                {% for productoid, producto in carrito.items %}
+                    <div class="carrito-item">
+                        <div id="img-{{ productoid }}">
+                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" class="product-image">
+                            <h3>{{ producto.nombre }}</h3>
+                            <p>{{ producto.categoria }}</p>
+                            <p>{{ producto.precio|format_decimal }}€</p>
+                            <p>Disponibilidad: {{ producto.stock }}</p>
+                            <p>Cantidad: {{ producto.cantidad }}</p>
+                            <!-- Botones para actualizar cantidad y eliminar -->
+                             <div class="button_group">
+                                <a href="{% url 'actualizar_cantidad' productoid -1 %}" class="btn">-</a>
+                                <a href="{% url 'actualizar_cantidad' productoid 1 %}" class="btn">+</a>
+                             </div>
+                            
+                            <a href="{% url 'eliminar_producto_carrito' productoid %}" class="btn-cancel">Eliminar</a>
                         </div>
-                        <p>{{ item.producto.precio|floatformat:2 }}€</p>
-                        <p>Cantidad: {{ item.cantidad }}</p>
-                        <button type="button">Eliminar</button>
                     </div>
-                </div>
-            {% empty %}
+                {% endfor %}
+            {% else %}
                 <p>No hay productos en tu carrito.</p>
-            {% endfor %}
+            {% endif %}
         </div>
         <div class="carrito-total">
-            <p>Total: {{ carrito.total }}€</p>
+            <p>Total: {{ total|floatformat:"2" }}€</p>
         </div>
-        <div class="carrito-buttons">
-            <a href="/productos/lista_productos" class="btn">Continuar Comprando</a>
+        <div class="button_group">
+            <a href="/productos/lista_productos" class="btn btn_pass">Continuar Comprando</a>
             <a href="#" class="btn">Finalizar Compra</a>
         </div>
     </div>
@@ -129,5 +156,30 @@
         <p>&copy; 2024 MARKETECO - Universidad de Sevilla</p>
     </section>
     <!-- footer section -->
+
+    <script>
+        // Mostrar el popup con SweetAlert
+        window.onload = function() {
+            var popupMessages = document.getElementById('popup-messages');
+            if (popupMessages && popupMessages.children.length > 0) {
+                
+                var iconType = 'error'; 
+                var titleText = '¡ERROR!';
+
+                // Verificar si hay un mensaje de éxito
+                var successMessages = popupMessages.getElementsByClassName('alert-success');
+                if (successMessages.length > 0) {
+                    iconType = 'success';
+                    titleText = '¡ÉXITO!';
+                }
+
+                Swal.fire({
+                    icon: iconType, 
+                    title: titleText,
+                    html: popupMessages.innerHTML,
+                });
+            }
+        }
+    </script>
 </body>
 </html>
