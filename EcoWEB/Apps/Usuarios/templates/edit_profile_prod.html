@@ -28,8 +28,8 @@
     /* Estilos para el formulario de editar perfil */
     body, html {
         height: 100%; 
-        margin: 0; /* Elimina los márgenes predeterminados */
-        font-family: Arial, sans-serif; /* Usa una fuente genérica */
+        margin: 0;
+        font-family: Arial, sans-serif;
     }
 
     .container_perfil {
@@ -47,6 +47,20 @@
         border: 1px solid #ddd;
         border-radius: 5px;
         background-color: #f6f8f7;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .perfil_form h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #023b48;
+        }
+    
+    .perfil_form label {
+        display: block;
+        margin-bottom: 5px;
+        color: #023b48;
+        font-weight: bold;
     }
 
     .perfil_form h2 {
@@ -54,6 +68,19 @@
         margin-bottom: 20px;
         color: #023b48;
     }
+
+    .perfil_form input[type="text"],
+    .perfil_form input[type="email"],
+    .perfil_form input[type="file"],
+    .perfil_form input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
 
     .btn {
         width: calc(100% - 22px); 
@@ -84,36 +111,36 @@
             justify-content: center;
         }
 
-
-    /* footer section*/
-
-    .footer_section_perfil {
-    background-color: #fbfdfd;
-    padding: 20px;
-    font-weight: 500;
-    }
-
-    .footer_section_perfil p {
-    color: #292929;
-    margin: 0;
-    text-align: center;
-    }
-
-    .footer_section_perfil a {
-    color: #292929;
-    }
-
-    /* end footer section*/
-
 </style>
 </head>
 <body>
     <div class="container_perfil">
         <div class="perfil_form">
-            <h1>Editar Perfil</h1>
+            <h2>Editar Perfil</h2>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form.as_p }}
+
+                <label for="id_nombre">Nombre:</label>
+                <input type="text" name="nombre" id="id_nombre" value="{{ productor_data.nombre }}" required>
+
+                <label for="id_apellidos">Apellidos:</label>
+                <input type="text" name="apellidos" id="id_apellidos" value="{{ productor_data.apellidos }}" required>
+
+                <label for="id_email">Email:</label>
+                <input type="email" name="email" id="id_email" value="{{ productor_data.user }}" required>
+
+                <label for="id_cif">CIF/NIF:</label>
+                <input type="text" name="cif" id="id_cif" value="{{ productor_data.cif }}" required>
+
+                <label for="id_direccion">Dirección:</label>
+                <input type="text" name="direccion" id="id_direccion" value="{{ productor_data.direccion }}" required>
+
+                <label for="id_telefono">Teléfono:</label>
+                <input type="text" name="telefono" id="id_telefono" value="{{ productor_data.telefono }}" required>
+
+                <label for="id_photo">Foto:</label>
+                <input type="file" name="photo" id="id_photo">
+
                 <div class="button_group">
                     <a href="/usuarios/password_reset/" class="btn btn_pass">Editar Contraseña</a>
                     <button type="submit" class="btn">Guardar Cambios</button>
@@ -124,7 +151,7 @@
     </div>
 
         <!-- footer section -->
-        <section class="container-fluid footer_section_perfil">
+        <section class="container-fluid footer_section">
             <p>
             &copy;  2024 MARKETECO - Universidad de Sevilla </a>
             </p>

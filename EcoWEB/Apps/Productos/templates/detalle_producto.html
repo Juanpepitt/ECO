@@ -69,42 +69,29 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
-        .rate:not(:checked) > input {
-            position:absolute;
-            top:-9999px;
+        .rate input {
+            display: none;
         }
-        .rate:not(:checked) > label {
-            float:right;
-            width:1em;
-            overflow:hidden;
-            white-space:nowrap;
-            cursor:pointer;
-            font-size:30px;
-            color:#ccc;
+        .rate label {
+            float: right;
+            color: #ccc;
+            font-size: 30px;
+            cursor: pointer;
         }
-        .rate:not(:checked) > label:before {
-            content: '★ ';
+        .rate input:checked ~ label {
+            color: #ffc700;
         }
-        .rate > input:checked ~ label {
-            color: #ffc700;    
-        }
-        .rate:not(:checked) > label:hover,
-        .rate:not(:checked) > label:hover ~ label {
-            color: #deb217;  
-        }
-        .rate > input:checked + label:hover,
-        .rate > input:checked + label:hover ~ label,
-        .rate > input:checked ~ label:hover,
-        .rate > input:checked ~ label:hover ~ label,
-        .rate > label:hover ~ input:checked ~ label {
-            color: #c59b08;
+        .rate label:hover,
+        .rate label:hover ~ label {
+            color: #deb217;
         }
     </style>
 </head>
 <body>
     <div class="container_producto">
+        {% load custom_filters %}
         <div class="product-detail">
             {% if producto.imagen %}
                 <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
@@ -115,24 +102,16 @@
             
             <div class="rate">
                 {% if producto.valoracion %}
-                    {% for _ in range %}
-                        <input type="radio" id="star{{ forloop.counter }}" name="rate" value="{{ forloop.counter }}" checked disabled />
-                        <label for="star{{ forloop.counter }}" title="text">{{ forloop.counter }} stars</label>
-                    {% endfor %}
-                    {% for _ in empty_stars %}
-                        <input type="radio" id="star{{ forloop.counter }}" name="rate" value="{{ forloop.counter }}" disabled />
-                        <label for="star{{ forloop.counter }}" title="text">{{ forloop.counter }} stars</label>
-                    {% endfor %}
-                {% else %}
-                    {% for _ in full_stars %}
-                        <input type="radio" id="star{{ forloop.counter }}" name="rate" value="{{ forloop.counter }}" disabled />
-                        <label for="star{{ forloop.counter }}" title="text">{{ forloop.counter }} stars</label>
+                    {% for i in range %}
+                        <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if producto.valoracion == i %}checked{% endif %} disabled />
+                        <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
                     {% endfor %}
                 {% endif %}
+
             </div>
 
             <p>{{ producto.descripcion }}</p>
-            <p>Precio: {{ producto.precio }}€</p>
+            <p>Precio: {{ producto.precio|format_decimal }}€</p>
             <p>Unidades disponibles: {{ producto.stock }}</p>
             <p>Categoría: {{ producto.categoria }}</p>                                         
             

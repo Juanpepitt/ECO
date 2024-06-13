@@ -207,6 +207,7 @@
 <body>
     <div class="container_productos">
         <h2>Productos</h2>
+        {% load custom_filters %}
         <form method="get" class="filter-container">
             <div>
                 <label for="categoria">Categoría:</label>
@@ -254,13 +255,15 @@
                         <h3 class="h3"><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h3>
 
                         <div class="rate">
-                            {% for i in range %}
-                                <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if i <= producto.valoracion %}checked{% endif %} disabled />
-                                <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
-                            {% endfor %}
-                        </div>
+                            {% if producto.valoracion %}
+                                {% for i in range %}
+                                    <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if producto.valoracion == i %}checked{% endif %} disabled />
+                                    <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
+                                {% endfor %}
+                            {% endif %}
+                        </div>                                               
 
-                        <p>{{ producto.precio }}€</p>
+                        <p>{{ producto.precio|format_decimal }}€</p>
                         {% if producto.stock %}
                             <p>Unidades: {{ producto.stock }}</p>
                         {% else %}

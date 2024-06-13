@@ -90,7 +90,6 @@ def signup_consumidor(request):
         form = ConsumidorSignUpForm()
     return render(request, 'signup_consumidor.html', {'form': form})
 
-
 def signup_productor(request):
     clear_messages(request)
     if request.method == 'POST' and request.POST['password1'] == request.POST['password2'] and not verificar_usuario_en_firebase_auth(request.POST['email']):
@@ -132,10 +131,12 @@ def signup_productor(request):
     return render(request, 'signup_productor.html', {'form': form})
 
 def guardar_consumidor_en_firebase(uid, email):
+    carrito = {}
 
     # Datos del consumidor a guardar
     consumidor_data = {
-        "user": email
+        "user": email,
+        "carrito": carrito
     }
 
     # Guardar el consumidor en la base de datos
@@ -154,12 +155,10 @@ def verificar_usuario_en_firebase_auth(email):
             return True
     return False
 
-
 def actualizar_consumidor_en_firebase(request, user_data):
     #Obtener el uid del usuario actual
     uid = obtener_uid(request=request)
     database.child("Consumidores").child(uid).set(user_data)
-
 
 def guardar_productor_en_firebase(uid, email, cif):
 
@@ -207,11 +206,9 @@ def log_in(request):
 
     return render(request, 'login.html', {'form': form})
 
-
 def verificar_credenciales_firebase(email, password):
     user_firebase_info = auth_firebase.sign_in_with_email_and_password(email, password)
     return user_firebase_info is not None
-
 
 def enviar_mail(request):
     print(request)
@@ -278,7 +275,6 @@ def obtener_uid(request):
     except Exception as e:
         print(f'Error al obtener el usuario: {str(e)}')
     return uid
-
 
 @login_required
 def perfil(request):
@@ -366,7 +362,6 @@ def clear_messages(request):
     storage = messages.get_messages(request)
     for _ in storage:
         pass
-
 
 class CustomPasswordResetView(auth_views.PasswordResetView):
     email_template_name = 'password_reset_email.html'

@@ -25,6 +25,7 @@ from EcoWEB import views as ecoweb_views
 
 from Apps.Usuarios import views as usuarios_views
 from Apps.Productos import views as productos_views
+from Apps.Compras import views as carrito_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -65,6 +66,6 @@ urlpatterns = [
 
     ############################################ COMPRAS ############################################
 
-    
+    path('carrito/', carrito_views.carrito, name='carrito'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

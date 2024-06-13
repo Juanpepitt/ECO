@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+    <link rel="stylesheet" type="text/css" href="/../static/css/bootstrap.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+    <link href="/../static/css/style.css" rel="stylesheet" />
+    <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <style>
+        /* Agrega aquí cualquier estilo adicional que necesites para el carrito */
+        /* Asegúrate de incluir estilos para el carrito específicamente */
+        .carrito-container {
+            background-color: #f6f8f7;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .carrito-item {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            width: 100%;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+            margin: 10px;
+            padding: 20px;
+        }
+
+        .carrito-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden; 
+        }
+
+        .carrito-item h3 {
+            margin-top: 12px;
+        }
+
+        .carrito-item p {
+            margin: 10px 0;
+        }
+
+        .carrito-item button {
+            padding: 10px 20px;
+            background-color: #3d8a4f;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carrito-item button:hover {
+            background-color: #2c6b3a; 
+        }
+
+        .carrito-total {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .carrito-total p {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .carrito-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .carrito-buttons a {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #3d8a4f;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .carrito-buttons a:hover {
+            background-color: #2c6b3a; 
+        }
+    </style>
+</head>
+<body>
+    <div class="carrito-container">
+        <h2>Carrito de Compras</h2>
+        <div class="products-grid">
+            {% for item in carrito.all %}
+                <div class="carrito-item">
+                    <div id="img-{{ item.id }}">
+                        <img src="{{ item.producto.imagen }}" alt="{{ item.nombre }}" class="product-image">
+                        <h3>{{ item.nombre }}</h3>
+                        <div class="rate">
+                            <!-- Puedes incluir aquí el sistema de valoración si es necesario -->
+                        </div>
+                        <p>{{ item.producto.precio|floatformat:2 }}€</p>
+                        <p>Cantidad: {{ item.cantidad }}</p>
+                        <button type="button">Eliminar</button>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay productos en tu carrito.</p>
+            {% endfor %}
+        </div>
+        <div class="carrito-total">
+            <p>Total: {{ carrito.total }}€</p>
+        </div>
+        <div class="carrito-buttons">
+            <a href="/productos/lista_productos" class="btn">Continuar Comprando</a>
+            <a href="#" class="btn">Finalizar Compra</a>
+        </div>
+    </div>
+
+    <!-- footer section -->
+    <section class="container-fluid footer_section">
+        <p>&copy; 2024 MARKETECO - Universidad de Sevilla</p>
+    </section>
+    <!-- footer section -->
+</body>
+</html>

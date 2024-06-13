@@ -21,7 +21,7 @@ class ProductForm(forms.Form):
     categoria = forms.ChoiceField(label='Categoría de producto', choices=CATEGORIAS_PRODUCTO, required=True, widget=forms.Select(attrs={'style': 'width: 100%;'}))
     descripcion = forms.CharField(label='Descripción del producto', widget=forms.Textarea(attrs={'autofocus': True, 'style': 'width: 100%;'}), strip=True)
     disponibilidad = forms.BooleanField(label='Disponible', required=False)
-    precio = forms.DecimalField(label='Precio en €', max_digits=10, decimal_places=2, required=True, help_text="Si se trata de un producto a granel, añade el precio en €/kg", widget=CommaDecimalWidget())
+    precio = forms.DecimalField(label='Precio en €', max_digits=10, decimal_places=2, required=True, help_text="Si se trata de un producto a granel, añade el precio en €/kg", widget=CommaDecimalWidget)
     stock = forms.IntegerField(label='Número de unidades disponibles en Stock', required=False)
     imagen = forms.ImageField(label='Imagen del producto', required=False)
     # imagenes = forms.FileField(label='Imagen o imágenes del producto', widget=MultipleFileInput(attrs={'multiple': True, 'style': 'width: 100%;'}))

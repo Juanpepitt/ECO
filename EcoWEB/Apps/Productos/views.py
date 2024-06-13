@@ -102,7 +102,7 @@ def add_product(request):
             # Añadir el producto a la base de datos
             user_uid = obtener_uid(request)
             database.child("Productores").child(user_uid).child("productos").child(producto_id).set(producto)
-            messages.success(request, 'Producto añadido con éxito')
+            messages.success(request, nombre+' añadido con éxito')
             return redirect('products')
         else:
             print(form.errors)
@@ -171,6 +171,7 @@ def edit_product(request, product_id):
                 "disponibilidad": disponibilidad,
                 "stock": stock
             })
+        messages.success(request, nombre+' editado con éxito')
 
         return redirect('products')
 
@@ -202,25 +203,26 @@ def products(request):
         "stock": product_data.get("stock", ""),
         "disponibilidad": product_data.get("disponibilidad", False)
     } 
-
+    
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
 
     opciones_categoria = ['Alimentación', 'Tecnología', 'Ropa', 'Hogar', 'Otros']
 
-    return render(request, 'products.html', {'productos': productos, 'opciones_categoria': opciones_categoria})
+    # Filtrar por categoría si se especifica
+    filtro_categoria = request.GET.get('categoria')
+    if filtro_categoria:
+        productos = [producto for producto in productos if producto.get('categoria') == filtro_categoria]
 
-def obtener_uid(request):
-    try:
-        user = auth.get_user_by_email(str(request.user))
-        uid = user.uid
-        # print(f'UID del usuario: {uid}')
-    except firebase_admin.auth.UserNotFoundError:
-        print(f'No se encontró un usuario con el correo electrónico {email}')
-    except Exception as e:
-        print(f'Error al obtener el usuario: {str(e)}')
-    return uid
+    # Dejar categoría seleccionada al usar desplegable
+    selected_categoria = filtro_categoria if filtro_categoria in opciones_categoria else None
 
+    context = {
+        'productos': productos,
+        'opciones_categoria': opciones_categoria,
+        'selected_categoria': selected_categoria,
+    }
 
+    return render(request, 'products.html', context)
 
 def lista_productos(request):
     productos_ref = database.child("Productores").get()
@@ -244,7 +246,7 @@ def lista_productos(request):
             
             if 'valoracion' in producto_data:
                 try:
-                    producto_data['valoracion'] = float(producto_data['valoracion'])
+                    producto_data['valoracion'] = int(producto_data['valoracion'])
                 except (ValueError, TypeError):
                     producto_data['valoracion'] = 0
 
@@ -284,30 +286,25 @@ def lista_productos(request):
         'list_products': productos, 
         'categorias': categorias, 
         'productores': productores,
-        'range': range(1, 6),
+        'range': range(5, 0, -1),
         'selected_categoria': selected_categoria, 
         'selected_productor': selected_productor, 
         'selected_ordenar_por': selected_ordenar_por
         }
     return render(request, 'list_products.html', context)
 
-
 def detalle_producto(request, producto_id):
-    productos_ref = database.child("Productores").get()
+    productores_ref = database.child("Productores").get()
     producto = None
 
-    for productor in productos_ref.each():
+    for productor in productores_ref.each():
         productos_productor = productor.val().get('productos', {})
         if producto_id in productos_productor:
             producto = productos_productor[producto_id]
             producto['id'] = producto_id
-            valoracion = producto['valoracion']
-            empty_stars = 5 - valoracion
             context = {
                 'producto': producto,
-                'empty_stars': range(empty_stars),
-                'full_stars': range(1, 6),
-                'range': range(valoracion)
+                'range': range(5, 0, -1)
             }
             break
 
@@ -315,3 +312,15 @@ def detalle_producto(request, producto_id):
         return render(request, '404.html')
 
     return render(request, 'detalle_producto.html', context)
+
+def obtener_uid(request):
+    try:
+        user = auth.get_user_by_email(str(request.user))
+        uid = user.uid
+        # print(f'UID del usuario: {uid}')
+    except firebase_admin.auth.UserNotFoundError:
+        print(f'No se encontró un usuario con el correo electrónico {email}')
+    except Exception as e:
+        print(f'Error al obtener el usuario: {str(e)}')
+    return uid
+

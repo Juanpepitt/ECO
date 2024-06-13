@@ -175,10 +175,9 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-
+# El almacenamiento de imágenes en el sistema Django serán las de los perfiles, el resto irá a Firebase Storage
 MEDIA_URL = 'Usuarios/perfiles/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Apps')
-# Configura el almacenamiento de fotos de perfil
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
