@@ -167,6 +167,7 @@
             </div>
         </div>
     </div>
+    <a href="#" style="float: right; margin-right: 0px;"  onclick="confirmDelete()">Eliminar Usuario</a>
 
     <!-- footer section -->
     <section class="container-fluid footer_section_perfil">
@@ -186,6 +187,23 @@
                     html: popupMessages.innerHTML,
                 });
             }
+        }
+
+        function confirmDelete() {
+            Swal.fire({
+                title: '¿Estás seguro? Solo se pueden eliminar los usuarios registrados mediante el método tradicional.',
+                text: "No podrás revertir esto, ¡¡tendrás que crear un nuevo usuario!!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar usuario',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/usuarios/eliminar/`;
+                }
+            })
         }
     </script>
 

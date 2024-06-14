@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib import messages
 from .forms import ConsumidorSignUpForm, ProductorSignUpForm, LoginForm, ProfileEditForm, ProfileEditFormProd
 from .models import Consumidor, Productor
+from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from google.oauth2 import service_account
@@ -367,6 +368,30 @@ def muestra_productores(request):
 
     return render(request, 'muestra_productores.html', {'productores': productores_data})
 
+@login_required
+def eliminar_usuario(request):
+
+    user = request.user
+    uid = obtener_uid(request)
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+    
+    context = {
+        'user': user
+    }
+
+    if(isinstance(user, Productor)):
+        database.child("Productores").child(uid).remove()
+    else:
+        database.child("Consumidores").child(uid).remove()
+
+    auth.delete_user(uid)
+    user.delete()
+
+    logout(request)
+
+    return redirect("/")
 
 def home(request):
     return render(request, "index.html")

@@ -2,5 +2,10 @@ venv/*
 EcoWEB/Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json
 EcoWEB/Apps/Usuarios/migrations
 EcoWEB/Apps/Usuarios/__pycache__
+EcoWEB/Apps/Productos/migrations
+EcoWEB/Apps/Productos/__pycache__
+EcoWEB/Apps/Compras/migrations
+EcoWEB/Apps/Compras/__pycache__
 EcoWEB/__pycache__
 EcoWEB/EcoWEB/__pycache__
+EcoWEB/Apps/Productos/templatetags/__pycache__

@@ -3,10 +3,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from Apps.Usuarios.models import Consumidor, Productor
-
+from django.conf import settings
 import firebase_admin
 from firebase_admin import credentials, auth, storage, initialize_app
 
+import stripe
 import pyrebase
 
 # Configuración de Firebase
@@ -30,6 +31,8 @@ config={
 firebase = pyrebase.initialize_app(config)
 database = firebase.database()
 auth_firebase = firebase.auth()
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 @login_required
 def ver_carrito (request):
@@ -118,7 +121,7 @@ def add_carrito(request, producto_id):
     else:
         messages.error(request, 'Producto no encontrado')
 
-    return redirect('/productos/lista_productos/')
+    return redirect('list_products')
 
 @login_required
 def eliminar_producto_carrito(request, producto_id):
@@ -142,12 +145,12 @@ def eliminar_producto_carrito(request, producto_id):
                 database.child("Productores").child(uid).child('carrito').child(producto_id).remove()
             else:
                 database.child("Consumidores").child(uid).child('carrito').child(producto_id).remove()
-            messages.success(request, 'Producto eliminado del carrito correctamente.')
+            messages.success(request, 'Producto eliminado de la cesta correctamente.')
 
         except Exception as e:
-            messages.error(request, f'Error al eliminar el producto del carrito: {str(e)}')
+            messages.error(request, f'Error al eliminar el producto de la cesta: {str(e)}')
     else:
-        messages.error(request, 'El producto no está en el carrito.')
+        messages.error(request, 'El producto no está en la cesta.')
 
     return redirect('ver_carrito')
 
@@ -189,6 +192,68 @@ def actualizar_cantidad(request, producto_id, cambio):
             messages.error(request, f'Error al actualizar la cantidad del producto: {e}')
 
     return redirect('ver_carrito')
+
+def vaciar_carrito(request):
+    
+    user = request.user
+    uid = obtener_uid(request)
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
+
+    if user_data and 'carrito' in user_data:
+        try:
+            if(isinstance(user, Productor)):
+                database.child("Productores").child(uid).child('carrito').remove()
+            else:
+                database.child("Consumidores").child(uid).child('carrito').remove()
+            messages.success(request, 'La cesta se ha vaciado correctamente.')
+
+        except Exception as e:
+            messages.error(request, f'Error al vaciar la cesta: {str(e)}')
+    else:
+        messages.error(request, 'No hay productos en la cesta.')
+        
+    return redirect('ver_carrito')
+
+def checkout(request):
+    if request.method == 'POST':
+        # Crear una sesión de pago
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'eur',
+                    'product_data': {
+                        'name': 'Nombre del Producto',
+                    },
+                    'unit_amount': 1000,
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=settings.DOMAIN_URL + '/payment_success/',
+            cancel_url=settings.DOMAIN_URL + '/payment_cancel/',
+        )
+        return redirect(session.url, code=303)
+    return render(request, 'checkout.html', {
+        'STRIPE_PUBLIC_KEY': settings.STRIPE_PUBLIC_KEY
+    })
+
+def payment_success(request):
+    return render(request, 'payment_success.html')
+
+def payment_cancel(request):
+    return render(request, 'payment_cancel.html')
+
+
 
 
 def obtener_uid(request):

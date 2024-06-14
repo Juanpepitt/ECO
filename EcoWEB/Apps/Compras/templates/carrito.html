@@ -60,6 +60,7 @@
             color: #ffffff;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            min-width: 40px;
         }
 
         .btn-small:hover {
@@ -188,15 +189,15 @@
                     <div class="carrito-item">
                         <div id="img-{{ productoid }}">
                             <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" class="product-image">
-                            <h3>{{ producto.nombre }}</h3>
+                            <h3 class="h3"><a href="{% url 'detalle_producto' productoid %}">{{ producto.nombre }}</a></h3>
                             <p>{{ producto.categoria }}</p>
                             <p>{{ producto.precio|format_decimal }}€</p>
-                            <p>Cantidad: {{ producto.cantidad }}</p>
+                            <strong><p>CANTIDAD: {{ producto.cantidad }}</p></strong>
                             <div class="button_group">
                                 <a href="{% url 'actualizar_cantidad' productoid -1 %}" class="btn-small">-</a>
                                 <a href="{% url 'actualizar_cantidad' productoid 1 %}" class="btn-small">+</a>
                             </div>
-                            <a href="{% url 'eliminar_producto_carrito' productoid %}" class="btn-cancel">Eliminar</a>
+                            <a  class="btn btn-cancel" href="#" onclick="confirmDeleteItem('{{ productoid }}')">Eliminar</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -209,7 +210,14 @@
         </div>
         <div class="button_group">
             <a href="/productos/lista_productos" class="btn btn_pass">Continuar Comprando</a>
-            <a href="#" class="btn">Finalizar Compra</a>
+            <a href="/checkout" class="btn">Finalizar Compra</a>
+        </div>
+        <div>
+            {% if carrito %}
+                <a onclick="confirmDeleteCesta()"  href="#" class="btn btn-cancel">Vaciar la cesta</a>
+            {% else %}
+                <a href="{% url 'vaciar_carrito' %}" class="btn btn-cancel">Vaciar la cesta</a>
+            {% endif %}
         </div>
     </div>
 
@@ -242,6 +250,40 @@
                 });
             }
         }
+
+        function confirmDeleteItem(productId) {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `/carrito/eliminar/${productId}/`;
+                }
+            })
+        }
+
+        function confirmDeleteCesta() {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡No podrás revertir esto!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, vaciar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `/carrito/vaciar/`;
+                    }
+                })
+            }
     </script>
 </body>
 </html>

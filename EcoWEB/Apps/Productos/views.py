@@ -254,6 +254,11 @@ def lista_productos(request):
             categorias.add(producto_data.get('categoria', 'Otros'))
             productores.add(productor_nombre)
 
+    # Filtrar por nombre de producto si se especifica
+    buscar = request.GET.get('buscar')
+    if buscar:
+        productos = [producto for producto in productos if buscar.lower() in producto.get('nombre', '').lower()]
+
     # Filtrar por categoría si se especifica
     filtro_categoria = request.GET.get('categoria')
     if filtro_categoria:
@@ -289,7 +294,8 @@ def lista_productos(request):
         'range': range(5, 0, -1),
         'selected_categoria': selected_categoria, 
         'selected_productor': selected_productor, 
-        'selected_ordenar_por': selected_ordenar_por
+        'selected_ordenar_por': selected_ordenar_por,
+        'buscar':buscar
         }
     return render(request, 'list_products.html', context)
 
@@ -312,6 +318,7 @@ def detalle_producto(request, producto_id):
         return render(request, '404.html')
 
     return render(request, 'detalle_producto.html', context)
+
 
 def obtener_uid(request):
     try:

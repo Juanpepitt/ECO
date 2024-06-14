@@ -13,11 +13,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         body, html {
-            height: 100%; 
-            margin: 0; 
-            font-family: Arial, sans-serif; 
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
         }
-
+    
         .container_productos {
             background-color: #f6f8f7;
             padding: 20px;
@@ -25,7 +25,7 @@
             flex-direction: column;
             align-items: center;
         }
-
+    
         .product-item {
             background-color: #ffffff;
             border: 1px solid #ddd;
@@ -38,17 +38,17 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
-
+    
         .product-item:hover {
             transform: translateY(-5px);
         }
-
+    
         .product-item img {
             width: 100%;
             height: auto;
             display: block;
         }
-
+    
         .product-item button {
             margin-top: 10px;
             padding: 10px 20px;
@@ -59,49 +59,48 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+    
         .product-item button:hover {
             background-color: #2c6b3a; 
         }
-
+    
         .products-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
         }
-
+    
         .products-grid .product-item {
             flex: 0 0 calc(20% - 20px);
             margin: 10px;
         }
-
+    
         .product-image {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             overflow: hidden; 
         }
-
+    
         .product-image img {
             width: 100%; 
             height: auto;
             border-radius: 50%;
         }
-
+    
         .h3 {
             margin-top: 12px;
         }
-
+    
         h2 {
             font-size: 2.5em;
+            text-align: center;
             color: #3d8a4f;
             margin-bottom: 20px;
-            /* font-family: 'Poppins', sans-serif; */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-
+    
         .btn {
-            width: calc(100% - 22px); 
             padding: 10px;
             margin: 20px;
             border: 1px solid #ddd;
@@ -112,7 +111,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+    
         .btn-cancel {
             width: calc(100% - 22px); 
             padding: 10px;
@@ -125,13 +124,13 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+    
         .btn_pass {
             border: 1px solid #ddd;
             background-color: #3d6f8a;
             color: #ffffff;
         }
-
+    
         .btn-carrito {
             background-color: transparent;
             border: none;
@@ -144,23 +143,35 @@
             right: 10px;
             z-index: 1000;
         }
-
+    
         .btn-carrito img {
             width: 60px;
             height: 60px;
             margin: 70px;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
-
+    
         .btn-carrito img:hover {
             transform: scale(1.1);
             opacity: 0.8;
         }
-
+    
+        .btn:hover {
+            background-color: #2c6b3a;
+        }
+    
+        .btn-cancel:hover {
+            background-color: #6b2c2c;
+        }
+    
+        .btn_pass:hover {
+            background-color: #2c4f6b;
+        }
+    
         .hidden {
             display: none;
         }
-
+    
         .rate {
             display: flex;
             justify-content: center;
@@ -184,42 +195,59 @@
             color: #deb217;
         }
 
+        .form-inline {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+            margin-right: 200px;
+            margin-left: 70px;
+        }
+
+        @media (max-width: 768px) {
+            .form-inline {
+                max-width: 100%;
+            }
+        }
+
         @media (max-width: 1024px) {
             .products-grid .product-item {
                 flex: 0 0 calc(25% - 20px); /* 4 en fila para pantallas medianas */
             }
         }
-
+    
         @media (max-width: 768px) {
             .products-grid .product-item {
                 flex: 0 0 calc(33.333% - 20px); /* 3 en fila para pantallas pequeñas */
             }
         }
-
+    
         @media (max-width: 480px) {
             .products-grid .product-item {
                 flex: 0 0 calc(50% - 20px); /* 2 en fila para pantallas muy pequeñas */
             }
         }
-
+    
         @media (max-width: 320px) {
             .products-grid .product-item {
                 flex: 0 0 calc(100% - 20px); /* 1 en fila para pantallas extra pequeñas */
             }
         }
-
+    
         .filter-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
+            width: 100%;
             margin-bottom: 20px;
         }
-
+    
         .filter-container div {
             margin: 10px;
         }
-
-        .filter-container select, .filter-container button {
+    
+        .filter-container input[type="text"],
+        .filter-container select,
+        .filter-container button {
             padding: 10px;
             border-radius: 5px;
             border: 1px solid #ddd;
@@ -227,16 +255,17 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-
+    
         .filter-container button {
             background-color: #3d8a4f;
             color: #ffffff;
         }
-
+    
         .filter-container button:hover {
             background-color: #2c6b3a;
         }
     </style>
+    
 </head>
 <body>
     <!-- Mostrar mensajes de Django -->
@@ -248,8 +277,35 @@
     </div>
     {% endif %}
     <!-- Mostrar mensajes de Django -->
+    
+    <!-- header section starts -->
+    <header class="header_section">
+        <div class="container-fluid">
+        <!-- <h2>Productos</h2> -->
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="/">
+              <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo" style="width: 120px; height: 120px; border-radius: 80%;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <form class="form-inline my-2 my-lg-0 flex-grow-1" method="GET">
+                  <input class="form-control mr-sm-2 flex-grow-1" type="search" name="buscar" placeholder="Buscar producto" aria-label="Search" value="{{ request.GET.buscar }}">
+                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">BUSCAR</button>
+              </form>
+            </div>
+            <a href="{% url 'ver_carrito' %}" class="btn-carrito" alt="Cesta de la compra">
+                <img src="/static/icons/full-cart.png" alt="Cesta de la compra">
+            </a>    
+          </nav>
+        </div>
+      </header>
+      <!-- header section ends -->
+
     <div class="container_productos">
-        <h2>Productos</h2>
         {% load custom_filters %}
         <form method="get" class="filter-container">
             <div>
@@ -258,99 +314,95 @@
                     <option value="">Todas</option>
                     {% for categoria in categorias %}
                         <option value="{{ categoria }}" {% if categoria == selected_categoria %} selected {% endif %}>{{ categoria }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="productor">Productor:</label>
-                <select name="productor" id="productor">
-                    <option value="">Todos</option>
-                    {% for productor in productores %}
-                        <option value="{{ productor }}" {% if productor == selected_productor %} selected {% endif %}>{{ productor }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="ordenar_por">Ordenar por:</label>
-                <select name="ordenar_por" id="ordenar_por">
-                    <option value="">Ninguno</option>
-                    <option value="precio_ascendente" {% if selected_ordenar_por == 'precio_ascendente' %} selected {% endif %}>Precio (más baratos primero)</option>
-                    <option value="precio_descendente" {% if selected_ordenar_por == 'precio_descendente' %} selected {% endif %}>Precio (más caros primero)</option>
-                    <option value="valoracion" {% if selected_ordenar_por == 'valoracion' %} selected {% endif %}>Valoración</option>
-                </select>
-            </div>
-            <div>
-                <button type="submit">Aplicar</button>
-            </div>
-        </form>
-        <div>
-            {% if list_products|length < 1 %}
-                <p>No hay productos que mostrar</p>
-            {% endif %}
-        </div>
-        <div class="products-grid">            
-            {% for producto in list_products %}
-                <div class="product-item">
-                    <div id="img-{{ producto.id }}">
-                        <a href="{% url 'detalle_producto' producto.id %}"></a>
-                        {% if producto.imagen %}
-                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
-                        {% else %}
-                            <img src="https://dummyimage.com/2040x1080/3d003d/ffffff.png&text=Sin+imagen+de+producto"  alt="{{ producto.nombre }}"  class="product-image">
-                        {% endif %}
-
-                        <h3 class="h3"><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h3>
-
-                        <div class="rate">
-                            {% if producto.valoracion %}
-                                {% for i in range %}
-                                    <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if producto.valoracion == i %}checked{% endif %} disabled />
-                                    <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
-                                {% endfor %}
-                            {% endif %}
-                        </div>                                               
-
-                        <p>{{ producto.precio|format_decimal }}€</p>
-                        {% if producto.stock %}
-                            <p>Unidades: {{ producto.stock }}</p>
-                        {% else %}
-                            <p>Sin stock</p>
-                        {% endif %}
-                        
-                        <a href="{% url 'add_carrito' producto.id %}" class="btn" alt="Añadir al carrito">Añadir a la cesta</a>
-                        
-                    </div>
+                        {% endfor %}
+                    </select>
                 </div>
-            {% endfor %}
+                <div>
+                    <label for="productor">Productor:</label>
+                    <select name="productor" id="productor">
+                        <option value="">Todos</option>
+                        {% for productor in productores %}
+                            <option value="{{ productor }}" {% if productor == selected_productor %} selected {% endif %}>{{ productor }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="ordenar_por">Ordenar por:</label>
+                    <select name="ordenar_por" id="ordenar_por">
+                        <option value="">Ninguno</option>
+                        <option value="precio_ascendente" {% if selected_ordenar_por == 'precio_ascendente' %} selected {% endif %}>Precio (más baratos primero)</option>
+                        <option value="precio_descendente" {% if selected_ordenar_por == 'precio_descendente' %} selected {% endif %}>Precio (más caros primero)</option>
+                        <option value="valoracion" {% if selected_ordenar_por == 'valoracion' %} selected {% endif %}>Valoración</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Aplicar</button>
+                </div>
+            </form>
+            <div>
+                {% if list_products|length < 1 %}
+                    <p>No hay productos que mostrar</p>
+                {% endif %}
+            </div>
+            <div class="products-grid">            
+                {% for producto in list_products %}
+                    <div class="product-item">
+                        <div id="img-{{ producto.id }}">
+                            <a href="{% url 'detalle_producto' producto.id %}"></a>
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"  class="product-image">
+                            {% else %}
+                                <img src="https://dummyimage.com/2040x1080/3d003d/ffffff.png&text=Sin+imagen+de+producto"  alt="{{ producto.nombre }}"  class="product-image">
+                            {% endif %}
+    
+                            <h3 class="h3"><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h3>
+    
+                            <div class="rate">
+                                {% if producto.valoracion %}
+                                    {% for i in range %}
+                                        <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if producto.valoracion == i %}checked{% endif %} disabled />
+                                        <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>                                               
+    
+                            <p>{{ producto.precio|format_decimal }}€</p>
+                            {% if producto.stock %}
+                                <p>Unidades: {{ producto.stock }}</p>
+                            {% else %}
+                                <p>Sin stock</p>
+                            {% endif %}
+                            
+                            <a href="{% url 'add_carrito' producto.id %}" class="btn" alt="Añadir al carrito">Añadir a la cesta</a>
+                            
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div>
+                <a href="/" class="btn">Volver a Inicio</a>
+            </div>
         </div>
-        <div>
-            <a href="/" class="btn">Volver a Inicio</a>
-        </div>
-    </div>
-
-    <!-- footer section -->
-    <section class="container-fluid footer_section">
-        <p>&copy; 2024 MARKETECO - Universidad de Sevilla</p>
-    </section>
-    <!-- footer section -->
-
-    <a href="{% url 'ver_carrito' %}" class="btn-carrito" alt="Cesta de la compra">
-        <img src="/static/icons/full-cart.png" alt="Cesta de la compra">
-    </a>
-
-    <script>
-        // Mostrar el popup con SweetAlert
-        window.onload = function() {
-            var popupMessages = document.getElementById('popup-messages');
-            if (popupMessages && popupMessages.children.length > 0) {
-                Swal.fire({
-                    icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
-                    title: '¡ÉXITO!',
-                    html: popupMessages.innerHTML,
-                });
+    
+        <!-- footer section -->
+        <section class="container-fluid footer_section">
+            <p>&copy; 2024 MARKETECO - Universidad de Sevilla</p>
+        </section>
+        <!-- footer section -->
+    
+        <script>
+            // Mostrar el popup con SweetAlert
+            window.onload = function() {
+                var popupMessages = document.getElementById('popup-messages');
+                if (popupMessages && popupMessages.children.length > 0) {
+                    Swal.fire({
+                        icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
+                        title: '¡ÉXITO!',
+                        html: popupMessages.innerHTML,
+                    });
+                }
             }
-        }
-    </script>
-
-</body>
-</html>
+        </script>
+    
+    </body>
+    </html>

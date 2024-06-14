@@ -50,8 +50,8 @@ urlpatterns = [
     path('usuarios/perfil/', usuarios_views.perfil, name='perfil'),
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
     path('usuarios/editar_perfil_prod/', usuarios_views.edit_profile_prod, name='edit_profile_prod'),
-
     path('usuarios/productores/', usuarios_views.muestra_productores, name='productores'),
+    path('usuarios/eliminar/', usuarios_views.eliminar_usuario, name='eliminar_user'),
 
     ################################################################################################# 
 
@@ -72,5 +72,10 @@ urlpatterns = [
     path('carrito/add_carrito/<str:producto_id>/', carrito_views.add_carrito, name='add_carrito'),
     path('carrito/eliminar/<str:producto_id>/', carrito_views.eliminar_producto_carrito, name='eliminar_producto_carrito'),
     path('carrito/actualizar/<str:producto_id>/<str:cambio>/', carrito_views.actualizar_cantidad, name='actualizar_cantidad'),
+    path('carrito/vaciar/', carrito_views.vaciar_carrito, name='vaciar_carrito'),
+
+    path('checkout/', carrito_views.checkout, name='checkout'),
+    path('payment_success/', carrito_views.payment_success, name='payment_success'),
+    path('payment_cancel/', carrito_views.payment_cancel, name='payment_cancel'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

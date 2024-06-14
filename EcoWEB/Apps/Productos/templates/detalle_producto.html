@@ -24,7 +24,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            min-height: calc(100vh - 160px);
+            margin-top: 0;
         }
 
         .product-detail {
@@ -50,6 +51,15 @@
             margin-top: 12px;
         }
 
+        .h2 {
+            font-size: 2.5em;
+            color: #3d8a4f;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            height: 100%; 
+        }
+
         .btn {
             width: calc(100% - 22px); 
             padding: 10px;
@@ -63,8 +73,75 @@
             transition: background-color 0.3s ease;
         }
 
+        .btn-cancel {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            background-color: #8a3d3d;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
         .btn:hover {
             background-color: #2c6b3a;
+        }
+
+        .btn-cancel:hover {
+            background-color: #6b2c2c;
+        }
+
+        .btn_pass:hover {
+            background-color: #2c4f6b;
+        }
+
+        .btn-carrito {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            position: static;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        } 
+
+        .btn-carrito img {
+            width: 60px;
+            height: 60px;
+            margin: 20px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .btn-carrito img:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .img-marketeco {
+            display: inline-flex;
+            align-items: center;
+            margin-right: auto;
+        }
+
+        .img-marketeco img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
         }
 
         .button_group {
@@ -97,6 +174,14 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <a class="img-marketeco" href="/">
+            <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo">
+        </a>
+        <a href="{% url 'ver_carrito' %}" class="btn-carrito" alt="Cesta de la compra">
+            <img src="/static/icons/full-cart.png" alt="Cesta de la compra">
+        </a>   
+    </div>
     <div class="container_producto">
         {% load custom_filters %}
         <div class="product-detail">
@@ -121,11 +206,16 @@
 
             <p>{{ producto.descripcion }}</p>
             <p>Precio: {{ producto.precio|format_decimal }}€</p>
-            <p>Unidades disponibles: {{ producto.stock }}</p>
+            {% if producto.stock %}
+                <p>Unidades disponibles: {{ producto.stock }}</p>
+            {% else %}
+                <p>No hay stock de este producto</p>
+            {% endif %}
+
             <p>Categoría: {{ producto.categoria }}</p>                                         
             
             <div class="button_group">
-                <a href="{% url 'list_products' %}" class="btn">Volver</a>
+                <a href="{% url 'list_products' %}" class="btn btn-cancel">Volver</a>
                 <a href="{% url 'add_carrito' producto.id %}" class="btn" alt="Añadir al carrito">Añadir a la cesta</a>
             </div>
             
