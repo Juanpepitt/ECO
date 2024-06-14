@@ -12,10 +12,15 @@
     <link href="/../static/css/responsive.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
+        body, html {
+            height: 100%; 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+        }
+
         .btn {
-            width: calc(100% - 22px); 
             padding: 10px;
-            margin: 20px;
+            margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-sizing: border-box; 
@@ -25,10 +30,13 @@
             transition: background-color 0.3s ease;
         }
 
+        .btn:hover {
+            background-color: #2c6b3a; 
+        }
+
         .btn-cancel {
-            width: calc(100% - 22px); 
             padding: 10px;
-            margin: 20px;
+            margin: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-sizing: border-box; 
@@ -38,7 +46,27 @@
             transition: background-color 0.3s ease;
         }
 
-        .btn_pass{
+        .btn-cancel:hover {
+            background-color: #6b2c2c;
+        }
+
+        .btn-small {
+            padding: 10px 10px;
+            margin: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #3d8a4f;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-small:hover {
+            background-color: #2c6b3a;
+        }
+
+        .btn_pass {
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #3d6f8a;
@@ -47,9 +75,14 @@
             transition: background-color 0.3s ease;
         }
 
+        .btn_pass:hover {
+            background-color: #2c4f6b;
+        }
+
         .button_group {
             display: flex;
             justify-content: center;
+            gap: 10px;
         }
 
         .carrito-container {
@@ -64,17 +97,24 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            width: 100%;
         }
 
         .carrito-item {
             background-color: #ffffff;
             border: 1px solid #ddd;
-            width: 100%;
+            width: calc(100% - 40px);
             border-radius: 5px;
             overflow: hidden;
             text-align: center;
             margin: 10px;
             padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .carrito-item:hover {
+            transform: translateY(-5px);
         }
 
         .carrito-item img {
@@ -95,24 +135,49 @@
         .carrito-total {
             margin-top: 20px;
             text-align: right;
+            width: calc(100% - 40px);
         }
 
         .carrito-total p {
             font-weight: bold;
             font-size: 18px;
         }
+
+        h2 {
+            font-size: 2.5em;
+            color: #3d8a4f;
+            margin-bottom: 20px;
+            /* font-family: 'Poppins', sans-serif; */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .carrito-item {
+                width: calc(50% - 40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carrito-item {
+                width: calc(100% - 40px);
+            }
+
+            .carrito-total {
+                text-align: center;
+            }
+        }
     </style>
 </head>
 <body>
-      <!-- Mostrar mensajes de Django -->
-      {% if messages %}
-      <div id="popup-messages" style="display: none;">
-          {% for message in messages %}
-          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-          {% endfor %}
-      </div>
-      {% endif %}
-      <!-- Mostrar mensajes de Django -->
+    <!-- Mostrar mensajes de Django -->
+    {% if messages %}
+    <div id="popup-messages" style="display: none;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Mostrar mensajes de Django -->
 
     <div class="carrito-container">
         <h2>Cesta de la Compra</h2>
@@ -126,14 +191,11 @@
                             <h3>{{ producto.nombre }}</h3>
                             <p>{{ producto.categoria }}</p>
                             <p>{{ producto.precio|format_decimal }}€</p>
-                            <p>Disponibilidad: {{ producto.stock }}</p>
                             <p>Cantidad: {{ producto.cantidad }}</p>
-                            <!-- Botones para actualizar cantidad y eliminar -->
-                             <div class="button_group">
-                                <a href="{% url 'actualizar_cantidad' productoid -1 %}" class="btn">-</a>
-                                <a href="{% url 'actualizar_cantidad' productoid 1 %}" class="btn">+</a>
-                             </div>
-                            
+                            <div class="button_group">
+                                <a href="{% url 'actualizar_cantidad' productoid -1 %}" class="btn-small">-</a>
+                                <a href="{% url 'actualizar_cantidad' productoid 1 %}" class="btn-small">+</a>
+                            </div>
                             <a href="{% url 'eliminar_producto_carrito' productoid %}" class="btn-cancel">Eliminar</a>
                         </div>
                     </div>

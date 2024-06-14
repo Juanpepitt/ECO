@@ -35,6 +35,12 @@
             text-align: center;
             margin: 10px;
             padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
         }
 
         .product-item img {
@@ -86,6 +92,13 @@
             margin-top: 12px;
         }
 
+        h2 {
+            font-size: 2.5em;
+            color: #3d8a4f;
+            margin-bottom: 20px;
+            /* font-family: 'Poppins', sans-serif; */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
         .btn {
             width: calc(100% - 22px); 
@@ -124,14 +137,18 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            margin-top: 10px;
             display: inline-flex;
             align-items: center;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
         }
 
         .btn-carrito img {
-            width: 32px;
-            height: 32px;
+            width: 60px;
+            height: 60px;
+            margin: 70px;
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
@@ -222,7 +239,7 @@
     </style>
 </head>
 <body>
-      <!-- Mostrar mensajes de Django -->
+    <!-- Mostrar mensajes de Django -->
     {% if messages %}
     <div id="popup-messages" style="display: none;">
         {% for message in messages %}
@@ -230,7 +247,7 @@
         {% endfor %}
     </div>
     {% endif %}
-  <!-- Mostrar mensajes de Django -->
+    <!-- Mostrar mensajes de Django -->
     <div class="container_productos">
         <h2>Productos</h2>
         {% load custom_filters %}
@@ -265,7 +282,6 @@
             <div>
                 <button type="submit">Aplicar</button>
             </div>
-            
         </form>
         <div>
             {% if list_products|length < 1 %}
@@ -301,11 +317,8 @@
                             <p>Sin stock</p>
                         {% endif %}
                         
-                        <a href="{% url 'add_carrito' producto.id %}" class="btn-carrito" alt="Añadir al carrito">
-                            <img src="/static/icons/full-cart.png" alt="Añadir al carrito">
-                        </a>
+                        <a href="{% url 'add_carrito' producto.id %}" class="btn" alt="Añadir al carrito">Añadir a la cesta</a>
                         
-
                     </div>
                 </div>
             {% endfor %}
@@ -321,6 +334,10 @@
     </section>
     <!-- footer section -->
 
+    <a href="{% url 'ver_carrito' %}" class="btn-carrito" alt="Cesta de la compra">
+        <img src="/static/icons/full-cart.png" alt="Cesta de la compra">
+    </a>
+
     <script>
         // Mostrar el popup con SweetAlert
         window.onload = function() {
@@ -333,7 +350,7 @@
                 });
             }
         }
-      </script>
+    </script>
 
 </body>
 </html>

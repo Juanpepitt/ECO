@@ -51,6 +51,8 @@ urlpatterns = [
     path('usuarios/editar_perfil/', usuarios_views.edit_profile, name='edit_profile'),
     path('usuarios/editar_perfil_prod/', usuarios_views.edit_profile_prod, name='edit_profile_prod'),
 
+    path('usuarios/productores/', usuarios_views.muestra_productores, name='productores'),
+
     ################################################################################################# 
 
     ########################################### PRODUCTOS ###########################################

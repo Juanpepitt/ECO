@@ -73,6 +73,19 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
     }
+
+    .btn-cancel {
+        width: calc(100% - 22px); 
+        padding: 10px;
+        margin: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box; 
+        background-color: #8a3d3d;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
     
     .btn_pass{
         border: 1px solid #ddd;
@@ -83,6 +96,10 @@
 
     .btn:hover {
         background-color: #2c6b3a; 
+    }
+
+    .btn-cancel:hover {
+        background-color: #6b2c2c;
     }
 
     .button_group {
@@ -111,7 +128,7 @@
                 {% endif %}
                 
             </form>
-            <a href="{% url 'perfil' %}" class="btn">Cancelar</a>
+            <a href="{% url 'perfil' %}" class="btn btn-cancel">Cancelar</a>
         </div>
     </div>
 

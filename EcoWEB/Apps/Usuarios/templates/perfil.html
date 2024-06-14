@@ -69,8 +69,36 @@
             transition: background-color 0.3s ease;
         }
 
+        .btn-cancel {
+            width: calc(100% - 22px); 
+            padding: 10px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; 
+            background-color: #8a3d3d;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn_pass{
+            border: 1px solid #ddd;
+            background-color: #3d6f8a;
+            color: #ffffff;
+
+        }
+
         .btn:hover {
             background-color: #2c6b3a; 
+        }
+
+        .btn-cancel:hover {
+            background-color: #6b2c2c;
+        }
+
+        .btn_pass:hover {
+            background-color: #2c586b;
         }
 
         .button_group {
@@ -134,8 +162,8 @@
             <a href="{% url 'edit_profile' %}" class="btn">Editar Perfil</a>
             
             <div class="button_group">
-                <a href="/" class="btn">Volver a Inicio</a>
-                <a href="/usuarios/signup/logout" class="btn">Salir de la cuenta de {{ user.username }}</a>
+                <a href="/" class="btn btn_pass">Volver a Inicio</a>
+                <a href="/usuarios/signup/logout" class="btn btn-cancel">Salir de la cuenta de {{ user.username }}</a>
             </div>
         </div>
     </div>

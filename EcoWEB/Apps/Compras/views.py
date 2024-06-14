@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from Apps.Usuarios.models import Consumidor, Productor
 
 import firebase_admin
 from firebase_admin import credentials, auth, storage, initialize_app
@@ -33,10 +34,19 @@ auth_firebase = firebase.auth()
 @login_required
 def ver_carrito (request):
 
+    user = request.user
     uid = obtener_uid(request)
-    consumer_ref = database.child("Consumidores").child(uid)
-    consumer_data = consumer_ref.get().val()
-    carrito_actual = consumer_data.get('carrito', {})
+    
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
+    carrito_actual = user_data.get('carrito', {})
 
     total = 0
 
@@ -55,15 +65,25 @@ def ver_carrito (request):
 
 @login_required
 def add_carrito(request, producto_id):
-    uid = obtener_uid(request)
-    consumer_ref = database.child("Consumidores").child(uid)
-    consumer_data = consumer_ref.get().val()
 
-    if not consumer_data:
-        messages.error(request, 'Consumidor no encontrado')
+    user = request.user
+    uid = obtener_uid(request)
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+    
+    user_data = user_ref.get().val()
+
+    if not user_data:
+        messages.error(request, 'Usuario no encontrado')
         return redirect('/productos/lista_productos/')
 
-    carrito_actual = consumer_data.get('carrito', {})
+    carrito_actual = user_data.get('carrito', {})
 
     productos_ref = database.child("Productores").get()
     producto_data = None
@@ -78,7 +98,6 @@ def add_carrito(request, producto_id):
     if producto_data:
         if producto_id in carrito_actual and 'cantidad' in carrito_actual[producto_id]:
             carrito_actual[producto_id]['cantidad'] += 1
-            print("he entrado")
         else:
             carrito_actual[producto_id] = {
                 'nombre': producto_data['nombre'],
@@ -90,7 +109,11 @@ def add_carrito(request, producto_id):
             }
 
         # Actualizar el carrito en la base de datos
-        database.child("Consumidores").child(uid).child('carrito').set(carrito_actual)
+        if(isinstance(user, Productor)):
+            database.child("Productores").child(uid).child('carrito').set(carrito_actual)
+        else:
+            database.child("Consumidores").child(uid).child('carrito').set(carrito_actual)
+
         messages.success(request, f'{producto_data["nombre"]} añadido con éxito a la cesta')
     else:
         messages.error(request, 'Producto no encontrado')
@@ -99,13 +122,26 @@ def add_carrito(request, producto_id):
 
 @login_required
 def eliminar_producto_carrito(request, producto_id):
-    uid = obtener_uid(request)
-    consumer_ref = database.child("Consumidores").child(uid)
-    consumer_data = consumer_ref.get().val()
 
-    if consumer_data and 'carrito' in consumer_data and producto_id in consumer_data['carrito']:
+    user = request.user
+    uid = obtener_uid(request)
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
+
+    if user_data and 'carrito' in user_data and producto_id in user_data['carrito']:
         try:
-            database.child("Consumidores").child(uid).child('carrito').child(producto_id).remove()                        
+            if(isinstance(user, Productor)):
+                database.child("Productores").child(uid).child('carrito').child(producto_id).remove()
+            else:
+                database.child("Consumidores").child(uid).child('carrito').child(producto_id).remove()
             messages.success(request, 'Producto eliminado del carrito correctamente.')
 
         except Exception as e:
@@ -116,9 +152,19 @@ def eliminar_producto_carrito(request, producto_id):
     return redirect('ver_carrito')
 
 def actualizar_cantidad(request, producto_id, cambio):
+
+    user = request.user
     uid = obtener_uid(request)
-    consumer_ref = database.child("Consumidores").child(uid)
-    consumer_data = consumer_ref.get().val()
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
 
     try:
         cambio = int(cambio)
@@ -126,17 +172,18 @@ def actualizar_cantidad(request, producto_id, cambio):
         messages.error(request, 'Cambio inválido.')
         return redirect('ver_carrito')
 
-    if consumer_data and 'carrito' in consumer_data and producto_id in consumer_data['carrito']:
+    if user_data and 'carrito' in user_data and producto_id in user_data['carrito']:
         try:
-            nueva_cantidad = consumer_data['carrito'][producto_id]['cantidad'] + cambio
+            nueva_cantidad = user_data['carrito'][producto_id]['cantidad'] + cambio
 
             if nueva_cantidad < 1:
                 messages.error(request, 'No se puede establecer una cantidad menor que 1.')
                 return redirect('ver_carrito')
 
-            # consumer_data['carrito'][producto_id]['cantidad'] = nueva_cantidad
-
-            database.child("Consumidores").child(uid).child('carrito').child(producto_id).child('cantidad').set(nueva_cantidad)
+            if(isinstance(user, Productor)):
+                database.child("Productores").child(uid).child('carrito').child(producto_id).child('cantidad').set(nueva_cantidad)
+            else:
+                database.child("Consumidores").child(uid).child('carrito').child(producto_id).child('cantidad').set(nueva_cantidad)
 
         except Exception as e:
             messages.error(request, f'Error al actualizar la cantidad del producto: {e}')

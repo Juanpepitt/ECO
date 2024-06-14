@@ -158,7 +158,7 @@ def verificar_usuario_en_firebase_auth(email):
 def actualizar_consumidor_en_firebase(request, user_data):
     #Obtener el uid del usuario actual
     uid = obtener_uid(request=request)
-    database.child("Consumidores").child(uid).set(user_data)
+    database.child("Consumidores").child(uid).update(user_data)
 
 def guardar_productor_en_firebase(uid, email, cif):
 
@@ -175,7 +175,7 @@ def guardar_productor_en_firebase(uid, email, cif):
 def actualizar_productor_en_firebase(request, user_data):
     #Obtener el uid del usuario actual
     uid = obtener_uid(request=request)
-    database.child("Productores").child(uid).set(user_data)
+    database.child("Productores").child(uid).update(user_data)
 
 def log_in(request):
     if request.method == 'POST':
@@ -298,7 +298,6 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            print(f"Datos del formulario: {form.cleaned_data}")  # Depuración
             form.save()
             messages.success(request, 'Tu perfil ha sido actualizado.')
             # Actualizar los datos en Firebase
@@ -350,6 +349,24 @@ def edit_profile_prod(request):
     }
     
     return render(request, 'edit_profile_prod.html', context)
+
+@login_required
+def muestra_productores(request):
+    productores = Productor.objects.all()
+
+    productores_data = []
+    for productor in productores:
+        productores_data.append({
+            'id': productor.id,
+            'email': productor.email,
+            'nombre': productor.nombre,
+            'apellidos': productor.apellidos,
+            'telefono': productor.telefono,
+            'imagen': productor.photo
+        })
+
+    return render(request, 'muestra_productores.html', {'productores': productores_data})
+
 
 def home(request):
     return render(request, "index.html")
