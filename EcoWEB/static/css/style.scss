@@ -354,7 +354,7 @@ a:focus {
   }
 
   .carousel-indicators li {
-    background-color: #0dc3ff;
+    background-color: #325600;
   }
   .carousel-indicators .active {
     background-color: #8c8a8a;
@@ -362,43 +362,6 @@ a:focus {
 }
 
 // end client section
-
-// map section
-.map_section {
-  position: relative;
-  #map {
-    position: absolute;
-  }
-  .form_container {
-    position: relative;
-    width: 50%;
-    form {
-      background-color: rgba($color: #ffffff, $alpha: 0.98);
-      padding: 45px;
-      margin: 75px 0;
-    }
-    z-index: 9;
-    input {
-      border: none;
-      outline: none;
-      background-color: transparent;
-      border-bottom: 1px solid #111111;
-      padding-top: 35px;
-      width: 100%;
-      &.message-box {
-        padding-top: 55px;
-      }
-    }
-    button {
-      @include hero_btn($btnColor, $white, 12px, 20px);
-      border-radius: 30px;
-      width: 100%;
-      margin-top: 35px;
-    }
-  }
-}
-
-// end map section
 
 // info section
 .info_section {

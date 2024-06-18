@@ -61,9 +61,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None  
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# AUTO_LOGUT
+AUTO_LOGOUT = {'IDLE_TIME': 10000, 'MESSAGE': 'La sesión ha expirado. Por favor, haz login de nuevo para continuar.',}
 
 
 STRIPE_SECRET_KEY = 'sk_test_51PRjF5BsYNWqst46JiNZOHnMJYEGYFZPkv8kQLaMAjOnVvpr61H8yAPIeEvWPyBuFs8etxUeYENHdbBl44rgyNXV00dpDTnON3'

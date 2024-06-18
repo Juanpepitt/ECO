@@ -30,7 +30,13 @@ from Apps.Compras import views as carrito_views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', ecoweb_views.home, name='index'),
+    # path('', ecoweb_views.home, name='index'),
+    path('', ecoweb_views.mostrar_mejores_productos, name='index'),
+
+    ################################################################################################# 
+
+    ########################################### USUARIOS ############################################
+    
     path('usuarios/login/', usuarios_views.log_in, name='login'),
     path('accounts/signup/', usuarios_views.signup_consumidor),
     path('accounts/login/', usuarios_views.log_in),

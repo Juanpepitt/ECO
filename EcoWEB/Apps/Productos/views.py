@@ -111,7 +111,6 @@ def add_product(request):
 
     return render(request, 'add_product.html', {'form': form})
 
-
 @login_required
 def edit_product(request, product_id):
     
@@ -179,7 +178,6 @@ def edit_product(request, product_id):
         producto = database.child("Productores").child(obtener_uid(request)).child("productos").child(product_id)
         return render(request, 'edit_product.html', {'producto': producto})
         
-
 @login_required
 def delete_product(request, product_id):
     uid = obtener_uid(request)

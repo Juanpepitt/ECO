@@ -7,6 +7,7 @@ from django.conf import settings
 import firebase_admin
 from firebase_admin import credentials, auth, storage, initialize_app
 
+from datetime import datetime
 import stripe
 import pyrebase
 
@@ -334,6 +335,64 @@ def checkout(request):
     })
 
 def payment_success(request):
+
+    user = request.user
+    uid = obtener_uid(request)
+
+    if hasattr(user, 'productor'):
+        user = user.productor
+
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
+
+    if user_data and 'carrito' in user_data:
+        try:
+            # Recuperar el carrito actual
+            carrito_actual = user_data['carrito']
+            precio_total = sum(item['precio'] * item['cantidad'] for item in carrito_actual.values())
+            fecha_compra = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                
+            if(isinstance(user, Productor)):
+                # Obtener el número de compra actual
+                compras = user_data.get('compras', {})
+                numero_compra = len(compras) + 1
+
+                # Añadir compra a la base de datos
+                nueva_compra = {
+                    'carrito': carrito_actual,
+                    'fecha': fecha_compra,
+                    'precio_total': precio_total,
+                    'numero_compra': numero_compra
+                }
+                database.child("Productores").child(uid).child('compras').child(f'compra_{numero_compra}').set(nueva_compra)
+                database.child("Productores").child(uid).child('carrito').remove()
+            else:
+                # Obtener el número de compra actual
+                compras = user_data.get('compras', {})
+                numero_compra = len(compras) + 1
+
+                # Añadir compra a la base de datos
+                nueva_compra = {
+                    'carrito': carrito_actual,
+                    'fecha': fecha_compra,
+                    'precio_total': precio_total,
+                    'numero_compra': numero_compra
+                }
+                database.child("Consumidores").child(uid).child('compras').child(f'compra_{numero_compra}').set(nueva_compra)
+                database.child("Consumidores").child(uid).child('carrito').remove()
+            
+            print(f'compra añadida a la BBDD correctamente')
+
+        except Exception as e:
+            messages.error(request, f'Ha habido un error: {str(e)}')
+    else:
+        messages.error(request, 'No hay productos en la cesta.')
+
+
     return render(request, 'pagado.html')
 
 def payment_cancel(request):

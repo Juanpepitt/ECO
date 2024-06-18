@@ -76,6 +76,29 @@
         max-width: 100%;
       }
     }
+
+    .rate {
+        display: flex;
+        justify-content: left;
+        align-items: left;
+        margin-bottom: 10px;
+    }
+    .rate input {
+        display: none;
+    }
+    .rate label {
+        float: right;
+        color: #ccc;
+        font-size: 30px;
+        cursor: pointer;
+    }
+    .rate input:checked ~ label {
+        color: #ffc700;
+    }
+    .rate label:hover,
+    .rate label:hover ~ label {
+        color: #deb217;
+    }
   </style>
 
 </head>
@@ -145,10 +168,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/productos/lista_productos">Productos</a>
+          <strong><a class="nav-link" href="/productos/lista_productos">Productos</a></strong>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/usuarios/productores">Productores</a>
+          <strong><a class="nav-link" href="/usuarios/productores">Productores</a></strong>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Contacto</a>
@@ -232,6 +255,40 @@
                 </div>
                 <div class="col-md-6">
                   <div class="slider_img-box">
+                    <img src="static/images/slider_jp3.png" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-4 offset-md-2">
+                  <div class="slider_detail-box">
+                    <h1>
+                      Professional
+                      <span>
+                        Care Your Pet
+                      </span>
+                    </h1>
+                    <p>
+                      Lorem Ipsum is simply dummy text of the printing and
+                      typesetting industry.
+                      Lorem Ipsum has been the industry's standard dummy text ever
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn-1">
+                        Buy now
+                      </a>
+                      <a href="" class="btn-2">
+                        Contact
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="slider_img-box">
                     <img src="static/images/slider_jp2.png" alt="">
                   </div>
                 </div>
@@ -266,41 +323,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="slider_img-box">
-                    <img src="static/images/slider_jp1.png" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-4 offset-md-2">
-                  <div class="slider_detail-box">
-                    <h1>
-                      Professional
-                      <span>
-                        Care Your Pet
-                      </span>
-                    </h1>
-                    <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                      Lorem Ipsum has been the industry's standard dummy text ever
-                    </p>
-                    <div class="btn-box">
-                      <a href="" class="btn-1">
-                        Buy now
-                      </a>
-                      <a href="" class="btn-2">
-                        Contact
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="slider_img-box">
-                    <img src="static/images/slider_jp1.png" alt="">
+                    <img src="static/images/slider_jp4.png" alt="">
                   </div>
                 </div>
               </div>
@@ -332,13 +355,14 @@
               </span>
             </h2>
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-              industry's standard dummy text ever since theLorem Ipsum is simply dummy text of the printing and
-              typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+              Esta propuesta surge de la iniciativa para un trabajo de fin de grado, propuesta por el profesor del departamento de 
+              Lenguajes y Sistemas Informáticos de la ETSII de Sevilla, Pablo Neira Ayuso, con el fin de abordar la problemática
+              acaecida en España a raíz de la subida de los precios de los productos en los últimos años. El objetivo principal del proyecto es estrechar la franja de comunicación
+              y transacción entre los productores y consumidores, procurando eliminar la figura del intermediario.
             </p>
             <div>
               <a href="">
-                About More
+                Saber más
               </a>
             </div>
           </div>
@@ -353,62 +377,62 @@
       <div class="row">
         <div class="col-md-6 offset-md-2">
           <h2 class="custom_heading">
-            Our <span>Services</span>
+            Nuestras <span>Categorías</span>
           </h2>
           <div class="container layout_padding2">
             <div class="row">
               <div class="col-md-4">
                 <div class="img_box">
-                  <img src="static/images/s-1.png" alt="">
+                  <img src="static/images/food_1.png" alt="">
                 </div>
                 <div class="detail_box">
                   <h6>
-                    Pet Care
+                    Alimentación
                   </h6>
                   <p>
-                    onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                    enim ad minim veniam, quis nostrud exe
+                    Productos frescos o procesados que se cultivan o crían sin el uso de pesticidas sintéticos, fertilizantes químicos o ingeniería genética, 
+                    siguiendo prácticas agrícolas y ganaderas respetuosas con el medio ambiente.
                   </p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="img_box">
-                  <img src="static/images/s-2.png" alt="">
+                  <img src="static/images/clothes_1.png" alt="">
                 </div>
                 <div class="detail_box">
                   <h6>
-                    Pet Hotel
+                    Ropa y complementos
                   </h6>
                   <p>
-                    onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                    enim ad minim veniam, quis nostrud exe
+                    Prendas de ropa ecológica o ropa orgánica hecha a partir de tejidos y materiales orgánicos y naturales 
+                    que han sido producidos de la forma lo menos dañina posible para el planeta.
                   </p>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="img_box">
-                  <img src="static/images/s-3.png" alt="">
+                  <img src="static/images/house_1.png" alt="">
                 </div>
                 <div class="detail_box">
                   <h6>
-                    Emergency
+                    Productos de hogar
                   </h6>
                   <p>
-                    onsectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                    enim ad minim veniam, quis nostrud exe
+                    Artículos elaborados con materiales sostenibles y biodegradables, libres de sustancias tóxicas y químicos nocivos, 
+                    que minimizan el impacto ambiental durante su producción y uso.
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <div>
-            <a href="">
-              Read More
+            <a href="/productos/lista_productos/">
+              ¡Saber más!
             </a>
           </div>
         </div>
         <div class="col-md-4">
-          <img src="static/images/tool.png" alt="" class="w-100">
+          <img src="static/images/abu_1-no_fond.png" alt="" class="w-100">
         </div>
       </div>
     </div>
@@ -419,146 +443,79 @@
   <!-- client section -->
   <section class="client_section layout_padding-bottom">
     <div class="container">
-      <h2 class="custom_heading text-center">
-        What Say Our
-        <span>
-          clients
-        </span>
-      </h2>
-      <p class="text-center">
-        orem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut la
-      </p>
-      <div id="carouselExample2Indicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExample2Indicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExample2Indicators" data-slide-to="1"></li>
-          <li data-target="#carouselExample2Indicators" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="layout_padding2 pl-100">
-              <div class="client_container ">
-                <div class="img_box">
-                  <img src="static/images/client.jpg" alt="">
-                </div>
-                <div class="detail_box">
-                  <h5>
-                    Sandy Mark
-                  </h5>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                    ea
-                    commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                  </p>
-                </div>
-              </div>
+        <h2 class="custom_heading text-center">
+            Nuestros productos con mejores
+            <span>valoraciones</span>
+        </h2>
+        <p class="text-center">
+            porque nuestro mayor valor dentro de la ecología es la transparencia
+        </p>
+        <div id="carouselExample2Indicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExample2Indicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExample2Indicators" data-slide-to="1"></li>
+                <li data-target="#carouselExample2Indicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                {% for producto in productos_top %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="layout_padding2 pl-100">
+                            <div class="client_container">
+                                <div class="img_box">
+                                  <a href="{% url 'detalle_producto' producto.id %}"><img src="{{ producto.imagen }}" alt="{{ producto.nombre }}"></a>
+                                </div>
+                                <div class="detail_box">
+                                    <h5 class="h3"><a href="{% url 'detalle_producto' producto.id %}">{{ producto.nombre }}</a></h5>
+                                    <h5>{{ producto.nombre }}</h5>
+                                    <p>{{ producto.descripcion }}</p>
+                                    {% if producto.valoracion %}
+                                    <div class="rate">
+                                      {% if producto.valoracion %}
+                                          {% for i in range %}
+                                              <input type="radio" id="star{{ i }}-{{ producto.id }}" name="rate{{ producto.id }}" value="{{ i }}" {% if producto.valoracion == i %}checked{% endif %} disabled />
+                                              <label for="star{{ i }}-{{ producto.id }}" title="{{ i }} stars">★</label>
+                                          {% endfor %}
+                                      {% endif %}
+                                  </div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-          </div>
-          <div class="carousel-item">
-            <div class="layout_padding2 pl-100">
-              <div class="client_container ">
-                <div class="img_box">
-                  <img src="static/images/client.jpg" alt="">
-                </div>
-                <div class="detail_box">
-                  <h5>
-                    Sandy Mark
-                  </h5>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                    ea
-                    commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="layout_padding2 pl-100">
-              <div class="client_container ">
-                <div class="img_box">
-                  <img src="static/images/client.jpg" alt="">
-                </div>
-                <div class="detail_box">
-                  <h5>
-                    Sandy Mark
-                  </h5>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et
-                    dolore
-                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                    ea
-                    commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-      </div>
-
-
     </div>
-
   </section>
   <!-- end client section -->
 
+
   <!-- map section -->
 
-  <section class="map_section">
-    <div id="map" class="h-100 w-100 ">
-    </div>
-    <div class="form_container ">
+  <section class="contact_section layout_padding">
+    <div class="container">
       <div class="row">
-        <div class="col-md-8 col-sm-10 offset-md-4">
-          <form action="">
-            <div class="text-center">
-              <h3>
-                Contact Us
-              </h3>
-            </div>
-            <div>
-              <input type="text" placeholder="Name" class="pt-3">
-            </div>
-            <div>
-              <input type=" text" placeholder="Pone Number">
-            </div>
-            <div>
-              <input type="email" placeholder="Email">
-            </div>
-            <div>
-              <input type="text" class="message-box" placeholder="Message">
-            </div>
-            <div class="d-flex justify-content-center">
-              <button>
-                SEND
-              </button>
-            </div>
-          </form>
+        <div class="col-md-12 map_container">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2171.667567306649!2d-5.9866459808731305!3d37.35775985705388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126dd4a3055555%3A0x29c3f634f8a021b8!2sEscuela%20T%C3%A9cnica%20Superior%20de%20Ingenier%C3%ADa%20Inform%C3%A1tica!5e0!3m2!1ses!2ses!4v1718734674215!5m2!1ses!2ses" 
+            width="600" 
+            height="450" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
     </div>
   </section>
-
-
+  
   <!-- end map section -->
 
   <!-- info section -->
   <section class="info_section layout_padding2">
     <div class="container">
       <div class="info_items">
-        <a href="">
+        <a href="https://maps.app.goo.gl/3Yf9uJddxnPE2ZPX7">
           <div class="item ">
             <div class="img-box box-1">
               <img src="" alt="">
@@ -618,33 +575,6 @@
   <script type="text/javascript" src="static/js/jquery-3.4.1.min.js"></script>
   <script type="text/javascript" src="static/js/bootstrap.js"></script>
 
-  <script>
-    // This example adds a marker to indicate the position of Bondi Beach in Sydney,
-    // Australia.
-    function initMap() {
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 11,
-        center: {
-          lat: 40.645037,
-          lng: -73.880224
-        },
-      });
-
-      var image = 'static/images/MARKETECO_logo.png';
-      var beachMarker = new google.maps.Marker({
-        position: {
-          lat: 40.645037,
-          lng: -73.880224
-        },
-        map: map,
-        icon: image
-      });
-    }
-  </script>
-  <!-- google map js -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8eaHt9Dh5H57Zh0xVTqxVdBFCvFMqFjQ&callback=initMap">
-  </script>
-  <!-- end google map js -->
 </body>
 </body>
 
