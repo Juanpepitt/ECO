@@ -392,16 +392,27 @@
     
         <script>
             // Mostrar el popup con SweetAlert
-            window.onload = function() {
-                var popupMessages = document.getElementById('popup-messages');
-                if (popupMessages && popupMessages.children.length > 0) {
-                    Swal.fire({
-                        icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
-                        title: '¡ÉXITO!',
-                        html: popupMessages.innerHTML,
-                    });
+        window.onload = function() {
+            var popupMessages = document.getElementById('popup-messages');
+            if (popupMessages && popupMessages.children.length > 0) {
+                
+                var iconType = 'error'; 
+                var titleText = '¡ERROR!';
+
+                // Verificar si hay un mensaje de éxito
+                var successMessages = popupMessages.getElementsByClassName('alert-success');
+                if (successMessages.length > 0) {
+                    iconType = 'success';
+                    titleText = '¡ÉXITO!';
                 }
+
+                Swal.fire({
+                    icon: iconType, 
+                    title: titleText,
+                    html: popupMessages.innerHTML,
+                });
             }
+        }
         </script>
     
     </body>

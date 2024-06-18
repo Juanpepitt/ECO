@@ -142,16 +142,18 @@
     <div class="container_perfil">
         <div class="perfil_form">
             <h2>Perfil de Usuario</h2>
-            <p><strong>Nombre:</strong> {{ user.nombre }}</p>
-            <p><strong>Apellidos:</strong> {{ user.apellidos }}</p>
+            <p><strong>Nombre:</strong> {{ user.nombre|default:"Sin nombre establecido" }}</p>
+            <p><strong>Apellidos:</strong> {{ user.apellidos|default:"Sin apellidos establecidos" }}</p>
             <p><strong>Email:</strong> {{ user.email }}</p>
             <p><strong>CIF/NIF:</strong> {{ user.cif }}</p>
-            <p><strong>Dirección:</strong> {{ user.direccion }}</p>
-            <p><strong>Teléfono:</strong> {{ user.telefono }}</p>
+            <p><strong>Dirección:</strong> {{ user.direccion|default:"Sin dirección establecida" }}</p>
+            <p><strong>Teléfono:</strong> {{ user.telefono|default:"Sin teléfono establecido" }}</p>
             <p><strong>Fecha de Alta:</strong> {{ user.fecha_alta }}</p>
             <p>
                 <strong>Foto de Perfil:</strong>
-                {% if user.photo %}
+                {% if user.photo_url %}
+                    <img src="{{ user.photo.url }}" alt="Foto de Perfil" width="200">
+                {% elif user.photo %}
                     <img src="{{ user.photo.url }}" alt="Foto de Perfil" width="200">
                 {% else %}
                     No has subido una foto de perfil.

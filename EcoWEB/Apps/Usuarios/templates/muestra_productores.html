@@ -91,7 +91,7 @@
             background-color: #2c6b3a;
         }
 
-        h2 {
+        .h2 {
             font-size: 2.5em;
             color: #3d8a4f;
             margin-bottom: 20px;
@@ -123,8 +123,30 @@
     </style>
 </head>
 <body>
+    <!-- header section starts -->
+    <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="/">
+              <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo" style="width: 120px; height: 120px; border-radius: 80%;">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+      
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <!-- <h2 class="h2">Productores</h2> -->
+            </div>
+            <a href="{% url 'ver_carrito' %}" class="btn-carrito" alt="Cesta de la compra">
+                <img src="/static/icons/full-cart.png" alt="Cesta de la compra">
+            </a>    
+          </nav>
+        </div>
+      </header>
+      <!-- header section ends -->
+
     <div class="productor-container">
-        <h2>Lista de Productores</h2>
         <div class="productor-grid">
             {% if productores %}
                 {% for productor in productores %}

@@ -33,7 +33,7 @@ body {
 }
 
 .custom_heading span {
-  color: #21d7ff;
+  color: #7ca000;
 }
 
 /*header section*/
@@ -163,7 +163,7 @@ a:focus {
 /*end header section*/
 /* slider section */
 .slider_section {
-  background-image: url(../images/hero.jpg);
+  background-image: url(../images/pai_1.png);
   padding: 6% 0;
   background-size: cover;
   background-repeat: no-repeat;

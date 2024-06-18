@@ -1,7 +1,7 @@
-$btnColor: #023b48;
+$btnColor: #024835;
 $white: #ffffff;
-$primary1: #18d3ff;
-$primary2: #0dc3ff;
+$primary1: #d8dfab;
+$primary2: #325600;
 
 @mixin main-font {
   font-family: "Poppins", sans-serif;
@@ -59,7 +59,7 @@ body {
   color: #030404;
 
   span {
-    color: #21d7ff;
+    color: #7ca000;
   }
 }
 
@@ -72,7 +72,7 @@ body {
     position: absolute;
     width: 100%;
     height: 15px;
-    background-color: #023b48;
+    background-color: #024827;
   }
 }
 
@@ -199,7 +199,7 @@ a:focus {
 
 /* slider section */
 .slider_section {
-  background-image: url(../images/hero.jpg);
+  background-image: url(../images/pai_1.png);
   padding: 6% 0;
   background-size: cover;
   background-repeat: no-repeat;

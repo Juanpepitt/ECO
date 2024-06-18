@@ -75,7 +75,7 @@ urlpatterns = [
     path('carrito/vaciar/', carrito_views.vaciar_carrito, name='vaciar_carrito'),
 
     path('checkout/', carrito_views.checkout, name='checkout'),
-    path('payment_success/', carrito_views.payment_success, name='payment_success'),
-    path('payment_cancel/', carrito_views.payment_cancel, name='payment_cancel'),
+    path('payment_success/', carrito_views.payment_success, name='pagado'),
+    path('payment_cancel/', carrito_views.payment_cancel, name='pago_cancelado'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
