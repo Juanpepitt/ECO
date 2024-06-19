@@ -1,0 +1,29 @@
+<!-- ver_conversacion.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversación</title>
+</head>
+<body>
+    <h1>Conversación entre {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</h1>
+    <ul>
+        {% for mensaje in mensajes %}
+        <li>
+            <p><strong>{{ mensaje.emisor.username }}:</strong> {{ mensaje.contenido }}</p>
+            <p>Enviado el: {{ mensaje.fecha_envio }}</p>
+        </li>
+        {% empty %}
+        <li>No hay mensajes en esta conversación.</li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <form action="{% url 'enviar_mensaje' conversacion.id %}" method="post">
+        {% csrf_token %}
+        <label for="contenido">Mensaje:</label><br>
+        <textarea id="contenido" name="contenido" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Enviar mensaje">
+    </form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!-- enviar_mensaje.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enviar Mensaje</title>
+</head>
+<body>
+    <h1>Enviar Mensaje en Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</h1>
+    <form action="{% url 'enviar_mensaje' conversacion.id %}" method="post">
+        {% csrf_token %}
+        <label for="contenido">Mensaje:</label><br>
+        <textarea id="contenido" name="contenido" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="Enviar mensaje">
+    </form>
+</body>
+</html>

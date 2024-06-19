@@ -353,6 +353,7 @@ def edit_profile_prod(request):
 
 @login_required
 def muestra_productores(request):
+    user = request.user
     productores = Productor.objects.all()
 
     productores_data = []
@@ -366,7 +367,12 @@ def muestra_productores(request):
             'imagen': productor.photo
         })
 
-    return render(request, 'muestra_productores.html', {'productores': productores_data})
+    context = {
+        'productores': productores_data,
+        'user': user
+    }
+
+    return render(request, 'muestra_productores.html', context)
 
 @login_required
 def eliminar_usuario(request):

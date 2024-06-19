@@ -95,7 +95,8 @@ def add_product(request):
                 "precio": float(precio),
                 "stock": int(stock) if stock else None,
                 "imagen": image_url,
-                "valoracion": int(0)
+                "valoracion": int(0),
+                "valoraciones": int(0)
                 
             }
 

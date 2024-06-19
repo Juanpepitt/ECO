@@ -26,6 +26,7 @@ from EcoWEB import views as ecoweb_views
 from Apps.Usuarios import views as usuarios_views
 from Apps.Productos import views as productos_views
 from Apps.Compras import views as carrito_views
+from Apps.Mensajes import views as mensajes_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -87,5 +88,14 @@ urlpatterns = [
     path('checkout/', carrito_views.checkout, name='checkout'),
     path('payment_success/', carrito_views.payment_success, name='pagado'),
     path('payment_cancel/', carrito_views.payment_cancel, name='pago_cancelado'),
+
+    ################################################################################################# 
+
+    ########################################### MENSAJES ############################################
+
+      path('mensajes/lista_conversaciones/', mensajes_views.lista_conversaciones, name='lista_conversaciones'),
+      path('mensajes/ver_conversacion/<int:conversacion_id>/', mensajes_views.ver_conversacion, name='ver_conversacion'),
+      path('mensajes/enviar_mensaje/<int:conversacion_id>/', mensajes_views.enviar_mensaje, name='enviar_mensaje'),
+      path('iniciar_conversacion/<int:usuario_id>/', mensajes_views.iniciar_conversacion, name='iniciar_conversacion'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

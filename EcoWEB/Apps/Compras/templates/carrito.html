@@ -208,17 +208,35 @@
         <div class="carrito-total">
             <p>Total: {{ total|floatformat:"2" }}€</p>
         </div>
-        <div class="button_group">
-            <a href="/productos/lista_productos" class="btn btn_pass">Continuar Comprando</a>
-            <a href="/checkout" class="btn">Finalizar Compra</a>
-        </div>
-        <div>
-            {% if carrito %}
-                <a onclick="confirmDeleteCesta()"  href="#" class="btn btn-cancel">Vaciar la cesta</a>
-            {% else %}
-                <a href="{% url 'vaciar_carrito' %}" class="btn btn-cancel">Vaciar la cesta</a>
-            {% endif %}
-        </div>
+
+        
+        {% if carrito %}
+            <div class="button_group">
+                <a href="/productos/lista_productos" class="btn btn_pass">Continuar Comprando</a>
+                <a href="/checkout" class="btn">Finalizar Compra</a>
+            </div>
+            
+            <div>
+                {% if carrito %}
+                    <a onclick="confirmDeleteCesta()"  href="#" class="btn btn-cancel">Vaciar la cesta</a>
+                {% else %}
+                    <a href="{% url 'vaciar_carrito' %}" class="btn btn-cancel">Vaciar la cesta</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="button_group">
+                <a href="/productos/lista_productos" class="btn btn_pass">Continuar Comprando</a>
+                <div>
+                    {% if carrito %}
+                        <a onclick="confirmDeleteCesta()"  href="#" class="btn btn-cancel">Vaciar la cesta</a>
+                    {% else %}
+                        <a href="{% url 'vaciar_carrito' %}" class="btn btn-cancel">Vaciar la cesta</a>
+                    {% endif %}
+                </div>
+            </div>
+            
+        {% endif %}
+
     </div>
 
     <!-- footer section -->

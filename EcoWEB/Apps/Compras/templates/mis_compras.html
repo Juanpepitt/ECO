@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
     <link href="/../static/css/style.css" rel="stylesheet">
     <link href="/../static/css/responsive.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
         body, html {
             height: 100%;
@@ -119,6 +120,15 @@
     </style>
 </head>
 <body>
+    <!-- Mostrar mensajes de Django -->
+    {% if messages %}
+    <div id="popup-messages" style="display: none;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <!-- Mostrar mensajes de Django -->
     <!-- header section starts -->
     <header class="header_section">
         <div class="container-fluid">
@@ -154,15 +164,15 @@
                                     {% if not producto.valorado %}
                                     <p>Valorar producto:</p>
                                     <div class="rating">
-                                        <form method="post" action="{% url 'valorar_producto' %}">
+                                        <form method="post" action="{% url 'valorar_producto' %}" class="rating-form">
                                             {% csrf_token %}
-                                            <button class="star" type="submit" data-rating="1">&#9733;</button>
-                                            <button class="star" type="submit" data-rating="2">&#9733;</button>
-                                            <button class="star" type="submit" data-rating="3">&#9733;</button>
-                                            <button class="star" type="submit" data-rating="4">&#9733;</button>
-                                            <button class="star" type="submit" data-rating="5">&#9733;</button>
-                                            <input type="hidden" name="producto_id" value="{{ producto.id }}">
-                                            <input type="hidden" name="valoracion" id="valoracion" value="0">
+                                            <button class="star" type="button" data-rating="5">&#9733;</button>
+                                            <button class="star" type="button" data-rating="4">&#9733;</button>
+                                            <button class="star" type="button" data-rating="3">&#9733;</button>
+                                            <button class="star" type="button" data-rating="2">&#9733;</button>
+                                            <button class="star" type="button" data-rating="1">&#9733;</button>
+                                            <input type="hidden" name="producto_id" value="{{ producto_id }}">
+                                            <input type="hidden" name="valoracion" class="valoracion-input" value="0">
                                         </form>
                                     </div>
                                     {% else %}
@@ -192,7 +202,8 @@
         window.onload = function() {
             var popupMessages = document.getElementById('popup-messages');
             if (popupMessages && popupMessages.children.length > 0) {
-                var iconType = 'error';
+                
+                var iconType = 'error'; 
                 var titleText = '¡ERROR!';
 
                 // Verificar si hay un mensaje de éxito
@@ -203,12 +214,40 @@
                 }
 
                 Swal.fire({
-                    icon: iconType,
+                    icon: iconType, 
                     title: titleText,
                     html: popupMessages.innerHTML,
                 });
             }
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const ratingForms = document.querySelectorAll('.rating-form');
+
+            ratingForms.forEach(form => {
+                const starButtons = form.querySelectorAll('.star');
+                const valoracionInput = form.querySelector('.valoracion-input');
+
+                starButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const valoracion = this.getAttribute('data-rating');
+                        valoracionInput.value = valoracion;
+
+                        // Marcar las estrellas hasta la seleccionada
+                        starButtons.forEach(star => {
+                            if (star.getAttribute('data-rating') <= valoracion) {
+                                star.classList.add('checked');
+                            } else {
+                                star.classList.remove('checked');
+                            }
+                        });
+
+                        // Enviar el formulario
+                        form.submit();
+                    });
+                });
+            });
+        });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

@@ -1,0 +1,23 @@
+<!-- lista_conversaciones.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Conversaciones</title>
+</head>
+<body>
+    <h1>Lista de Conversaciones</h1>
+    <ul>
+        {% for conversacion in conversaciones %}
+        <li>
+            <a href="{% url 'ver_conversacion' conversacion.id %}">Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</a>
+            <p>Último mensaje: {{ conversacion.ultimo_mensaje }}</p>
+            <p>Fecha del último mensaje: {{ conversacion.fecha_ultimo_mensaje }}</p>
+        </li>
+        {% empty %}
+        <li>No hay conversaciones disponibles.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

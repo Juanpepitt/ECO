@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "Apps.Usuarios",
     "Apps.Productos",
     "Apps.Compras",
+    "Apps.Mensajes",
     "django.contrib.sites",
     "allauth",
     "allauth.account",
