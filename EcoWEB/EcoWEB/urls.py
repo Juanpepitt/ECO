@@ -59,6 +59,8 @@ urlpatterns = [
     path('usuarios/productores/', usuarios_views.muestra_productores, name='productores'),
     path('usuarios/eliminar/', usuarios_views.eliminar_usuario, name='eliminar_user'),
 
+    path('usuarios/mis_compras', carrito_views.mis_compras, name='mis_compras'),
+
     ################################################################################################# 
 
     ########################################### PRODUCTOS ###########################################
@@ -69,6 +71,8 @@ urlpatterns = [
     path('usuarios/productos/edit/<str:product_id>/', productos_views.edit_product, name='edit_product'),
     path('usuarios/productos/delete/<str:product_id>/', productos_views.delete_product, name='delete_product'),
     path('productos/lista_productos/', productos_views.lista_productos, name='list_products'),
+
+    path('usuarios/productos/valorar_producto/', carrito_views.valorar_producto, name='valorar_producto'),
 
     ################################################################################################# 
 

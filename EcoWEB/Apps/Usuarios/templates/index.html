@@ -26,8 +26,12 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
   <style>
+    .swal2-container {
+      z-index: 9999 !important;
+    }
+
     .header_section {
-      background-color: #f8f9fa; /* Fondo claro para contraste */
+      background-color: #f8f9fa;
       padding: 10px 0;
     }
   
@@ -74,6 +78,34 @@
   
       .form-inline {
         max-width: 100%;
+      }
+    }
+
+    .custom_nav-container .navbar-nav .nav-item .btn-menu {
+      color: #fff;
+      background-color: #325600;
+      padding: 10px 20px;
+      border-radius: 30px;
+      margin: 0 15px;
+      margin-top: 40px;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .custom_nav-container .navbar-nav .nav-item .btn-menu:hover {
+      background-color: #024835;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .custom_nav-container .navbar-nav .nav-item .btn-menu {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        text-align: center;
       }
     }
 
@@ -159,7 +191,7 @@
 </header>
 <!-- header section ends -->
 
-<!-- Menú horizontal mejorado -->
+<!-- Menú horizontal -->
 <nav class="navbar navbar-expand-lg custom_nav-container">
   <div class="container-fluid">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -168,13 +200,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <strong><a class="nav-link" href="/productos/lista_productos">Productos</a></strong>
+          <a class="nav-link btn-menu" href="/productos/lista_productos">Productos</a>
         </li>
         <li class="nav-item">
-          <strong><a class="nav-link" href="/usuarios/productores">Productores</a></strong>
+          <a class="nav-link btn-menu" href="/usuarios/productores">Productores</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Contacto</a>
+          <a class="nav-link btn-menu" href="#">Contacto</a>
         </li>
       </ul>
     </div>
@@ -199,22 +231,18 @@
                 <div class="col-md-4 offset-md-2">
                   <div class="slider_detail-box">
                     <h1>
-                      Productos ECO
+                      Productos frescos
                       <span>
-                        Care Your Pet
+                        Cuidando tu salud
                       </span>
                     </h1>
                     <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                      Lorem Ipsum has been the industry's standard dummy text ever
+                      Disfruta de la naturaleza en su estado más puro: degusta frutas y verduras frescas de cultivo ecológico, 
+                      libres de pesticidas y rebosantes de nutrientes esenciales para tu salud.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
-                        Buy now
-                      </a>
-                      <a href="" class="btn-2">
-                        Contact
+                      <a href="/productos/lista_productos" class="btn-1">
+                        Ver productos
                       </a>
                     </div>
                   </div>
@@ -233,22 +261,18 @@
                 <div class="col-md-4 offset-md-2">
                   <div class="slider_detail-box">
                     <h1>
-                      Professional
+                      Pastas y lácteos
                       <span>
-                        Care Your Pet
+                        Sin aditivos
                       </span>
                     </h1>
                     <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                      Lorem Ipsum has been the industry's standard dummy text ever
+                      El auténtico sabor de la leche y sus derivados ecológicos son provienen de animales criados 
+                      de forma libre siempre exentos de cualquier tipo de maltrato.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
-                        Buy now
-                      </a>
-                      <a href="" class="btn-2">
-                        Contact
+                      <a href="/productos/lista_productos" class="btn-1">
+                        Ver productos
                       </a>
                     </div>
                   </div>
@@ -267,22 +291,18 @@
                 <div class="col-md-4 offset-md-2">
                   <div class="slider_detail-box">
                     <h1>
-                      Professional
+                      Las mejores marcas
                       <span>
-                        Care Your Pet
+                        Primeros orígenes
                       </span>
                     </h1>
                     <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                      Lorem Ipsum has been the industry's standard dummy text ever
+                      Los sabores más auténticos: aceite de oliva virgen extra ecológico de primera prensa y miel ecológica de flores silvestres, 
+                      sin procesar y con el sabor más excepcional.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
-                        Buy now
-                      </a>
-                      <a href="" class="btn-2">
-                        Contact
+                      <a href="/productos/lista_productos" class="btn-1">
+                        Ver productos
                       </a>
                     </div>
                   </div>
@@ -301,22 +321,18 @@
                 <div class="col-md-4 offset-md-2">
                   <div class="slider_detail-box">
                     <h1>
-                      Professional
+                      Productores locales
                       <span>
-                        Care Your Pet
+                        Aromas naturales
                       </span>
                     </h1>
                     <p>
-                      Lorem Ipsum is simply dummy text of the printing and
-                      typesetting industry.
-                      Lorem Ipsum has been the industry's standard dummy text ever
+                      Cafés de procedencia ecológica y tejidos elaborados con algodón orgánico. 
+                      Completa tu estilo de vida con productos biodegradables como los procedentes del bambú.
                     </p>
                     <div class="btn-box">
-                      <a href="" class="btn-1">
-                        Buy now
-                      </a>
-                      <a href="" class="btn-2">
-                        Contact
+                      <a href="/productos/lista_productos" class="btn-1">
+                        Ver productos
                       </a>
                     </div>
                   </div>
@@ -377,11 +393,11 @@
       <div class="row">
         <div class="col-md-6 offset-md-2">
           <h2 class="custom_heading">
-            Nuestras <span>Categorías</span>
+            Nuestras categorías de <span>productos</span>
           </h2>
           <div class="container layout_padding2">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-4" onclick="redirectToProductos('Alimentación')">
                 <div class="img_box">
                   <img src="static/images/food_1.png" alt="">
                 </div>
@@ -395,7 +411,7 @@
                   </p>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-4" onclick="redirectToProductos('Ropa')">
                 <div class="img_box">
                   <img src="static/images/clothes_1.png" alt="">
                 </div>
@@ -409,7 +425,7 @@
                   </p>
                 </div>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-4" onclick="redirectToProductos('Hogar')">
                 <div class="img_box">
                   <img src="static/images/house_1.png" alt="">
                 </div>
@@ -427,7 +443,7 @@
           </div>
           <div>
             <a href="/productos/lista_productos/">
-              ¡Saber más!
+              ¡Ver más!
             </a>
           </div>
         </div>
@@ -494,11 +510,14 @@
 
   <section class="contact_section layout_padding">
     <div class="container">
+      <h2 class="custom_heading text-center">
+          Dónde <span>estamos...</span>
+      </h2>
       <div class="row">
         <div class="col-md-12 map_container">
           <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2171.667567306649!2d-5.9866459808731305!3d37.35775985705388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126dd4a3055555%3A0x29c3f634f8a021b8!2sEscuela%20T%C3%A9cnica%20Superior%20de%20Ingenier%C3%ADa%20Inform%C3%A1tica!5e0!3m2!1ses!2ses!4v1718734674215!5m2!1ses!2ses" 
-            width="600" 
+            width="100%" 
             height="450" 
             style="border:0;" 
             allowfullscreen="" 
@@ -566,9 +585,17 @@
                 icon: 'success',  // tipo de mensaje: 'success', 'error', 'warning', 'info', 'question'
                 title: '¡ÉXITO!',
                 html: popupMessages.innerHTML,
+                allowOutsideClick: false
             });
         }
     }
+
+    // Función para redirigir a la página de productos con el filtro del categoría seleccionada
+    function redirectToProductos(categoria) {
+            var url = `/productos/lista_productos/?categoria=${categoria}`;
+            // Redirigir al usuario a la nueva página
+            window.location.href = url;
+        }
   </script>
 
 

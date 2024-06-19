@@ -47,7 +47,7 @@ body {
   position: absolute;
   width: 100%;
   height: 15px;
-  background-color: #023b48;
+  background-color: #024835;
 }
 
 .sub_page .hero_area {
@@ -161,7 +161,7 @@ a:focus {
 }
 
 .custom_nav-container {
-  z-index: 99999;
+  z-index: 9996;
   padding: 5px 0;
 }
 
@@ -209,15 +209,15 @@ a:focus {
 .slider_detail-box .btn-box .btn-1 {
   display: inline-block;
   padding: 10px 45px;
-  background-color: #023b48;
-  border: 1px solid #023b48;
+  background-color: #024835;
+  border: 1px solid #024835;
   color: #ffffff;
   margin-right: 10px;
 }
 
 .slider_detail-box .btn-box .btn-1:hover {
   background-color: transparent;
-  color: #023b48;
+  color: #024835;
 }
 
 .slider_detail-box .btn-box .btn-2 {
@@ -225,7 +225,7 @@ a:focus {
   padding: 10px 45px;
   background-color: #ffffff;
   border: 1px solid #ffffff;
-  color: #023b48;
+  color: #024835;
 }
 
 .slider_detail-box .btn-box .btn-2:hover {
@@ -278,14 +278,14 @@ a:focus {
 .about_section .detail-box a {
   display: inline-block;
   padding: 10px 20px;
-  background-color: #023b48;
-  border: 1px solid #023b48;
+  background-color: #024835;
+  border: 1px solid #024835;
   color: #ffffff;
 }
 
 .about_section .detail-box a:hover {
   background-color: transparent;
-  color: #023b48;
+  color: #024835;
 }
 
 .service_section .row .col-md-4 {
@@ -333,14 +333,14 @@ a:focus {
 .service_section a {
   display: inline-block;
   padding: 12px 25px;
-  background-color: #023b48;
-  border: 1px solid #023b48;
+  background-color: #024835;
+  border: 1px solid #024835;
   color: #ffffff;
 }
 
 .service_section a:hover {
   background-color: transparent;
-  color: #023b48;
+  color: #024835;
 }
 
 .gallery-section {
@@ -405,14 +405,14 @@ a:focus {
 .buy_section a {
   display: inline-block;
   padding: 12px 65px;
-  background-color: #023b48;
-  border: 1px solid #023b48;
+  background-color: #024835;
+  border: 1px solid #024835;
   color: #ffffff;
 }
 
 .buy_section a:hover {
   background-color: transparent;
-  color: #023b48;
+  color: #024835;
 }
 
 .client_section .pl-100 {

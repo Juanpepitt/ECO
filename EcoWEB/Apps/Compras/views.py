@@ -182,6 +182,7 @@ def eliminar_producto_carrito(request, producto_id):
 
     return redirect('ver_carrito')
 
+@login_required
 def actualizar_cantidad(request, producto_id, cambio):
 
     user = request.user
@@ -239,6 +240,7 @@ def actualizar_cantidad(request, producto_id, cambio):
 
     return redirect('ver_carrito')
 
+@login_required
 def vaciar_carrito(request):
     
     user = request.user
@@ -286,6 +288,7 @@ def vaciar_carrito(request):
         
     return redirect('ver_carrito')
 
+@login_required
 def checkout(request):
 
     user = request.user
@@ -353,8 +356,13 @@ def payment_success(request):
         try:
             # Recuperar el carrito actual
             carrito_actual = user_data['carrito']
+
+            # Añadir campo 'valorado: False' a cada producto en el carrito
+            for producto_id, producto in carrito_actual.items():
+                producto['valorado'] = False
+            
             precio_total = sum(item['precio'] * item['cantidad'] for item in carrito_actual.values())
-            fecha_compra = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            fecha_compra = datetime.now().strftime('%d/%m/%Y %H:%M')
                 
             if(isinstance(user, Productor)):
                 # Obtener el número de compra actual
@@ -398,7 +406,77 @@ def payment_success(request):
 def payment_cancel(request):
     return render(request, 'pago_cancelado.html')
 
+@login_required
+def mis_compras(request):
+    user = request.user
+    uid = obtener_uid(request)
+    
+    if hasattr(user, 'productor'):
+        user = user.productor
 
+    if(isinstance(user, Productor)):
+        user_ref = database.child("Productores").child(uid)
+    else:
+        user_ref = database.child("Consumidores").child(uid)
+
+    user_data = user_ref.get().val()
+    compras_actual = user_data.get('compras', {})
+
+    total_compras = 0
+    productos = []
+
+    # Itera sobre las compras
+    for compra_id, compra in compras_actual.items():
+        total_compras += compra.get('precio_total', 0)
+        for product_id, producto in compra.get('carrito', {}).items():
+            productos.append(producto)
+
+    context = {
+        'mis_compras': compras_actual,
+        'total': total_compras,
+        'range': range(5, 0, -1),
+        'productos': productos
+    }
+
+    return render(request, "mis_compras.html", context)
+
+@login_required
+def valorar_producto(request):
+    if request.method == 'POST':
+
+        user = request.user
+        uid = obtener_uid(request)
+
+        if hasattr(user, 'productor'):
+            user = user.productor
+
+        if(isinstance(user, Productor)):
+            user_ref = database.child("Productores").child(uid)
+        else:
+            user_ref = database.child("Consumidores").child(uid)
+
+        user_data = user_ref.get().val()
+        producto_id = request.POST.get('producto_id')
+        valoracion_nueva = int(request.POST.get('valoracion'))
+
+        try:
+
+            productores_ref = database.child("Productores").get()
+
+            # Aumentar el stock del producto eliminado en todos los productores
+            for productor in productores_ref.each():
+                productos_productor = productor.val().get('productos', {})
+                for product_id, producto_data in productos_productor.items():
+                    valoracion = "hacer la media entre la valoración y la nueva"
+
+            # Actualizar la valoración del producto
+
+            messages.success(request, 'Valoración aportada correctamente.')
+
+        except Exception as e:
+            messages.error(request, f'El producto no existe: {str(e)}')
+
+    return redirect('index')
 
 def obtener_uid(request):
     try:
