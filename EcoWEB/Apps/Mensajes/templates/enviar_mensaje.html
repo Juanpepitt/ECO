@@ -1,18 +1,103 @@
-<!-- enviar_mensaje.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
     <title>Enviar Mensaje</title>
+    <!-- slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="/../static/css/bootstrap.css"/>
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/../static/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <style>
+        body, html {
+            height: 100%; 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container_mensaje {
+            background-color: #f6f8f7;
+            min-height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mensaje_form {
+            width: 80%;
+            padding: 20px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .mensaje_form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #023b48;
+        }
+
+        .mensaje_form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .mensaje_form input[type="submit"] {
+            background-color: #3d8a4f;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .mensaje_form input[type="submit"]:hover {
+            background-color: #2c6b3a;
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Enviar Mensaje en Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</h1>
-    <form action="{% url 'enviar_mensaje' conversacion.id %}" method="post">
-        {% csrf_token %}
-        <label for="contenido">Mensaje:</label><br>
-        <textarea id="contenido" name="contenido" rows="4" cols="50"></textarea><br>
-        <input type="submit" value="Enviar mensaje">
-    </form>
+    <div class="container_mensaje">
+        <div class="mensaje_form">
+            <h2>Enviar Mensaje en Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</h2>
+            <form action="{% url 'enviar_mensaje' conversacion.id %}" method="post">
+                {% csrf_token %}
+                <label for="contenido">Mensaje:</label><br>
+                <textarea id="contenido" name="contenido" rows="4" cols="50"></textarea><br>
+                <input type="submit" value="Enviar mensaje">
+            </form>
+        </div>
+    </div>
+
+    <!-- footer section -->
+    <section class="container-fluid footer_section">
+        <p>
+        &copy; 2024 MARKETECO - Universidad de Sevilla </a>
+        </p>
+    </section>
+    <!-- footer section -->
 </body>
 </html>

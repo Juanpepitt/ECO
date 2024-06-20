@@ -158,7 +158,7 @@
                             <p>{{ productor.telefono }}</p>
                             <p>{{ productor.email }}</p>
                         </div>
-                        <a href="{% url 'iniciar_conversacion' user.id %}" class="btn">Iniciar Conversación con {{productor.nombre}}</a>
+                        <a href="{% url 'iniciar_conversacion' productor.id %}" class="btn">Iniciar Conversación con {{productor.nombre}}</a>
                         
                     </a>
                 {% endfor %}

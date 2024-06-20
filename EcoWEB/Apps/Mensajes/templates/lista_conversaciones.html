@@ -1,23 +1,158 @@
-<!-- lista_conversaciones.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
     <title>Lista de Conversaciones</title>
+    <!-- slider stylesheet -->
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+    <!-- bootstrap core css -->
+    <link rel="stylesheet" type="text/css" href="/../static/css/bootstrap.css"/>
+    <!-- fonts style -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/../static/css/style.css" rel="stylesheet" />
+    <!-- responsive style -->
+    <link href="/../static/css/responsive.css" rel="stylesheet" />
+    <style>
+        /* Estilos para la lista de conversaciones */
+        body, html {
+            height: 100%; 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container_conversaciones {
+            background-color: #f6f8f7;
+            min-height: calc(100vh - 40px); /* Ajuste para incluir el footer */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 40px; /* Espacio para el footer */
+        }
+
+        .conversaciones_form {
+            width: 80%;
+            padding: 20px;
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .conversaciones_form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #023b48;
+        }
+
+        .conversacion_item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .conversacion_item a {
+            text-decoration: none;
+            color: #3d8a4f;
+            font-weight: bold;
+        }
+
+        .conversacion_item p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .conversacion_item:last-child {
+            border-bottom: none;
+        }
+
+        .no_conversaciones {
+            text-align: center;
+            color: #777;
+            font-style: italic;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo-container img {
+            width: 120px;
+            height: 120px;
+            border-radius: 80%;
+        }
+
+        .boton_volver {
+            background-color: #3d8a4f;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .boton_volver:hover {
+            background-color: #2c6b3a;
+        }
+
+        .footer_section {
+            background-color: #fbfdfd;
+            padding: 20px;
+            font-weight: 500;
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .footer_section p {
+            color: #292929;
+            margin: 0;
+        }
+
+        .footer_section a {
+            color: #292929;
+        }
+    </style>
 </head>
 <body>
-    <h1>Lista de Conversaciones</h1>
-    <ul>
-        {% for conversacion in conversaciones %}
-        <li>
-            <a href="{% url 'ver_conversacion' conversacion.id %}">Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</a>
-            <p>Último mensaje: {{ conversacion.ultimo_mensaje }}</p>
-            <p>Fecha del último mensaje: {{ conversacion.fecha_ultimo_mensaje }}</p>
-        </li>
-        {% empty %}
-        <li>No hay conversaciones disponibles.</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <div class="container_conversaciones">
+        <div class="logo-container">
+            <a class="navbar-brand" href="/">
+                <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo">
+            </a>
+        </div>
+        <div class="conversaciones_form">
+            <h2>Mis Conversaciones</h2>
+            <ul>
+                {% for conversacion in conversaciones %}
+                <li class="conversacion_item">
+                    <a href="{% url 'ver_conversacion' conversacion.id %}">Conversación con {{ conversacion.participante1.username }} y {{ conversacion.participante2.username }}</a>
+                    <p>Último mensaje: {{ conversacion.ultimo_mensaje|truncatewords:10 }}</p>
+                    <p>Fecha del último mensaje: {{ conversacion.fecha_ultimo_mensaje }}</p>
+                </li>
+                {% empty %}
+                <li class="no_conversaciones">No hay conversaciones disponibles.</li>
+                {% endfor %}
+            </ul>
+            <a href="javascript:history.back()" class="boton_volver">Volver atrás</a>
+        </div>
+    </div>
+
+    <!-- foo
