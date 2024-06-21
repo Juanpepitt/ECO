@@ -33,18 +33,24 @@ def mostrar_mejores_productos(request):
     return render(request, 'index.html', context)
 
 def mejores_productos():
+    try:
 
-    productores_ref = database.child("Productores").get()
-    productos = []
+        productores_ref = database.child("Productores").get()
+        productos = []
+        if (productores_ref):
+            # Recorrer cada productor y obtener sus productos
+            for productor in productores_ref.each():
+                productor_id = productor.key()
+                productos_productor = productor.val().get('productos', {})
+                for product_id, producto_data in productos_productor.items():
+                    producto_data['id'] = product_id
+                    productos.append(producto_data)
 
-    # Recorrer cada productor y obtener sus productos
-    for productor in productores_ref.each():
-        productor_id = productor.key()
-        productos_productor = productor.val().get('productos', {})
-        for product_id, producto_data in productos_productor.items():
-            producto_data['id'] = product_id
-            productos.append(producto_data)
+            # ordenar y devolver los 3 más valorados
+            productos.sort(key=lambda x: x['valoracion'], reverse=True)
+        else:
+            print("no hay productores registrados")
 
-    # ordenar y devolver los 3 más valorados
-    productos.sort(key=lambda x: x['valoracion'], reverse=True)
+    except Exception as e:
+        print(e)
     return productos[:3]

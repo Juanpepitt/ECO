@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-SITE_ID=12
+SITE_ID=17
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,15 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "Apps.Usuarios",
-    "Apps.Productos",
-    "Apps.Compras",
-    "Apps.Mensajes",
-    "django.contrib.sites",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google"
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'Apps.Usuarios',
+    'Apps.Productos',
+    'Apps.Compras',
+    'Apps.Mensajes',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {

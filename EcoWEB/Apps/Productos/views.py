@@ -229,29 +229,33 @@ def lista_productos(request):
     categorias = set()
     productores = set()
 
-    # Recorrer cada productor y obtener sus productos
-    for productor in productos_ref.each():
-        productor_id = productor.key()
-        productor_nombre = productor.val().get('user', 'Desconocido')
-        productos_productor = productor.val().get('productos', {})
-        for product_id, producto_data in productos_productor.items():
-            producto_data['id'] = product_id
-            producto_data['productor'] = productor_nombre
-            if 'precio' in producto_data:
-                try:
-                    producto_data['precio'] = float(producto_data['precio'])
-                except (ValueError, TypeError):
-                    producto_data['precio'] = 0
-            
-            if 'valoracion' in producto_data:
-                try:
-                    producto_data['valoracion'] = int(producto_data['valoracion'])
-                except (ValueError, TypeError):
-                    producto_data['valoracion'] = 0
+    try:
+        if (productos_ref):
+            # Recorrer cada productor y obtener sus productos
+            for productor in productos_ref.each():
+                productor_id = productor.key()
+                productor_nombre = productor.val().get('user', 'Desconocido')
+                productos_productor = productor.val().get('productos', {})
+                for product_id, producto_data in productos_productor.items():
+                    producto_data['id'] = product_id
+                    producto_data['productor'] = productor_nombre
+                    if 'precio' in producto_data:
+                        try:
+                            producto_data['precio'] = float(producto_data['precio'])
+                        except (ValueError, TypeError):
+                            producto_data['precio'] = 0
+                    
+                    if 'valoracion' in producto_data:
+                        try:
+                            producto_data['valoracion'] = int(producto_data['valoracion'])
+                        except (ValueError, TypeError):
+                            producto_data['valoracion'] = 0
 
-            productos.append(producto_data)
-            categorias.add(producto_data.get('categoria', 'Otros'))
-            productores.add(productor_nombre)
+                    productos.append(producto_data)
+                    categorias.add(producto_data.get('categoria', 'Otros'))
+                    productores.add(productor_nombre)
+    except (ValueError, TypeError) as e:
+        print(e)
 
     # Filtrar por nombre de producto si se especifica
     buscar = request.GET.get('buscar')
