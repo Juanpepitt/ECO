@@ -10,7 +10,6 @@ from django.conf import settings
 from .forms import ProductForm
 
 import requests
-from requests.exceptions import HTTPError
 import json
 
 import uuid
@@ -321,7 +320,6 @@ def detalle_producto(request, producto_id):
         return render(request, '404.html')
 
     return render(request, 'detalle_producto.html', context)
-
 
 def obtener_uid(request):
     try:

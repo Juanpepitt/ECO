@@ -7,4 +7,3 @@ social-auth-app-django
 django-allauth
 Pillow
 stripe
-gunicorn
