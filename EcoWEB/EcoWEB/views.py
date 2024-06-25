@@ -54,3 +54,6 @@ def mejores_productos():
     except Exception as e:
         print(e)
     return productos[:3]
+
+def about(request):
+    return render(request, 'about.html')

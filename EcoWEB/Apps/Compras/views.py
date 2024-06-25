@@ -23,11 +23,6 @@ config={
     "measurementId": "G-YXW94VQWHH"
 }
 
-# #Firebase ADMIN
-# cred = credentials.Certificate("Apps/Usuarios/ecoweb-fc73c-firebase-adminsdk-20hmv-feea5a9108.json")
-# firebase_admin.initialize_app(cred, {'storageBucket': 'ecoweb-fc73c.appspot.com'})
-# bucket = storage.bucket()
-
 # Inicialización de la aplicación de Firebase
 firebase = pyrebase.initialize_app(config)
 database = firebase.database()

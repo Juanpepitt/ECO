@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>SOBRE NOSOTROS</title>
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css"/>
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="/static/css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="/static/css/responsive.css" rel="stylesheet" />
+  <!-- SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+    .swal2-container {
+      z-index: 9999 !important;
+    }
+
+    .header_section {
+      background-color: #f8f9fa;
+      padding: 10px 0;
+    }
+  
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
+  
+    .navbar-brand img {
+      margin-right: 10px;
+    }
+  
+    .navbar-brand span {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .form-inline {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+  
+    .form-control {
+      margin-left: 170px;
+      flex-grow: 1; 
+      margin-right: 20px;
+      max-width: 800px;
+    }
+  
+    .btn-outline-success {
+      width: auto;
+    }
+  
+    @media (max-width: 768px) {
+      .navbar-brand span {
+        display: none;
+      }
+  
+      .nav-link span {
+        display: none;
+      }
+  
+      .form-inline {
+        max-width: 100%;
+      }
+    }
+
+    .custom_nav-container .navbar-nav .nav-item .btn-menu {
+      color: #fff;
+      background-color: #325600;
+      padding: 10px 20px;
+      border-radius: 30px;
+      margin: 0 15px;
+      margin-top: 40px;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .custom_nav-container .navbar-nav .nav-item .btn-menu:hover {
+      background-color: #024835;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .custom_nav-container .navbar-nav .nav-item .btn-menu {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        text-align: center;
+      }
+    }
+
+    .logo-link {
+        display: inline-block;
+        background-color: white;
+        border-radius: 50%;
+    }
+
+    .logo-image {
+        width: 350px;
+        height: 350px;
+        border-radius: 100%;
+        display: block;
+        overflow: hidden;
+    }
+  </style>
+
+</head>
+
+
+<body>
+<!-- header section starts -->
+<header class="header_section">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg custom_nav-container">
+
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="/usuarios/perfil">
+              {% if user.photo_url %}
+                <img src="{{ user.photo_url }}" alt="Profile Picture" style="width: 70px; height: 70px; border-radius: 50%;">
+              {% elif user.photo %}
+                <img src="{{ user.photo.url }}" alt="Foto de Perfil" style="width: 70px; height: 70px; border-radius: 50%;">
+              {% endif %}
+              <span>{{ user.email }}</span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="/usuarios/login">
+              <img src="/static/images/user-login.png" alt="" style="width: 50px; height: 50px;">
+              <span>LOGIN</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- header section ends -->
+
+<!-- Menú horizontal -->
+<nav class="navbar navbar-expand-lg custom_nav-container">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link btn-menu" href="/productos/lista_productos">Explorar Productos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-menu" href="/usuarios/productores">Ver Productores</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-menu" href="/about">Sobre MARKETECO</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- end Menú horizontal -->
+
+</div>
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 order-md-1">
+          <div class="detail-box">
+            <h2 class="custom_heading">
+              ¿Qué nos hace
+              <span>
+                Diferentes?
+              </span>
+            </h2>
+            <p>
+              Esta propuesta surge de la iniciativa para un trabajo de fin de grado, propuesta por el profesor del departamento de 
+              Lenguajes y Sistemas Informáticos de la ETSII de Sevilla, Pablo Neira Ayuso, con el fin de abordar la problemática
+              acaecida en España a raíz de la subida de los precios de los productos en los últimos años. El objetivo principal del proyecto es estrechar la franja de comunicación
+              y transacción entre los productores y consumidores, procurando eliminar la figura del intermediario.
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 order-md-2">
+          <div class="img-box">
+            <img src="/static/images/5.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- service section -->
+  <section class="service_section layout_padding">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6 offset-md-2">
+          <h2 class="custom_heading">
+            Nuestros <span>productores</span> y <span>productos</span> de confianza
+          </h2>
+          <div class="container layout_padding2">
+            <div class="row">
+              <div class="col-md-4">
+                  <img src="/static/images/ico-promotion-1.png" alt="">
+                <div class="detail_box">
+                  <p>
+                    Damos visibilidad a productos locales y zonas rurales a nivel nacional
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <img src="/static/images/ico-flores.png" alt="">
+                <div class="detail_box">
+                  <p>
+                    Valoramos el uso responsable, sostenible de los recursos, y responsabilidad social
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                  <img src="/static/images/ico-eco.png" alt="">
+                <div class="detail_box">
+                  <p>
+                    Fomentamos el uso de materiales naturales, ecológicos, bio y artesanales, todo sin químicos
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <a href="/productos/lista_productos/">
+              ¡Ver más!
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <a href="/" class="logo-link">
+              <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo" class="logo-image">
+          </a>
+        </div>      
+      </div>
+    </div>
+  </section>
+
+  <!-- end service section -->
+
+
+  <!-- map section -->
+
+  <section class="contact_section layout_padding">
+    <div class="container">
+      <h2 class="custom_heading text-center">
+          Dónde puedes <span>encontrarnos...</span>
+      </h2>
+      <div class="row">
+        <div class="col-md-12 map_container">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2171.667567306649!2d-5.9866459808731305!3d37.35775985705388!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126dd4a3055555%3A0x29c3f634f8a021b8!2sEscuela%20T%C3%A9cnica%20Superior%20de%20Ingenier%C3%ADa%20Inform%C3%A1tica!5e0!3m2!1ses!2ses!4v1718734674215!5m2!1ses!2ses" 
+            width="100%" 
+            height="450" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- end map section -->
+
+  <!-- info section -->
+  <section class="info_section layout_padding2">
+    <div class="container">
+      <div class="info_items">
+        <a href="https://maps.app.goo.gl/3Yf9uJddxnPE2ZPX7">
+          <div class="item ">
+            <div class="img-box box-1">
+              <img src="" alt="">
+            </div>
+            <div class="detail-box">
+              <p>
+                Ubicación
+              </p>
+            </div>
+          </div>
+        </a>
+        <a href="https://wa.me/34666666666">
+          <div class="item ">
+            <div class="img-box box-2">
+              <img src="" alt="">
+            </div>
+            <div class="detail-box">
+              <p>
+                Whatsapp
+              </p>
+            </div>
+          </div>
+        </a>
+        <a href="mailto:info@marketeco.shop">
+          <div class="item ">
+            <div class="img-box box-3">
+              <img src="" alt="">
+            </div>
+            <div class="detail-box">
+              <p>
+                info@marketeco.shop
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- end info_section -->
+
+  <script type="text/javascript" src="/static/js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="/static/js/bootstrap.js"></script>
+
+</body>
+</body>
+
+</html>

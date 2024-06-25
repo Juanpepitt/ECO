@@ -97,5 +97,13 @@ urlpatterns = [
       path('mensajes/ver_conversacion/<int:conversacion_id>/', mensajes_views.ver_conversacion, name='ver_conversacion'),
       path('mensajes/enviar_mensaje/<int:conversacion_id>/', mensajes_views.enviar_mensaje, name='enviar_mensaje'),
       path('iniciar_conversacion/<int:usuario_id>/', mensajes_views.iniciar_conversacion, name='iniciar_conversacion'),
-    
+
+    ################################################################################################# 
+
+    ############################################# ABOUT #############################################
+
+
+    path('about/', ecoweb_views.about, name='about'),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
