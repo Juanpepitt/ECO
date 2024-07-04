@@ -358,14 +358,15 @@ def muestra_productores(request):
 
     productores_data = []
     for productor in productores:
-        productores_data.append({
-            'id': productor.id,
-            'email': productor.email,
-            'nombre': productor.nombre,
-            'apellidos': productor.apellidos,
-            'telefono': productor.telefono,
-            'imagen': productor.photo
-        })
+        if productor.email != user.email:
+            productores_data.append({
+                'id': productor.id,
+                'email': productor.email,
+                'nombre': productor.nombre,
+                'apellidos': productor.apellidos,
+                'telefono': productor.telefono,
+                'imagen': productor.photo
+            })
 
     context = {
         'productores': productores_data,
