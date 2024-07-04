@@ -253,6 +253,12 @@
                         <option value="{{ categoria }}" {% if selected_categoria == categoria %}selected{% endif %}>{{ categoria }}</option>
                     {% endfor %}
                 </select>
+                <select name="certificaciones" onchange="this.form.submit()">
+                    <option value="">Todas las certificaciones</option>
+                    {% for certificacion in opciones_cert %}
+                        <option value="{{ certificacion }}" {% if selected_cert == certificacion %}selected{% endif %}>{{ certificacion }}</option>
+                    {% endfor %}
+                </select>
             </form>
         </div>
         <div>
@@ -305,6 +311,15 @@
                                     <option value="" disabled selected>Selecciona una categoría</option>
                                     {% for opcion in opciones_categoria %}
                                         <option value="{{ opcion }}" {% if opcion == producto.categoria %} selected {% endif %}>{{ opcion }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="certificaciones">Certificación ecológica</label>
+                                <select name="certificaciones">
+                                    <option value="" disabled selected>Selecciona una certificación que lo cubra</option>
+                                    {% for certificacion in opciones_cert %}
+                                        <option value="{{ certificacion }}" {% if certificacion == producto.certificaciones %} selected {% endif %}>{{ certificacion }}</option>
                                     {% endfor %}
                                 </select>
                             </div>

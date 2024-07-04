@@ -67,7 +67,7 @@ def add_product(request):
             categoria = form.cleaned_data['categoria']
             descripcion = form.cleaned_data['descripcion']
             disponibilidad = form.cleaned_data['disponibilidad']
-            certifiaciones = forms.cleaned_data['certificaciones']
+            certificaciones = form.cleaned_data['certificaciones']
             precio = form.cleaned_data['precio']
             stock = form.cleaned_data['stock']
             imagen = request.FILES.get('imagen')
@@ -92,7 +92,7 @@ def add_product(request):
                 "categoria": categoria,
                 "descripcion": descripcion,
                 "disponibilidad": disponibilidad,
-                'certificaciones': certifiaciones,
+                'certificaciones': certificaciones,
                 "precio": float(precio),
                 "stock": int(stock) if stock else None,
                 "imagen": image_url,
@@ -139,7 +139,7 @@ def edit_product(request, product_id):
                     'descripcion': descripcion,
                     'precio': precio,
                     'categoria': categoria,
-                    'certificaciones': certifiaciones,
+                    'certificaciones': certificaciones,
                     'stock': stock,
                     'disponibilidad': disponibilidad,
                 }
@@ -161,7 +161,7 @@ def edit_product(request, product_id):
                 "precio": precio,
                 "categoria": categoria,
                 "disponibilidad": disponibilidad,
-                'certificaciones': certifiaciones,
+                'certificaciones': certificaciones,
                 "stock": stock,
                 "imagen": image_url
             })
@@ -173,7 +173,7 @@ def edit_product(request, product_id):
                 "precio": precio,
                 "categoria": categoria,
                 "disponibilidad": disponibilidad,
-                'certificaciones': certifiaciones,
+                'certificaciones': certificaciones,
                 "stock": stock
             })
         messages.success(request, nombre+' editado con éxito')
@@ -212,6 +212,7 @@ def products(request):
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
 
     opciones_categoria = ['Alimentación', 'Tecnología', 'Ropa', 'Hogar', 'Otros']
+    opciones_cert = ['Euroleaf', 'CAAE', 'Ecovalia', 'Demeter', 'Sohiscert']
 
     # Filtrar por categoría si se especifica
     filtro_categoria = request.GET.get('categoria')
@@ -221,10 +222,20 @@ def products(request):
     # Dejar categoría seleccionada al usar desplegable
     selected_categoria = filtro_categoria if filtro_categoria in opciones_categoria else None
 
+    # Filtrar por certificación si se especifica
+    filtro_cert = request.GET.get('certificaciones')
+    if filtro_cert:
+        productos = [producto for producto in productos if producto.get('certificaciones') == filtro_cert]
+
+    # Dejar certificación seleccionada al usar desplegable
+    selected_cert = filtro_cert if filtro_cert in opciones_cert else None
+
     context = {
         'productos': productos,
         'opciones_categoria': opciones_categoria,
         'selected_categoria': selected_categoria,
+        'opciones_cert': opciones_cert,
+        'selected_cert': selected_cert
     }
 
     return render(request, 'products.html', context)
@@ -233,6 +244,7 @@ def lista_productos(request):
     productos_ref = database.child("Productores").get()
     productos = []
     categorias = set()
+    certificaciones = set()
     productores = set()
 
     try:
@@ -259,6 +271,7 @@ def lista_productos(request):
 
                     productos.append(producto_data)
                     categorias.add(producto_data.get('categoria', 'Otros'))
+                    certificaciones.add(producto_data.get('certificaciones', ''))
                     productores.add(productor_nombre)
     except (ValueError, TypeError) as e:
         print(e)
@@ -273,6 +286,11 @@ def lista_productos(request):
     if filtro_categoria:
         productos = [producto for producto in productos if producto.get('categoria') == filtro_categoria]
 
+    # Filtrar por certificación si se especifica
+    filtro_cert = request.GET.get('certificaciones')
+    if filtro_cert:
+        productos = [producto for producto in productos if producto.get('certificaciones') == filtro_cert]
+
     # Filtrar por productor si se especifica
     filtro_productor = request.GET.get('productor')
     if filtro_productor:
@@ -280,6 +298,8 @@ def lista_productos(request):
 
     #dejar categoría seleccionada al usar desplegable
     selected_categoria = filtro_categoria if filtro_categoria in categorias else None
+    #dejar certificación seleccionada al usar desplegable
+    selected_cert = filtro_cert if filtro_cert in certificaciones else None
     #dejar productor seleccionado al usar desplegable
     selected_productor = filtro_productor if filtro_productor in productores else None
 
@@ -298,10 +318,12 @@ def lista_productos(request):
 
     context = {
         'list_products': productos, 
-        'categorias': categorias, 
+        'categorias': categorias,
+        'certificaciones': certificaciones, 
         'productores': productores,
         'range': range(5, 0, -1),
-        'selected_categoria': selected_categoria, 
+        'selected_categoria': selected_categoria,
+        'selected_cert': selected_cert, 
         'selected_productor': selected_productor, 
         'selected_ordenar_por': selected_ordenar_por,
         'buscar':buscar

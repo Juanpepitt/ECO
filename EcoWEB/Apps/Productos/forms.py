@@ -27,7 +27,7 @@ CERTIFICACIONES_ECO = [
 class ProductForm(forms.Form):
     nombre = forms.CharField(label='Nombre de producto', max_length=150, strip=False, widget=forms.TextInput(attrs={'autofocus': True, 'style': 'width: 100%;'}), required=True)
     categoria = forms.ChoiceField(label='Categoría de producto', choices=CATEGORIAS_PRODUCTO, required=True, widget=forms.Select(attrs={'style': 'width: 100%;'}))
-    descripcion = forms.CharField(label='Descripción del producto', widget=forms.Textarea(attrs={'autofocus': True, 'style': 'width: 100%;'}), strip=True)
+    descripcion = forms.CharField(label='Descripción del producto', widget=forms.Textarea(attrs={'autofocus': True, 'style': 'width: 100%;' 'height: 10%;'}), strip=True)
     certificaciones = forms.ChoiceField(label='Certificaciones ecológicas', choices=CERTIFICACIONES_ECO, required=True, widget=forms.Select(attrs={'style': 'width: 100%;'}))
     disponibilidad = forms.BooleanField(label='Disponible', required=False)
     precio = forms.DecimalField(label='Precio en €', max_digits=10, decimal_places=2, required=True, help_text="Si se trata de un producto a granel, añade el precio en €/kg", widget=CommaDecimalWidget)

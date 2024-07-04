@@ -212,7 +212,8 @@
                 <p>No hay stock de este producto</p>
             {% endif %}
 
-            <p>Categoría: {{ producto.categoria }}</p>                                         
+            <p>Categoría: {{ producto.categoria }}</p>
+            <p>Certificaciones ecológicas: {{ producto.certificaciones }}</p>
             
             <div class="button_group">
                 <a href="{% url 'list_products' %}" class="btn btn-cancel">Volver</a>

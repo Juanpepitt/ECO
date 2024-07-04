@@ -303,28 +303,37 @@
                         <option value="{{ categoria }}" {% if categoria == selected_categoria %} selected {% endif %}>{{ categoria }}</option>
                         {% endfor %}
                     </select>
-                </div>
-                <div>
-                    <label for="productor">Productor:</label>
-                    <select name="productor" id="productor">
-                        <option value="">Todos</option>
-                        {% for productor in productores %}
-                            <option value="{{ productor }}" {% if productor == selected_productor %} selected {% endif %}>{{ productor }}</option>
+            </div>
+            <div>
+                <label for="certificaciones">Certificaciones:</label>
+                <select name="certificaciones" id="certificaciones">
+                    <option value="">Todas</option>
+                    {% for certificacion in certificaciones %}
+                        <option value="{{ certificacion }}" {% if certificacion == selected_cert %} selected {% endif %}>{{ certificacion }}</option>
                         {% endfor %}
                     </select>
-                </div>
-                <div>
-                    <label for="ordenar_por">Ordenar por:</label>
-                    <select name="ordenar_por" id="ordenar_por">
-                        <option value="">Ninguno</option>
-                        <option value="precio_ascendente" {% if selected_ordenar_por == 'precio_ascendente' %} selected {% endif %}>Precio (más baratos primero)</option>
-                        <option value="precio_descendente" {% if selected_ordenar_por == 'precio_descendente' %} selected {% endif %}>Precio (más caros primero)</option>
-                        <option value="valoracion" {% if selected_ordenar_por == 'valoracion' %} selected {% endif %}>Valoración</option>
-                    </select>
-                </div>
-                <div>
-                    <button type="submit">Aplicar</button>
-                </div>
+            </div>
+            <div>
+                <label for="productor">Productor:</label>
+                <select name="productor" id="productor">
+                    <option value="">Todos</option>
+                    {% for productor in productores %}
+                        <option value="{{ productor }}" {% if productor == selected_productor %} selected {% endif %}>{{ productor }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="ordenar_por">Ordenar por:</label>
+                <select name="ordenar_por" id="ordenar_por">
+                    <option value="">Ninguno</option>
+                    <option value="precio_ascendente" {% if selected_ordenar_por == 'precio_ascendente' %} selected {% endif %}>Precio (más baratos primero)</option>
+                    <option value="precio_descendente" {% if selected_ordenar_por == 'precio_descendente' %} selected {% endif %}>Precio (más caros primero)</option>
+                    <option value="valoracion" {% if selected_ordenar_por == 'valoracion' %} selected {% endif %}>Valoración</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Aplicar</button>
+            </div>
             </form>
             <div>
                 {% if list_products|length < 1 %}
@@ -367,7 +376,7 @@
                 {% endfor %}
             </div>
             <div>
-                <a href="/" class="btn">Volver a Inicio</a>
+                <a href="/" class="btn btn-cancel">Volver a Inicio</a>
             </div>
         </div>
     
