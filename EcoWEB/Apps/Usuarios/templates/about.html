@@ -122,6 +122,39 @@
         display: block;
         overflow: hidden;
     }
+
+    .certification_section {
+      padding: 50px 0;
+      background-color: #f8f9fa;
+    }
+
+    .certification_section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .certification_item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .certification_item img {
+      max-width: 150px;
+      margin-right: 20px;
+      height: auto;
+      flex-shrink: 0;
+    }
+
+    .certification_item p {
+      margin: 0;
+      font-size: 1rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
   </style>
 
 </head>
@@ -132,8 +165,9 @@
 <header class="header_section">
   <div class="container-fluid">
     <nav class="navbar navbar-expand-lg custom_nav-container">
-
-
+      <a class="navbar-brand" href="/">
+        <img src="/static/images/MARKETECO_logo.png" alt="MARKETECO_logo" style="width: 120px; height: 120px; border-radius: 80%;">
+      </a>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
@@ -189,7 +223,7 @@
 
   <!-- about section -->
 
-  <section class="about_section layout_padding">
+  <section class="about_section layout_padding" style="margin-top: 35px;">
     <div class="container">
       <div class="row">
         <div class="col-md-6 order-md-1">
@@ -270,6 +304,45 @@
 
   <!-- end service section -->
 
+  <!-- certification section -->
+  <section class="certification_section">
+    <div class="container">
+      <h2 class="custom_heading">
+        Certificaciones <span>ecológicas</span> oficiales
+      </h2>
+      <a href="https://agriculture.ec.europa.eu/farming/organic-farming_es" target="_blank">
+        <div class="certification_item">
+            <img src="/static/images/euroleaf.png" alt="Euroleaf">
+            <p>Certificación Ecológica de la Unión Europea (Euroleaf): Garantiza que los productos cumplen con los estándares de la UE para la agricultura ecológica.</p>
+        </div>
+      </a>
+      <a href="https://www.caae.es/" target="_blank">
+        <div class="certification_item">
+          <img src="/static/images/caae.jpg" alt="CAAE">
+          <p>Comité Andaluz de Agricultura Ecológica (CAAE): Certificación específica de Andalucía para productos ecológicos.</p>
+        </div>
+      </a>
+      <a href="https://www.ecovalia.org/" target="_blank">
+        <div class="certification_item">
+          <img src="/static/images/ecovalia.png" alt="Certif Eco">
+          <p>Certificación Ecovalia: Asociación profesional española que certifica productos ecológicos y sostenibles.</p>
+        </div>
+      </a>
+      <a href="https://www.demeter.es/" target="_blank">
+        <div class="certification_item">
+          <img src="/static/images/demeter.png" alt="Demeter">
+          <p>Certificación Demeter: Certificación internacional para productos biodinámicos, muy presente en Europa y España.</p>
+        </div>
+      </a>
+      <a href="https://sohiscert.com/" target="_blank">
+        <div class="certification_item">
+          <img src="/static/images/sohiscert.png" alt="Sohiscert">
+          <p>Sohiscert: Entidad española de certificación que verifica el cumplimiento de estándares ecológicos en la producción agrícola.</p>
+        </div>
+      </a>
+    </div>
+  </section>
+  <!-- end certification section -->
 
   <!-- map section -->
 

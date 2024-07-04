@@ -87,9 +87,21 @@
             transition: background-color 0.3s ease;
         }
 
+        .btn_pass{
+            border: 1px solid #ddd;
+            background-color: #3d6f8a;
+            color: #ffffff;
+
+        }
+
         .btn:hover {
             background-color: #2c6b3a; 
         }
+
+        .btn_pass:hover {
+            background-color: #2c586b;
+        }
+        
 
         /* footer section*/
 
@@ -127,6 +139,10 @@
                 {% load socialaccount %}
                 <a href="/accounts/google/login/?next=/usuarios/firebase_register/" class="btn">Registrar con Google</a>
                 {% endif %}
+                <div>
+                    <a href="/usuarios/signup_prod/" class="btn btn_pass">Registrar como Productor o Distribuidor</a>
+                </div>
+                
             </form>
         </div>
     </div>

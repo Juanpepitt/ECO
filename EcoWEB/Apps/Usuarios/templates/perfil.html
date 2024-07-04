@@ -166,10 +166,13 @@
             <div class="button_group">
                 <a href="/" class="btn">Volver a Inicio</a>
                 <a href="/usuarios/signup/logout" class="btn btn-cancel">Salir de la cuenta de {{ user.username }}</a>
+                <div style="min-width: fit-content;">
+                    <a href="#" class="btn btn-cancel" onclick="confirmDelete()">Eliminar mi Usuario</a>
+                </div>
             </div>
         </div>
     </div>
-    <a href="#" style="float: right; margin-right: 0px;"  onclick="confirmDelete()">Eliminar Usuario</a>
+    
 
     <!-- footer section -->
     <section class="container-fluid footer_section_perfil">

@@ -67,6 +67,7 @@ def add_product(request):
             categoria = form.cleaned_data['categoria']
             descripcion = form.cleaned_data['descripcion']
             disponibilidad = form.cleaned_data['disponibilidad']
+            certifiaciones = forms.cleaned_data['certificaciones']
             precio = form.cleaned_data['precio']
             stock = form.cleaned_data['stock']
             imagen = request.FILES.get('imagen')
@@ -91,6 +92,7 @@ def add_product(request):
                 "categoria": categoria,
                 "descripcion": descripcion,
                 "disponibilidad": disponibilidad,
+                'certificaciones': certifiaciones,
                 "precio": float(precio),
                 "stock": int(stock) if stock else None,
                 "imagen": image_url,
@@ -121,6 +123,7 @@ def edit_product(request, product_id):
         categoria = request.POST.get('categoria')
         stock = request.POST.get('stock')
         disponibilidad = 'disponibilidad' in request.POST
+        certificaciones = request.POST.get('certificaciones')
 
         # Convertir precio de coma a punto
         try:
@@ -136,6 +139,7 @@ def edit_product(request, product_id):
                     'descripcion': descripcion,
                     'precio': precio,
                     'categoria': categoria,
+                    'certificaciones': certifiaciones,
                     'stock': stock,
                     'disponibilidad': disponibilidad,
                 }
@@ -157,6 +161,7 @@ def edit_product(request, product_id):
                 "precio": precio,
                 "categoria": categoria,
                 "disponibilidad": disponibilidad,
+                'certificaciones': certifiaciones,
                 "stock": stock,
                 "imagen": image_url
             })
@@ -168,6 +173,7 @@ def edit_product(request, product_id):
                 "precio": precio,
                 "categoria": categoria,
                 "disponibilidad": disponibilidad,
+                'certificaciones': certifiaciones,
                 "stock": stock
             })
         messages.success(request, nombre+' editado con éxito')
@@ -199,7 +205,8 @@ def products(request):
         "precio": product_data.get("precio", ""),
         "categoria": product_data.get("categoria", ""),
         "stock": product_data.get("stock", ""),
-        "disponibilidad": product_data.get("disponibilidad", False)
+        "disponibilidad": product_data.get("disponibilidad", False),
+        "certificaciones": product_data.get("certificaciones", "")
     } 
     
     for product_id, product_data in productos_ref.val().items()] if productos_ref and productos_ref.val() else print("No se encontraron productos para el usuario.")
